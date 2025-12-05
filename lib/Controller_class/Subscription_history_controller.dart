@@ -33,7 +33,7 @@ class PrescriptionhistoryController extends GetxController {
       // "store_id": "1",
       "status": Status,
     };
-    ApiWrapper.dataPost(AppUrl.prescriptionhistory, data).then((val) {
+    ApiWrapper.dataPost(AppUrl.prescriptionhistory, data).then(( val) {
       if ((val != null) && (val.isNotEmpty)) {
         // if ((val['ResponseCode'] == "200") && (val['Result'] == "true")) {
         prescriptionorderinfo = Prescriptionorderinfo.fromJson(val);
@@ -50,10 +50,11 @@ class PrescriptionhistoryController extends GetxController {
     isLoading = false;
     var data = {
       "store_id": getData.read("StoreLogin")["id"],
-      // "store_id": "1",
+      //"store_id": "1",
       "order_id": oid,
     };
     ApiWrapper.dataPost(AppUrl.subScriptioninfo, data).then((val) {
+
       if ((val != null) && (val.isNotEmpty)) {
         if ((val['ResponseCode'] == "200") && (val['Result'] == "true")) {
           print("%%%%%%%%%%%%%%%%%%%%%%%${val.toString()}");

@@ -437,9 +437,7 @@ class _PrescriptionOrderState extends State<PrescriptionOrder>
                                                         .orderHistory[index]
                                                         .id);
                                                 setState(() {
-                                                  //   prescriptionhistoryController
-                                                  //       .Prescriptionhistorylist(
-                                                  //           Status: "Current");
+                                                  
                                                 });
                                               }),
                                           orderbutton(
@@ -935,9 +933,19 @@ class _PrescriptionOrderState extends State<PrescriptionOrder>
                       itemBuilder: (ctx, i) {
                         return InkWell(
                           onTap: () {
-                            setState(() {});
+                           
                             selectedRadioTile = i;
                             rejectmsg = cancelList[i]["title"];
+                          
+                          setState(() {
+                                                  prescriptionhistoryController.Prescriptionhistorylist(Status: "Cancelled");
+                                                    prescriptionhistoryController
+                                                        .Prescriptionhistorylist(
+                                                            Status: "Current");
+                                                            
+                                                });
+                         
+                            
                           },
                           child: SizedBox(
                             height: 40,
@@ -1036,13 +1044,25 @@ class _PrescriptionOrderState extends State<PrescriptionOrder>
                         orderbutton(
                           text: "Confirm",
                           gradient: gradient.btnGradient,
-                          onTap: () {
+                          onTap: () async {
+                            // close the sheet first
                             Get.back();
-                            prescriptiondetailsController.prescriptioncancle(
-                                oid: orderid,
-                                reason: rejectmsg == "Others".tr
-                                    ? note.text
-                                    : rejectmsg);
+
+                            // await API call (works with Future<void> or Future<bool>)
+                            await prescriptiondetailsController.prescriptioncancle(
+                              oid: orderid,
+                              reason: rejectmsg == "Others".tr ? note.text : rejectmsg,
+                            );
+
+                            // switch to Completed tab (index 1) and refresh its data
+                            _tabController?.animateTo(1);
+                            prescriptionhistoryController.Prescriptionhistorylist(Status: "past");
+
+                            // also refresh current tab if you want both updated
+                            prescriptionhistoryController.Prescriptionhistorylist(Status: "Current");
+
+                            // update UI
+                            setState(() {});
                           },
                         ),
                       ],

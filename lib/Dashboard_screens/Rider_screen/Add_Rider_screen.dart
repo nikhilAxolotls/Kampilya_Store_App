@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:storeappnew/Controller_class/Addrider_controller.dart';
+import 'package:storeappnew/Controller_class/Deshboard_controller.dart';
 import 'package:storeappnew/api_screens/Api_werper.dart';
 import 'package:storeappnew/api_screens/confrigation.dart';
 import 'package:storeappnew/utils/Colors.dart';
@@ -62,7 +63,7 @@ class _AddRiderScreenState extends State<AddRiderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appbar(title: "Add Rider"),
+      appBar: appbar(title: widget.add == "edit"?"Update Rider":"Add Rider"),
       backgroundColor: WhiteColor,
       bottomNavigationBar: Padding(
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -70,7 +71,7 @@ class _AddRiderScreenState extends State<AddRiderScreen> {
             Width: Get.size.width,
             height: 55,
             buttoncolor: greenColor,
-            buttontext: "Update".tr,
+            buttontext: widget.add == "edit"?"Update".tr:"Add".tr,
             style: TextStyle(
               fontFamily: FontFamily.gilroyBold,
               color: WhiteColor,
@@ -89,6 +90,9 @@ class _AddRiderScreenState extends State<AddRiderScreen> {
                     ApiWrapper.showToastMessage("Please Upload Image".tr);
                   }
                 }
+                
+                  Get.find<DashboardController>().deshboard();
+                  
               }
             }),
       ),

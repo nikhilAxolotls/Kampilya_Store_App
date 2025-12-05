@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:storeappnew/Controller_class/Add_category_controller.dart';
+import 'package:storeappnew/Controller_class/Category_Controller.dart';
+import 'package:storeappnew/Controller_class/Deshboard_controller.dart';
 import 'package:storeappnew/api_screens/confrigation.dart';
 import 'package:storeappnew/utils/Colors.dart';
 import 'package:storeappnew/utils/Custom_widget.dart';
@@ -24,8 +26,10 @@ class Addcategory extends StatefulWidget {
 List<String> propartyStatus = ["Publish", "UnPublish"];
 
 class _AddcategoryState extends State<Addcategory> {
-  AddcategoryController addcategoryController =
-      Get.put(AddcategoryController());
+  DashboardController dashController = Get.put(DashboardController());
+  AddcategoryController addcategoryController = Get.put(
+    AddcategoryController(),
+  );
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   void initState() {
@@ -49,30 +53,36 @@ class _AddcategoryState extends State<Addcategory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appbar(title: "Add Category"),
+      appBar: appbar(
+        title: widget.edit == "edit" ? "Update Category" : "Add Category",
+      ),
       backgroundColor: WhiteColor,
       bottomNavigationBar: Padding(
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         child: GestButton(
-            Width: Get.size.width,
-            height: 55,
-            buttoncolor: greenColor,
-            buttontext: "Update".tr,
-            style: TextStyle(
-              fontFamily: FontFamily.gilroyBold,
-              color: WhiteColor,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-            onclick: () {
-              if (_formKey.currentState?.validate() ?? false) {
-                if (widget.edit == "Add") {
-                  addcategoryController.addcategory();
-                } else {
-                  addcategoryController.updatecategory();
-                }
+          Width: Get.size.width,
+          height: 55,
+          buttoncolor: greenColor,
+          buttontext: widget.edit == "Add" ? "Add".tr : "Update".tr,
+          style: TextStyle(
+            fontFamily: FontFamily.gilroyBold,
+            color: WhiteColor,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+          onclick: () {
+            if (_formKey.currentState?.validate() ?? false) {
+              if (widget.edit == "Add") {
+                addcategoryController.addcategory();
+              } else {
+                addcategoryController.updatecategory();
               }
-            }),
+
+              Get.find<DashboardController>().deshboard();
+              Get.find<CategoryController>().categorylist();
+            }
+          },
+        ),
       ),
       body: Form(
         key: _formKey,
@@ -112,9 +122,7 @@ class _AddcategoryState extends State<Addcategory> {
                                     width: 42,
                                   )
                                 : Image.file(
-                                    File(
-                                      addcategoryController.path.toString(),
-                                    ),
+                                    File(addcategoryController.path.toString()),
                                     height: 50,
                                     width: 50,
                                     fit: BoxFit.cover,
@@ -135,20 +143,18 @@ class _AddcategoryState extends State<Addcategory> {
                                     width: 42,
                                   )
                                 : addcategoryController.path == null
-                                    ? Image.network(
-                                        "${AppUrl.imageurl}${addcategoryController.productImage}",
-                                        height: 50,
-                                        width: 50,
-                                        fit: BoxFit.cover,
-                                      )
-                                    : Image.file(
-                                        File(
-                                          addcategoryController.path.toString(),
-                                        ),
-                                        height: 50,
-                                        width: 50,
-                                        fit: BoxFit.cover,
-                                      ),
+                                ? Image.network(
+                                    "${AppUrl.imageurl}${addcategoryController.productImage}",
+                                    height: 50,
+                                    width: 50,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.file(
+                                    File(addcategoryController.path.toString()),
+                                    height: 50,
+                                    width: 50,
+                                    fit: BoxFit.cover,
+                                  ),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
                             ),
@@ -193,8 +199,9 @@ class _AddcategoryState extends State<Addcategory> {
                   ),
                   isExpanded: true,
                   underline: SizedBox.shrink(),
-                  items: propartyStatus
-                      .map<DropdownMenuItem<String>>((String value) {
+                  items: propartyStatus.map<DropdownMenuItem<String>>((
+                    String value,
+                  ) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(
@@ -233,8 +240,9 @@ class _AddcategoryState extends State<Addcategory> {
   }
 
   void _openGallery() async {
-    final pickedFile =
-        await ImagePicker().getImage(source: ImageSource.gallery);
+    final pickedFile = await ImagePicker().getImage(
+      source: ImageSource.gallery,
+    );
     if (pickedFile != null) {
       addcategoryController.path = pickedFile.path;
       setState(() {});

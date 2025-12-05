@@ -9,6 +9,8 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:storeappnew/Controller_class/Add_product_controller.dart';
 import 'package:storeappnew/Controller_class/Category_Controller.dart';
+import 'package:storeappnew/Controller_class/Deshboard_controller.dart';
+import 'package:storeappnew/Controller_class/My_medicine_Controller.dart';
 import 'package:storeappnew/api_screens/Api_werper.dart';
 import 'package:storeappnew/api_screens/confrigation.dart';
 import 'package:storeappnew/utils/Colors.dart';
@@ -20,8 +22,13 @@ class AddMedicine extends StatefulWidget {
   String? recordid;
   String? categoryname;
   String? categoryid;
-  AddMedicine(
-      {this.add, this.recordid, this.categoryid, this.categoryname, super.key});
+  AddMedicine({
+    this.add,
+    this.recordid,
+    this.categoryid,
+    this.categoryname,
+    super.key,
+  });
 
   @override
   State<AddMedicine> createState() => _AddMedicineState();
@@ -33,8 +40,9 @@ List<String> category = ["fevar"];
 
 class _AddMedicineState extends State<AddMedicine> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  AddmedicineController addmedicineController =
-      Get.put(AddmedicineController());
+  AddmedicineController addmedicineController = Get.put(
+    AddmedicineController(),
+  );
   CategoryController categoryController = Get.put(CategoryController());
 
   String selectValue = list.first;
@@ -69,42 +77,48 @@ class _AddMedicineState extends State<AddMedicine> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appbar(title: "Add Product"),
+      appBar: appbar(
+        title: widget.add == "edit" ? "Update Product" : "Add Product",
+      ),
       backgroundColor: WhiteColor,
       bottomNavigationBar: Padding(
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         child: GestButton(
-            Width: Get.size.width,
-            height: 55,
-            buttoncolor: greenColor,
-            buttontext: "Update".tr,
-            style: TextStyle(
-              fontFamily: FontFamily.gilroyBold,
-              color: WhiteColor,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-            onclick: () {
-              print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!${widget.recordid}");
-              if (_formKey.currentState?.validate() ?? false) {
-                if (selectProperty != null) {
-                  if (addmedicineController.path != null ||
-                      addmedicineController.medicineImage != "") {
-                    if (widget.add == "Add") {
-                      addmedicineController.addmedicine();
-                    }
-                    if (widget.add == "edit") {
-                      addmedicineController.updatemedicine(
-                          recordid: widget.recordid);
-                    }
-                  } else {
-                    ApiWrapper.showToastMessage("Please Upload Image".tr);
+          Width: Get.size.width,
+          height: 55,
+          buttoncolor: greenColor,
+          buttontext: widget.add == "edit" ? "Update".tr : "Add".tr,
+          style: TextStyle(
+            fontFamily: FontFamily.gilroyBold,
+            color: WhiteColor,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+          onclick: () {
+            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!${widget.recordid}");
+            if (_formKey.currentState?.validate() ?? false) {
+              if (selectProperty != null) {
+                if (addmedicineController.path != null ||
+                    addmedicineController.medicineImage != "") {
+                  if (widget.add == "Add") {
+                    addmedicineController.addmedicine();
+                  }
+                  if (widget.add == "edit") {
+                    addmedicineController.updatemedicine(
+                      recordid: widget.recordid,
+                    );
                   }
                 } else {
-                  ApiWrapper.showToastMessage("Please  Select Category".tr);
+                  ApiWrapper.showToastMessage("Please Upload Image".tr);
                 }
+              } else {
+                ApiWrapper.showToastMessage("Please  Select Category".tr);
               }
-            }),
+              Get.find<DashboardController>().deshboard();
+              Get.find<MymedicineController>().mymedicine();
+            }
+          },
+        ),
       ),
       body: Form(
         key: _formKey,
@@ -142,8 +156,9 @@ class _AddMedicineState extends State<AddMedicine> {
                               child: widget.add == "Add"
                                   ? Container(
                                       height: 80,
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 20),
+                                      margin: EdgeInsets.symmetric(
+                                        horizontal: 20,
+                                      ),
                                       width: Get.size.width,
                                       alignment: Alignment.center,
                                       child: addmedicineController.path == null
@@ -167,12 +182,13 @@ class _AddMedicineState extends State<AddMedicine> {
                                     )
                                   : Container(
                                       height: 80,
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 20),
+                                      margin: EdgeInsets.symmetric(
+                                        horizontal: 20,
+                                      ),
                                       width: Get.size.width,
                                       alignment: Alignment.center,
-                                      child: addmedicineController
-                                                  .medicineImage ==
+                                      child:
+                                          addmedicineController.medicineImage ==
                                               ""
                                           ? Image.asset(
                                               "assets/uplodeimage.png",
@@ -180,21 +196,21 @@ class _AddMedicineState extends State<AddMedicine> {
                                               width: 42,
                                             )
                                           : addmedicineController.path == null
-                                              ? Image.network(
-                                                  "${AppUrl.imageurl}${addmedicineController.medicineImage}",
-                                                  height: 50,
-                                                  width: 50,
-                                                  fit: BoxFit.cover,
-                                                )
-                                              : Image.file(
-                                                  File(
-                                                    addmedicineController.path
-                                                        .toString(),
-                                                  ),
-                                                  height: 50,
-                                                  width: 50,
-                                                  fit: BoxFit.cover,
-                                                ),
+                                          ? Image.network(
+                                              "${AppUrl.imageurl}${addmedicineController.medicineImage}",
+                                              height: 50,
+                                              width: 50,
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Image.file(
+                                              File(
+                                                addmedicineController.path
+                                                    .toString(),
+                                              ),
+                                              height: 50,
+                                              width: 50,
+                                              fit: BoxFit.cover,
+                                            ),
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(15),
                                       ),
@@ -252,31 +268,40 @@ class _AddMedicineState extends State<AddMedicine> {
                             underline: SizedBox.shrink(),
                             items: categoryController.categorytext
                                 .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(
-                                  value,
-                                  style: TextStyle(
-                                    fontFamily: FontFamily.gilroyMedium,
-                                    color: BlackColor,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              );
-                            }).toList(),
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(
+                                      value,
+                                      style: TextStyle(
+                                        fontFamily: FontFamily.gilroyMedium,
+                                        color: BlackColor,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  );
+                                })
+                                .toList(),
                             onChanged: (value) {
-                              for (var i = 0;
-                                  i <
-                                      categoryController
-                                          .categoryinfo!.categorydata.length;
-                                  i++) {
+                              for (
+                                var i = 0;
+                                i <
+                                    categoryController
+                                        .categoryinfo!
+                                        .categorydata
+                                        .length;
+                                i++
+                              ) {
                                 if (value ==
                                     categoryController
-                                        .categoryinfo?.categorydata[i].title) {
+                                        .categoryinfo
+                                        ?.categorydata[i]
+                                        .title) {
                                   addmedicineController.pType =
-                                      categoryController.categoryinfo
-                                              ?.categorydata[i].id ??
-                                          "";
+                                      categoryController
+                                          .categoryinfo
+                                          ?.categorydata[i]
+                                          .id ??
+                                      "";
                                 }
                               }
                               setState(() {
@@ -365,20 +390,21 @@ class _AddMedicineState extends State<AddMedicine> {
                             ),
                             isExpanded: true,
                             underline: SizedBox.shrink(),
-                            items: propartyStatus
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(
-                                  value,
-                                  style: TextStyle(
-                                    fontFamily: FontFamily.gilroyMedium,
-                                    color: BlackColor,
-                                    fontSize: 14,
+                            items: propartyStatus.map<DropdownMenuItem<String>>(
+                              (String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(
+                                    value,
+                                    style: TextStyle(
+                                      fontFamily: FontFamily.gilroyMedium,
+                                      color: BlackColor,
+                                      fontSize: 14,
+                                    ),
                                   ),
-                                ),
-                              );
-                            }).toList(),
+                                );
+                              },
+                            ).toList(),
                             onChanged: (value) {
                               if (value == "Publish") {
                                 addmedicineController.status = "1";
@@ -401,9 +427,7 @@ class _AddMedicineState extends State<AddMedicine> {
                       ],
                     ),
                   ),
-                  decoration: BoxDecoration(
-                    color: WhiteColor,
-                  ),
+                  decoration: BoxDecoration(color: WhiteColor),
                 ),
               ),
             ),
@@ -414,8 +438,9 @@ class _AddMedicineState extends State<AddMedicine> {
   }
 
   void _openGallery() async {
-    final pickedFile =
-        await ImagePicker().getImage(source: ImageSource.gallery);
+    final pickedFile = await ImagePicker().getImage(
+      source: ImageSource.gallery,
+    );
     if (pickedFile != null) {
       addmedicineController.path = pickedFile.path;
       setState(() {});

@@ -186,8 +186,10 @@ class _LoginscreenState extends State<Loginscreen> {
                                     checkColor: WhiteColor,
                                     onChanged: (value) {
                                       setState(() {
+                                       
                                         isChecked = value!;
-                                        save("Remember", value);
+                                        // save("Remember", value);
+                                        
                                       });
                                     },
                                   ),
@@ -235,6 +237,7 @@ class _LoginscreenState extends State<Loginscreen> {
         var result = jsonDecode(response.body);
         loginpage = result["Result"];
         save("Firstuser", true);
+        save("Remember", isChecked);   // ✅ Add this
         setState(() {
           save("StoreLogin", result["StoreLogin"]);
           // currency = result["currency"];

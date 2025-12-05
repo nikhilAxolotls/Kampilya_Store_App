@@ -16,16 +16,15 @@ class DashboardController extends GetxController {
   String earningamount = "";
 
   deshboard() {
-    var data = {
-      "store_id": getData.read("StoreLogin")["id"],
-    };
+    var data = {"store_id": getData.read("StoreLogin")["id"]};
     ApiWrapper.dataPost(AppUrl.dashboard, data).then((val) {
       print("||||||||||+++++++++++" + val.toString());
       if ((val != null) && (val.isNotEmpty)) {
         if ((val['ResponseCode'] == "200") && (val['Result'] == "true")) {
+          dashboardlist.clear();
           for (var element in val["report_data"]) {
             if (element["title"] == "Earning") {
-              earningamount = element["report_data"].toString();
+              earningamount = element["report_data"].toStringAsFixed(2);
             }
           }
           dashboardlist = val["report_data"];

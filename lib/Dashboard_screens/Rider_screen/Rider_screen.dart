@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:storeappnew/Controller_class/Addrider_controller.dart';
 import 'package:storeappnew/Controller_class/Rider_controller.dart';
 import 'package:storeappnew/Dashboard_screens/Rider_screen/Add_Rider_screen.dart';
+import 'package:storeappnew/Dashboard_screens/Rider_screen/rider_routes_screen.dart';
 import 'package:storeappnew/api_screens/confrigation.dart';
 import 'package:storeappnew/utils/Colors.dart';
 import 'package:storeappnew/utils/Custom_widget.dart';
@@ -34,171 +35,212 @@ class _RiderScreenState extends State<RiderScreen> {
     return Scaffold(
       backgroundColor: WhiteColor,
       appBar: CustomAppbar(
-          title: "Rider List",
-          onTap: () {
-            Get.to((() => AddRiderScreen(
-                  add: "Add",
-                )));
-          }),
+        title: "Rider List",
+        onTap: () {
+          Get.to((() => AddRiderScreen(add: "Add")));
+        },
+      ),
       body: Column(
         children: [
-          SizedBox(
-            height: 20,
-          ),
+          SizedBox(height: 20),
           Expanded(
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 10),
-              child: GetBuilder<RiderlistController>(builder: (context) {
-                return riderlistController.isLoading
-                    ? ListView.builder(
-                        itemCount:
-                            riderlistController.riderinfo?.riderdata.length,
-                        physics: BouncingScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return Stack(
-                            children: [
-                              Container(
-                                height: 125,
-                                width: Get.size.width,
-                                margin: EdgeInsets.all(10),
-                                child: Row(
-                                  children: [
-                                    Stack(
-                                      children: [
-                                        Container(
-                                          height: 125,
-                                          width: 110,
-                                          margin: EdgeInsets.all(10),
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            child: Image.network(
-                                              "${AppUrl.imageurl}${riderlistController.riderinfo?.riderdata[index].img ?? ""}",
-                                              height: 140,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      width: 4,
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+              child: GetBuilder<RiderlistController>(
+                builder: (context) {
+                  return riderlistController.isLoading
+                      ? ListView.builder(
+                          itemCount:
+                              riderlistController.riderinfo?.riderdata.length,
+                          physics: BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return Stack(
+                              children: [
+                                Container(
+                                  // height: 150,
+                                  width: Get.size.width,
+                                  margin: EdgeInsets.all(10),
+                                  child: Row(
+                                    children: [
+                                      Stack(
                                         children: [
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                child: Padding(
-                                                  padding:
-                                                      EdgeInsets.only(top: 30),
-                                                  child: Text(
-                                                    riderlistController
-                                                            .riderinfo
-                                                            ?.riderdata[index]
-                                                            .title ??
-                                                        "",
-                                                    maxLines: 2,
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontFamily:
-                                                          FontFamily.gilroyBold,
-                                                      color: BlackColor,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                  ),
-                                                ),
+                                          Container(
+                                            height: 125,
+                                            width: 110,
+                                            margin: EdgeInsets.all(10),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                              child: Image.network(
+                                                "${AppUrl.imageurl}${riderlistController.riderinfo?.riderdata[index].img ?? ""}",
+                                                height: 140,
+                                                fit: BoxFit.cover,
                                               ),
-                                            ],
-                                          ),
-                                          SizedBox(height: Get.height * 0.015),
-                                          GetBuilder<RiderlistController>(
-                                              builder: (context) {
-                                            return Row(
-                                              children: [
-                                                Expanded(
-                                                  child: Text(
-                                                    "${riderlistController.riderinfo?.riderdata[index].ccode} ${riderlistController.riderinfo?.riderdata[index].mobile}",
-                                                    maxLines: 2,
-                                                    style: TextStyle(
-                                                      color: greyColor,
-                                                      fontFamily: FontFamily
-                                                          .gilroyMedium,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                              ],
-                                            );
-                                          }),
-                                          SizedBox(
-                                            height: 5,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                            ),
                                           ),
                                         ],
                                       ),
-                                    )
-                                  ],
+                                      SizedBox(width: 4),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(
+                                                      top: 30,
+                                                    ),
+                                                    child: Text(
+                                                      riderlistController
+                                                              .riderinfo
+                                                              ?.riderdata[index]
+                                                              .title ??
+                                                          "",
+                                                      maxLines: 2,
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontFamily: FontFamily
+                                                            .gilroyBold,
+                                                        color: BlackColor,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              height: Get.height * 0.015,
+                                            ),
+                                            GetBuilder<RiderlistController>(
+                                              builder: (context) {
+                                                return Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(
+                                                        "${riderlistController.riderinfo?.riderdata[index].ccode} ${riderlistController.riderinfo?.riderdata[index].mobile}",
+                                                        maxLines: 2,
+                                                        style: TextStyle(
+                                                          color: greyColor,
+                                                          fontFamily: FontFamily
+                                                              .gilroyMedium,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(width: 10),
+                                                  ],
+                                                );
+                                              },
+                                            ),
+                                            SizedBox(height: 5),
+                                            InkWell(
+                                              onTap: () {
+                                                Get.to(
+                                                  () => RiderDetailsScreen(
+                                                    info: riderlistController
+                                                        .riderinfo!
+                                                        .riderdata[index],
+                                                  ),
+                                                );
+                                              },
+                                              child: Container(
+                                                padding: EdgeInsets.symmetric(
+                                                  vertical: 8,
+                                                  horizontal: 16,
+                                                ),
+                                                margin: EdgeInsets.symmetric(
+                                                  vertical: 5,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: greenColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(6),
+                                                ),
+                                                child: Text(
+                                                  "Rider Routes",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontFamily:
+                                                        FontFamily.gilroyMedium,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.grey.shade400,
+                                    ),
+                                    color: WhiteColor,
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
                                 ),
-                                decoration: BoxDecoration(
-                                  border:
-                                      Border.all(color: Colors.grey.shade200),
-                                  color: WhiteColor,
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                              ),
-                              Positioned(
-                                top: 0,
-                                right: 0,
-                                child: InkWell(
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: InkWell(
                                     onTap: () {
                                       print(
-                                          "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!${riderlistController.riderinfo?.riderdata[index].id ?? ""}");
-                                      Get.to(() => AddRiderScreen(
-                                            add: "edit",
-                                            recordid: riderlistController
-                                                    .riderinfo
-                                                    ?.riderdata[index]
-                                                    .id ??
-                                                "",
-                                          ));
+                                        "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!${riderlistController.riderinfo?.riderdata[index].id ?? ""}",
+                                      );
+                                      Get.to(
+                                        () => AddRiderScreen(
+                                          add: "edit",
+                                          recordid:
+                                              riderlistController
+                                                  .riderinfo
+                                                  ?.riderdata[index]
+                                                  .id ??
+                                              "",
+                                        ),
+                                      );
                                       addRiderController.getEditDetails(
-                                          Editriderimage: riderlistController
-                                              .riderinfo?.riderdata[index].img,
-                                          EditRtitle: riderlistController
-                                              .riderinfo
-                                              ?.riderdata[index]
-                                              .title,
-                                          EditRideremail: riderlistController
-                                              .riderinfo
-                                              ?.riderdata[index]
-                                              .email,
-                                          EditRccode: riderlistController
-                                              .riderinfo
-                                              ?.riderdata[index]
-                                              .ccode,
-                                          EditRmobile: riderlistController
-                                              .riderinfo
-                                              ?.riderdata[index]
-                                              .mobile
-                                              .toString(),
-                                          EditRpassword: riderlistController
-                                              .riderinfo
-                                              ?.riderdata[index]
-                                              .password,
-                                          estatus: riderlistController.riderinfo
-                                              ?.riderdata[index].status);
+                                        Editriderimage: riderlistController
+                                            .riderinfo
+                                            ?.riderdata[index]
+                                            .img,
+                                        EditRtitle: riderlistController
+                                            .riderinfo
+                                            ?.riderdata[index]
+                                            .title,
+                                        EditRideremail: riderlistController
+                                            .riderinfo
+                                            ?.riderdata[index]
+                                            .email,
+                                        EditRccode: riderlistController
+                                            .riderinfo
+                                            ?.riderdata[index]
+                                            .ccode,
+                                        EditRmobile: riderlistController
+                                            .riderinfo
+                                            ?.riderdata[index]
+                                            .mobile
+                                            .toString(),
+                                        EditRpassword: riderlistController
+                                            .riderinfo
+                                            ?.riderdata[index]
+                                            .password,
+                                        estatus: riderlistController
+                                            .riderinfo
+                                            ?.riderdata[index]
+                                            .status,
+                                      );
                                     },
                                     child: Container(
                                       height: 35,
@@ -210,20 +252,20 @@ class _RiderScreenState extends State<RiderScreen> {
                                         shape: BoxShape.circle,
                                         color: greenColor,
                                       ),
-                                    )),
-                              )
-                              // : SizedBox(),
-                            ],
-                          );
-                        },
-                      )
-                    : Center(child: CircularProgressIndicator());
-              }),
-              decoration: BoxDecoration(
-                color: WhiteColor,
+                                    ),
+                                  ),
+                                ),
+                                // : SizedBox(),
+                              ],
+                            );
+                          },
+                        )
+                      : Center(child: CircularProgressIndicator());
+                },
               ),
+              decoration: BoxDecoration(color: WhiteColor),
             ),
-          )
+          ),
         ],
       ),
     );

@@ -5,6 +5,7 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:storeappnew/Controller_class/Deshboard_controller.dart';
 import 'package:storeappnew/api_screens/data_store.dart';
 import 'package:storeappnew/utils/Colors.dart';
 import 'package:storeappnew/utils/Fontfamily.dart';
@@ -141,6 +142,7 @@ CustomAppbar({String? title, Function()? onTap}) {
   return AppBar(
     leading: InkWell(
       onTap: () {
+        Get.find<DashboardController>().deshboard();
         Get.back();
       },
       child: Icon(

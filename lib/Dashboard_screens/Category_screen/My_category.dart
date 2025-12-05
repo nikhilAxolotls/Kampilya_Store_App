@@ -71,6 +71,7 @@ class _MyCategoryState extends State<MyCategory> {
                                       alignment: Alignment.center,
                                       child: Image.asset(
                                           "assets/documentlist.png"),
+                                          //categoryController.categoryinfo?.categorydata[index]
                                       decoration: BoxDecoration(
                                           gradient: gradient.btnGradient,
                                           borderRadius:

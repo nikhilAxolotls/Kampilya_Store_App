@@ -65,9 +65,7 @@ class _LoginscreenState extends State<Loginscreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(
-                          height: Get.height * 0.13,
-                        ),
+                        SizedBox(height: Get.height * 0.13),
                         Text(
                           "Welcome Back".tr,
                           style: TextStyle(
@@ -77,9 +75,7 @@ class _LoginscreenState extends State<Loginscreen> {
                             letterSpacing: 1.1,
                           ),
                         ),
-                        SizedBox(
-                          height: Get.height * 0.01,
-                        ),
+                        SizedBox(height: Get.height * 0.01),
                         Text(
                           "Sign in to start".tr,
                           style: TextStyle(
@@ -91,19 +87,19 @@ class _LoginscreenState extends State<Loginscreen> {
                       ],
                     ),
                   ),
-                  Positioned(
-                    top: 10,
-                    right: 0,
-                    child: SizedBox(
-                      height: Get.size.height * 0.23,
-                      width: Get.size.width * 0.7,
-                      child: Image.asset(
-                        "assets/loginImage.png",
-                        height: Get.size.height * 0.2,
-                        width: Get.size.width * 0.6,
-                      ),
-                    ),
-                  )
+                  // Positioned(
+                  //   top: 10,
+                  //   right: 0,
+                  //   child: SizedBox(
+                  //     height: Get.size.height * 0.23,
+                  //     width: Get.size.width * 0.7,
+                  //     child: Image.asset(
+                  //       "assets/loginImage.png",
+                  //       height: Get.size.height * 0.2,
+                  //       width: Get.size.width * 0.6,
+                  //     ),
+                  //   ),
+                  // )
                 ],
               ),
               Positioned(
@@ -117,22 +113,29 @@ class _LoginscreenState extends State<Loginscreen> {
                     width: Get.width * 0.9,
                     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: WhiteColor),
+                      borderRadius: BorderRadius.circular(15),
+                      color: WhiteColor,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Sign in !",
-                            style: TextStyle(
-                                color: BlackColor,
-                                fontFamily: "Gilroy Bold",
-                                fontSize: 22)),
+                        Text(
+                          "Sign in !",
+                          style: TextStyle(
+                            color: BlackColor,
+                            fontFamily: "Gilroy Bold",
+                            fontSize: 22,
+                          ),
+                        ),
                         SizedBox(height: Get.height * 0.005),
-                        Text("Welcome back you’ve been missed! ",
-                            style: TextStyle(
-                                color: BlackColor,
-                                fontFamily: "Gilroy Medium",
-                                fontSize: 16)),
+                        Text(
+                          "Welcome back you’ve been missed! ",
+                          style: TextStyle(
+                            color: BlackColor,
+                            fontFamily: "Gilroy Medium",
+                            fontSize: 16,
+                          ),
+                        ),
                         SizedBox(height: Get.height * 0.02),
                         passwordtextfield(
                           controller: Email,
@@ -157,18 +160,13 @@ class _LoginscreenState extends State<Loginscreen> {
                             return null;
                           },
                           suffixIcon: InkWell(
-                              onTap: () {
-                                _toggle();
-                              },
-                              child: !_obscureText
-                                  ? Icon(
-                                      Icons.visibility,
-                                      color: greenColor,
-                                    )
-                                  : Icon(
-                                      Icons.visibility_off,
-                                      color: greycolor,
-                                    )),
+                            onTap: () {
+                              _toggle();
+                            },
+                            child: !_obscureText
+                                ? Icon(Icons.visibility, color: greenColor)
+                                : Icon(Icons.visibility_off, color: greycolor),
+                          ),
                         ),
                         SizedBox(height: Get.height * 0.01),
                         Row(
@@ -177,19 +175,19 @@ class _LoginscreenState extends State<Loginscreen> {
                               children: [
                                 Theme(
                                   data: ThemeData(
-                                      unselectedWidgetColor: greycolor),
+                                    unselectedWidgetColor: greycolor,
+                                  ),
                                   child: Checkbox(
                                     shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(4)),
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
                                     value: isChecked,
                                     activeColor: BlackColor,
                                     checkColor: WhiteColor,
                                     onChanged: (value) {
                                       setState(() {
-                                       
                                         isChecked = value!;
                                         // save("Remember", value);
-                                        
                                       });
                                     },
                                   ),
@@ -197,9 +195,10 @@ class _LoginscreenState extends State<Loginscreen> {
                                 Text(
                                   "Remember Me",
                                   style: TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: "Gilroy Medium",
-                                      color: BlackColor),
+                                    fontSize: 16,
+                                    fontFamily: "Gilroy Medium",
+                                    color: BlackColor,
+                                  ),
                                 ),
                               ],
                             ),
@@ -237,7 +236,7 @@ class _LoginscreenState extends State<Loginscreen> {
         var result = jsonDecode(response.body);
         loginpage = result["Result"];
         save("Firstuser", true);
-        save("Remember", isChecked);   // ✅ Add this
+        save("Remember", isChecked); // ✅ Add this
         setState(() {
           save("StoreLogin", result["StoreLogin"]);
           // currency = result["currency"];
@@ -248,7 +247,10 @@ class _LoginscreenState extends State<Loginscreen> {
         if (loginpage == "true") {
           Get.offAll(() => BottoBarScreen());
           // OneSignal.shared.sendTag("store_id", getData.read("StoreLogin")["id"]);
-          OneSignal.User.addTagWithKey("store_id", getData.read("StoreLogin")["id"]);
+          OneSignal.User.addTagWithKey(
+            "store_id",
+            getData.read("StoreLogin")["id"],
+          );
           ApiWrapper.showToastMessage(result["ResponseMsg"]);
         } else {
           ApiWrapper.showToastMessage(result["ResponseMsg"]);
@@ -275,6 +277,6 @@ class _LoginscreenState extends State<Loginscreen> {
     OneSignal.initialize(AppUrl.oneSignel);
     OneSignal.Notifications.requestPermission(true).then((value) {
       print("Signal value:- $value");
-    },);
+    });
   }
 }

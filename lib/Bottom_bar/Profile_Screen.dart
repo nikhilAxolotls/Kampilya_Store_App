@@ -1,10 +1,13 @@
 // ignore_for_file: file_names, prefer_const_constructors, sort_child_properties_last, must_be_immutable, non_constant_identifier_names
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:storeappnew/Bottom_bar/Bottom_bar.dart';
 import 'package:storeappnew/Bottom_bar/terms_condition.dart';
 import 'package:storeappnew/Controller_class/Delete_account_controller.dart';
+import 'package:storeappnew/Controller_class/route_controller.dart';
 import 'package:storeappnew/Controller_class/trems_condition_controller.dart';
 import 'package:storeappnew/Dashboard_screens/Notification_screen.dart';
 import 'package:storeappnew/Dashboard_screens/Rider_screen/Rider_screen.dart';
@@ -29,10 +32,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String? text;
   bool isLodding = false;
   PageListController pageListController = Get.put(PageListController());
+  RouteController routeController = Get.put(RouteController());
   DeleteAccountController deleteAccountController = Get.put(
     DeleteAccountController(),
   );
   @override
+  void initState() {
+    super.initState();
+    Timer(const Duration(seconds: 2), () {
+      routeController.routeList();
+    });
+  }
+
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {

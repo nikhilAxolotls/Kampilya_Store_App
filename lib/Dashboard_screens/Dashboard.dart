@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:storeappnew/Dashboard_screens/Notification_screen.dart';
+import 'package:storeappnew/Dashboard_screens/earning/earning_screen.dart';
+import 'package:storeappnew/Dashboard_screens/earning/total_on_hand_screen.dart';
 import 'package:storeappnew/Dashboard_screens/subscription_screen/subscription__history_screen.dart';
 import 'package:storeappnew/Controller_class/Category_Controller.dart';
 import 'package:storeappnew/Controller_class/Deshboard_controller.dart';
@@ -122,34 +124,34 @@ class _DashboardState extends State<Dashboard> {
                     ),
                   ),
                   SizedBox(width: Get.width * 0.025),
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        getData.remove('Firstuser');
-                        getData.remove('Remember');
-                        getData.remove("StoreLogin");
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Loginscreen(),
-                          ),
-                        );
-                      });
-                    },
-                    child: Container(
-                      height: 50,
-                      width: 50,
-                      padding: EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: bgcolor,
-                      ),
-                      child: Image.asset(
-                        "assets/logout.png",
-                        color: greenColor,
-                      ),
-                    ),
-                  ),
+                  // InkWell(
+                  //   onTap: () {
+                  //     setState(() {
+                  //       getData.remove('Firstuser');
+                  //       getData.remove('Remember');
+                  //       getData.remove("StoreLogin");
+                  //       Navigator.pushReplacement(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //           builder: (context) => Loginscreen(),
+                  //         ),
+                  //       );
+                  //     });
+                  //   },
+                  //   child: Container(
+                  //     height: 50,
+                  //     width: 50,
+                  //     padding: EdgeInsets.all(14),
+                  //     decoration: BoxDecoration(
+                  //       shape: BoxShape.circle,
+                  //       color: bgcolor,
+                  //     ),
+                  //     child: Image.asset(
+                  //       "assets/logout.png",
+                  //       color: greenColor,
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -229,7 +231,7 @@ class _DashboardState extends State<Dashboard> {
                                           break;
                                         case 9:
                                           setState(() {});
-                                          // Get.to(() => AcademicYear());
+                                          Get.to(() => EarningScreen());
                                           break;
                                         case 10:
                                           setState(() {});
@@ -246,6 +248,9 @@ class _DashboardState extends State<Dashboard> {
                                         case 13:
                                           setState(() {});
                                           Get.to(() => AttributeListScreen());
+                                        case 14:
+                                          setState(() {});
+                                          Get.to(() => OnHandEarningScreen());
                                           break;
                                         default:
                                       }

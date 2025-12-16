@@ -406,7 +406,8 @@ class _BoardingScreenState extends State<BoardingPage> {
             alignment: Alignment.center,
             margin: EdgeInsets.only(top: Get.size.height * 0.1),
             padding: EdgeInsets.all(10),
-            child: Image.asset(slide.image, fit: BoxFit.cover),
+            /////////////////////////
+            // child: Image.asset(slide.image, fit: BoxFit.cover),
             // decoration: BoxDecoration(
             //     image: DecorationImage(
             //         image: AssetImage(slide.image), fit: BoxFit.cover)),
@@ -616,7 +617,7 @@ class _BoardingScreenState extends State<BoardingPage> {
                   SizedBox(
                     height: Get.height * 0.01, //indicator set screen
                   ),
-                 // const SizedBox(height: 20),
+                  // const SizedBox(height: 20),
                 ],
               ),
             ),

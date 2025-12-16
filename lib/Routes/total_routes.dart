@@ -1,7 +1,14 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
+import 'package:storeappnew/Controller_class/route_controller.dart';
+import 'package:storeappnew/Modal_class/route_model.dart';
+import 'package:storeappnew/Routes/route_details_screen.dart';
 import 'package:storeappnew/utils/Colors.dart';
+import 'package:storeappnew/utils/Custom_widget.dart';
 import 'package:storeappnew/utils/Fontfamily.dart';
 
 class TotalRoutes extends StatefulWidget {
@@ -13,7 +20,11 @@ class TotalRoutes extends StatefulWidget {
 
 class _TotalRoutesState extends State<TotalRoutes> {
   bool isLoading = false;
+  //PreScriptionControllre preScriptionControllre = Get.find();
+  //RouteController routeController = Get.put(RouteController());
+  RouteController routeController = Get.find();
 
+  /*
   /// Mock API Data - Replace with actual API call
   final List<Map<String, dynamic>> allRoutes = [
     {
@@ -32,13 +43,16 @@ class _TotalRoutesState extends State<TotalRoutes> {
           'orderTotal': '₹1,250',
           'society': 'Green Valley Society',
           "order_status": 'Pending',
+          "order_type": "Subscription",
           "order_details": [
             {
-              "productsName": "Fresh Milk - 500ml",
+              "productsName": "Fresh Milk",
               "order_id": "ORD123456",
               "order_date": "2025-12-02",
               "remainingDelivery": "2",
               "totalDelivery": "5",
+              "halp_ltr_qty": "1",
+              "one_ltr_qty": "2",
               "delivery_time": "10:00 AM - 12:00 PM",
               "total": "₹1,250",
             },
@@ -51,13 +65,16 @@ class _TotalRoutesState extends State<TotalRoutes> {
           'orderTotal': '₹2,100',
           'society': 'Green Valley Society',
           "order_status": 'Pending',
+          "order_type": "Subscription",
           "order_details": [
             {
               "order_id": "ORD123457",
-              "productsName": "Yogurt - 200g",
+              "productsName": "Yogurt",
               "order_date": "2025-12-02",
               "remainingDelivery": "3",
               "totalDelivery": "5",
+              "halp_ltr_qty": "1",
+              "one_ltr_qty": "1",
               "delivery_time": "10:00 AM - 12:00 PM",
               "total": "₹2,100",
             },
@@ -70,13 +87,16 @@ class _TotalRoutesState extends State<TotalRoutes> {
           'orderTotal': '₹1,890',
           'society': 'Lake View Apartments',
           "order_status": 'In Progress',
+          "order_type": "Normal",
           "order_details": [
             {
               "order_id": "ORD123458",
-              "productsName": "Butter - 100g",
+              "productsName": "Butter",
               "order_date": "2025-12-02",
               "remainingDelivery": "4",
               "totalDelivery": "5",
+              "halp_ltr_qty": "0",
+              "one_ltr_qty": "1",
               "delivery_time": "10:00 AM - 12:00 PM",
               "total": "₹1,890",
             },
@@ -100,13 +120,16 @@ class _TotalRoutesState extends State<TotalRoutes> {
           'orderTotal': '₹2,100',
           'society': 'Palm Grove',
           "order_status": 'In Progress',
+          "order_type": "Normal",
           "order_details": [
             {
               "order_id": "ORD123459",
               "order_date": "2025-12-02",
-              "productsName": "Paneer - 250g",
+              "productsName": "Paneer",
               "remainingDelivery": "1",
               "totalDelivery": "5",
+              "halp_ltr_qty": "0",
+              "one_ltr_qty": "1",
               "delivery_time": "2:00 PM - 4:00 PM",
               "total": "₹2,100",
             },
@@ -119,13 +142,16 @@ class _TotalRoutesState extends State<TotalRoutes> {
           'orderTotal': '₹1,800',
           'society': 'Palm Grove',
           "order_status": 'Pending',
+          "order_type": "Subscription",
           "order_details": [
             {
               "order_id": "ORD123460",
               "order_date": "2025-12-02",
-              "productsName": "Cheese Spread - 200g",
+              "productsName": "Cheese Spread ",
               "remainingDelivery": "2",
               "totalDelivery": "5",
+              "halp_ltr_qty": "1",
+              "one_ltr_qty": "0",
               "delivery_time": "2:00 PM - 4:00 PM",
               "total": "₹1,800",
             },
@@ -138,13 +164,16 @@ class _TotalRoutesState extends State<TotalRoutes> {
           'orderTotal': '₹2,500',
           'society': 'Royal Gardens',
           "order_status": 'Completed',
+          "order_type": "Normal",
           "order_details": [
             {
               "order_id": "ORD123461",
               "order_date": "2025-12-02",
-              "productsName": "Ghee - 500ml",
+              "productsName": "Ghee",
               "remainingDelivery": "0",
               "totalDelivery": "5",
+              "halp_ltr_qty": "2",
+              "one_ltr_qty": "0",
               "delivery_time": "2:00 PM - 4:00 PM",
               "total": "₹2,500",
             },
@@ -157,13 +186,16 @@ class _TotalRoutesState extends State<TotalRoutes> {
           'orderTotal': '₹2,500',
           'society': 'Silver Oak',
           "order_status": 'In Progress',
+          "order_type": "Normal",
           "order_details": [
             {
               "order_id": "ORD123462",
               "order_date": "2025-12-02",
-              "productsName": "Lassi - 200ml",
+              "productsName": "Lassi",
               "remainingDelivery": "3",
               "totalDelivery": "5",
+              "halp_ltr_qty": "0",
+              "one_ltr_qty": "2",
               "delivery_time": "2:00 PM - 4:00 PM",
               "total": "₹2,500",
             },
@@ -187,13 +219,16 @@ class _TotalRoutesState extends State<TotalRoutes> {
           'orderTotal': '₹890',
           'society': 'Elite Residency',
           "order_status": 'Completed',
+          "order_type": "Subscription",
           "order_details": [
             {
               "order_id": "ORD123463",
-              "productsName": "Buttermilk - 500ml",
+              "productsName": "Buttermilk",
               "order_date": "2025-12-01",
               "remainingDelivery": "0",
               "totalDelivery": "5",
+              "halp_ltr_qty": "2",
+              "one_ltr_qty": "2",
               "delivery_time": "11:00 AM - 1:00 PM",
               "total": "₹890",
             },
@@ -206,13 +241,16 @@ class _TotalRoutesState extends State<TotalRoutes> {
           'orderTotal': '₹1,450',
           'society': 'Elite Residency',
           "order_status": 'Completed',
+          "order_type": "Subscription",
           "order_details": [
             {
               "order_id": "ORD123464",
-              "productsName": "Curd - 400g",
+              "productsName": "Curd",
               "order_date": "2025-12-01",
               "remainingDelivery": "0",
               "totalDelivery": "5",
+              "halp_ltr_qty": "1",
+              "one_ltr_qty": "2",
               "delivery_time": "11:00 AM - 1:00 PM",
               "total": "₹1,450",
             },
@@ -225,13 +263,16 @@ class _TotalRoutesState extends State<TotalRoutes> {
           'orderTotal': '₹3,300',
           'society': 'Golden Heights',
           "order_status": 'Completed',
+          "order_type": "Normal",
           "order_details": [
             {
               "order_id": "ORD123465",
-              "productsName": "Cream - 200ml",
+              "productsName": "Cream",
               "order_date": "2025-12-01",
               "remainingDelivery": "0",
               "totalDelivery": "5",
+              "halp_ltr_qty": "1",
+              "one_ltr_qty": "2",
               "delivery_time": "11:00 AM - 1:00 PM",
               "total": "₹3,300",
             },
@@ -240,6 +281,18 @@ class _TotalRoutesState extends State<TotalRoutes> {
       ],
     },
   ];
+*/
+  List<AssignedRoutes> allRoutes = [];
+  @override
+  void initState() {
+    super.initState();
+
+    Timer(Duration(seconds: 2), () {
+      routeController.routeList();
+    });
+
+    allRoutes = routeController.routeInfo?.assignedRoutes ?? [];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -275,6 +328,10 @@ class _TotalRoutesState extends State<TotalRoutes> {
         onRefresh: () async {
           // Add API call to refresh routes
           await Future.delayed(Duration(seconds: 1));
+          routeController.routeList();
+          Timer(Duration(seconds: 3), () {
+            allRoutes = routeController.routeInfo!.assignedRoutes!;
+          });
         },
         color: greenColor,
         child: SingleChildScrollView(
@@ -328,13 +385,13 @@ class _TotalRoutesState extends State<TotalRoutes> {
 
   Widget _buildHeaderStatistics() {
     int totalRoutes = allRoutes.length;
-    int activeRoutes = allRoutes.where((r) => r['status'] == 'Active').length;
+    int activeRoutes = allRoutes.where((r) => r.status == 'Active').length;
     int completedRoutes = allRoutes
-        .where((r) => r['status'] == 'Completed')
+        .where((r) => r.status == 'Completed')
         .length;
     int totalCustomers = 0;
     for (var route in allRoutes) {
-      totalCustomers += (route['customers'] as List).length;
+      totalCustomers += route.customers!.length;
     }
 
     return Container(
@@ -343,9 +400,12 @@ class _TotalRoutesState extends State<TotalRoutes> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Color.fromARGB(255, 37, 186, 227),
-            Color.fromARGB(255, 10, 140, 176),
-            greenColor,
+            const Color.fromARGB(255, 53, 204, 221),
+            const Color.fromARGB(255, 30, 186, 204),
+            const Color.fromARGB(255, 31, 168, 184),
+
+            //gradient.defoultColor,
+            //greenColor,
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -379,6 +439,7 @@ class _TotalRoutesState extends State<TotalRoutes> {
               Expanded(
                 child: _buildStatItem(
                   icon: Icons.route,
+                  //icon: Icons.apartment,
                   label: 'Total Routes',
                   value: '$totalRoutes',
                 ),
@@ -394,25 +455,25 @@ class _TotalRoutesState extends State<TotalRoutes> {
             ],
           ),
           SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: _buildStatItem(
-                  icon: Icons.check_circle,
-                  label: 'Active Routes',
-                  value: '$activeRoutes',
-                ),
-              ),
-              SizedBox(width: 16),
-              Expanded(
-                child: _buildStatItem(
-                  icon: Icons.task_alt,
-                  label: 'Completed',
-                  value: '$completedRoutes',
-                ),
-              ),
-            ],
-          ),
+          // Row(
+          //   children: [
+          //     Expanded(
+          //       child: _buildStatItem(
+          //         icon: Icons.check_circle,
+          //         label: 'Active Routes',
+          //         value: '$activeRoutes',
+          //       ),
+          //     ),
+          //     SizedBox(width: 16),
+          //     Expanded(
+          //       child: _buildStatItem(
+          //         icon: Icons.task_alt,
+          //         label: 'Completed',
+          //         value: '$completedRoutes',
+          //       ),
+          //     ),
+          //   ],
+          // ),
         ],
       ),
     );
@@ -473,9 +534,32 @@ class _TotalRoutesState extends State<TotalRoutes> {
     );
   }
 
-  Widget _buildRouteCard(Map<String, dynamic> route) {
-    Color statusColor = _getStatusColor(route['status']);
-    IconData statusIcon = _getStatusIcon(route['status']);
+  Widget _buildRouteCard(AssignedRoutes route) {
+    Color statusColor = _getStatusColor(route.status ?? "Pending");
+    IconData statusIcon = _getStatusIcon(route.status ?? "Pending");
+
+    int cow_halp_ltr_qty = 0;
+    int cow_one_ltr_qty = 0;
+    int cow_two_ltr_qty = 0;
+    int cow_total_qty = 0;
+    int buffalo_halp_ltr_qty = 0;
+    int buffalo_one_ltr_qty = 0;
+    int buffalo_two_ltr_qty = 0;
+    int buffalo_total_qty = 0;
+    for (var customer in route.customers!) {
+      for (var item in customer.orderDetails ?? []) {
+        cow_halp_ltr_qty += int.tryParse(item.cowHalpLtrQty ?? "0") ?? 0;
+        cow_one_ltr_qty += int.tryParse(item.cowOneLtrQty ?? "0") ?? 0;
+        cow_two_ltr_qty += int.tryParse(item.cowTwoLtrQty ?? "0") ?? 0;
+        buffalo_halp_ltr_qty +=
+            int.tryParse(item.buffaloHalpLtrQty ?? "0") ?? 0;
+        buffalo_one_ltr_qty += int.tryParse(item.buffaloOneLtrQty ?? "0") ?? 0;
+        buffalo_two_ltr_qty += int.tryParse(item.buffaloTwoLtrQty ?? "0") ?? 0;
+      }
+    }
+    cow_total_qty = cow_halp_ltr_qty + cow_one_ltr_qty + cow_two_ltr_qty;
+    buffalo_total_qty =
+        buffalo_halp_ltr_qty + buffalo_one_ltr_qty + buffalo_two_ltr_qty;
 
     return Container(
       margin: EdgeInsets.only(bottom: 16),
@@ -486,7 +570,8 @@ class _TotalRoutesState extends State<TotalRoutes> {
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap: () => _showCustomersBottomSheet(route),
+        onTap: () => Get.to(RouteDetailsScreen(), arguments: route),
+
         child: Padding(
           padding: EdgeInsets.all(16),
           child: Column(
@@ -501,12 +586,12 @@ class _TotalRoutesState extends State<TotalRoutes> {
                       Container(
                         padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: buttonColor.withOpacity(0.1),
+                          color: Color(0xff006b8a).withOpacity(0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Icon(
                           Icons.receipt_long,
-                          color: buttonColor,
+                          color: Color(0xff006b8a),
                           size: 20,
                         ),
                       ),
@@ -515,7 +600,9 @@ class _TotalRoutesState extends State<TotalRoutes> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            route['route_name'],
+                            route.routeName!,
+                            overflow: TextOverflow.clip,
+                            maxLines: 2,
                             style: TextStyle(
                               fontSize: 17,
                               fontFamily: FontFamily.gilroyBold,
@@ -523,67 +610,647 @@ class _TotalRoutesState extends State<TotalRoutes> {
                             ),
                           ),
                           SizedBox(height: 2),
-                          Text(
-                            route['route_id'],
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: FontFamily.gilroyMedium,
-                              color: greyColor,
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                route.routeId!,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontFamily: FontFamily.gilroyMedium,
+                                  color: greyColor,
+                                ),
+                              ),
+                              /*
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: statusColor.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(
+                                    color: statusColor.withOpacity(0.3),
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      statusIcon,
+                                      color: statusColor,
+                                      size: 14,
+                                    ),
+                                    SizedBox(width: 4),
+                                    Text(
+                                      route.status ?? 'Unknown',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontFamily: FontFamily.gilroyBold,
+                                        color: statusColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            */
+                            ],
                           ),
                         ],
                       ),
                     ],
                   ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                ],
+              ),
+
+              //SizedBox(height: 14),
+              Divider(color: Color(0xff006b8a), height: 10, thickness: 0.1),
+              // SizedBox(height: 14),
+
+              /// Customers and Societies Count
+              Row(
+                children: [
+                  Icon(Icons.people, color: blueColor, size: 18),
+                  SizedBox(width: 6),
+                  Text(
+                    "${route.customers!.length} Customers",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontFamily: FontFamily.gilroyMedium,
+                      color: BlackColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  // SizedBox(width: 20),
+                  Spacer(),
+                  Icon(Icons.apartment, color: gradientColor, size: 18),
+                  SizedBox(width: 6),
+                  Text(
+                    "${route.societies} Societies",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontFamily: FontFamily.gilroyMedium,
+                      color: BlackColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              // Quantity
+              SizedBox(height: 10),
+              Row(
+                // crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(Icons.inventory_2, color: Color(0xff006b8a), size: 18),
+                  SizedBox(width: 6),
+                  Text(
+                    "Milk Quantity (Ltr) :",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontFamily: FontFamily.gilroyMedium,
+                      color: BlackColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10),
+
+              //table
+              Table(
+                columnWidths: const {
+                  0: FlexColumnWidth(2.5),
+                  1: FlexColumnWidth(1),
+                  2: FlexColumnWidth(1),
+                  3: FlexColumnWidth(1),
+                  4: FlexColumnWidth(1.5),
+                },
+
+                border: TableBorder.all(
+                  color: Color(0xff006b8a).withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(10),
+                  width: 1,
+                ),
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                children: [
+                  TableRow(
                     decoration: BoxDecoration(
-                      color: statusColor.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: statusColor.withOpacity(0.3)),
+                      //padding: EdgeInsets.symmetric(horizontal: 10),
+                      color: Color(0xff006b8a).withOpacity(0.2),
+                    ),
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 5,
+                        ),
+                        child: TableCell(
+                          verticalAlignment: TableCellVerticalAlignment.middle,
+                          child: Text(
+                            "Milk Type/Liter",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: FontFamily.gilroyMedium,
+                              color: BlackColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 5,
+                        ),
+                        child: TableCell(
+                          verticalAlignment: TableCellVerticalAlignment.middle,
+
+                          child: Text(
+                            "0.5 Ltr",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: FontFamily.gilroyMedium,
+                              color: BlackColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 5,
+                        ),
+                        child: TableCell(
+                          verticalAlignment: TableCellVerticalAlignment.middle,
+
+                          child: Text(
+                            "1 Ltr",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: FontFamily.gilroyMedium,
+                              color: BlackColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 5,
+                          vertical: 5,
+                        ),
+                        child: TableCell(
+                          verticalAlignment: TableCellVerticalAlignment.middle,
+
+                          child: Text(
+                            "2 Ltr",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: FontFamily.gilroyMedium,
+                              color: BlackColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 5,
+                        ),
+                        child: TableCell(
+                          verticalAlignment: TableCellVerticalAlignment.middle,
+
+                          child: Text(
+                            "Total",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: FontFamily.gilroyMedium,
+                              color: BlackColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  TableRow(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 5,
+                        ),
+                        child: TableCell(
+                          child: Text(
+                            "Cow Milk",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: FontFamily.gilroyMedium,
+                              color: BlackColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 5,
+                        ),
+                        child: TableCell(
+                          verticalAlignment: TableCellVerticalAlignment.middle,
+
+                          child: Text(
+                            " ${cow_halp_ltr_qty}",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: FontFamily.gilroyMedium,
+                              color: BlackColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 5,
+                        ),
+                        child: TableCell(
+                          verticalAlignment: TableCellVerticalAlignment.middle,
+
+                          child: Text(
+                            " ${cow_one_ltr_qty}",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: FontFamily.gilroyMedium,
+                              color: BlackColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 5,
+                        ),
+                        child: TableCell(
+                          verticalAlignment: TableCellVerticalAlignment.middle,
+
+                          child: Text(
+                            " ${cow_two_ltr_qty}",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: FontFamily.gilroyMedium,
+                              color: BlackColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 5,
+                        ),
+                        child: TableCell(
+                          verticalAlignment: TableCellVerticalAlignment.middle,
+
+                          child: Text(
+                            " ${cow_total_qty}",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: FontFamily.gilroyMedium,
+                              color: BlackColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  //3
+                  TableRow(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 5,
+                        ),
+                        child: TableCell(
+                          child: Text(
+                            "Buffalo Milk",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: FontFamily.gilroyMedium,
+                              color: BlackColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 5,
+                        ),
+                        child: TableCell(
+                          verticalAlignment: TableCellVerticalAlignment.middle,
+
+                          child: Text(
+                            " ${buffalo_halp_ltr_qty}",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: FontFamily.gilroyMedium,
+                              color: BlackColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 5,
+                        ),
+                        child: TableCell(
+                          verticalAlignment: TableCellVerticalAlignment.middle,
+
+                          child: Text(
+                            " ${buffalo_one_ltr_qty}",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: FontFamily.gilroyMedium,
+                              color: BlackColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 5,
+                        ),
+                        child: TableCell(
+                          verticalAlignment: TableCellVerticalAlignment.middle,
+
+                          child: Text(
+                            " ${buffalo_two_ltr_qty}",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: FontFamily.gilroyMedium,
+                              color: BlackColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 5,
+                        ),
+                        child: TableCell(
+                          verticalAlignment: TableCellVerticalAlignment.middle,
+
+                          child: Text(
+                            " ${buffalo_total_qty}",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: FontFamily.gilroyMedium,
+                              color: BlackColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              /*
+              Row(
+                // crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Icon(Icons.inventory_2, color: Color(0xff006b8a), size: 18),
+                  // SizedBox(width: 6),
+                  // Text(
+                  //   "Quantity (Ltr) :",
+                  //   style: TextStyle(
+                  //     fontSize: 14,
+                  //     fontFamily: FontFamily.gilroyMedium,
+                  //     color: BlackColor,
+                  //     fontWeight: FontWeight.bold,
+                  //   ),
+                  // ),
+
+                  //SizedBox(width: 6),
+                  Container(
+                    height: 80,
+                    width: 269,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                        color: Color(0xff006b8a).withOpacity(0.5),
+                      ),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: Row(
-                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(statusIcon, color: statusColor, size: 14),
-                        SizedBox(width: 4),
-                        Text(
-                          route['status'] ?? 'Unknown',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: FontFamily.gilroyBold,
-                            color: statusColor,
-                          ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 40,
+                              width: 88,
+                              alignment: Alignment.center,
+
+                              //padding: EdgeInsets.symmetric(horizontal: 12),
+                              decoration: BoxDecoration(
+                                color: blueColor.withOpacity(0.1),
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Color(0xff006b8a).withOpacity(0.5),
+                                  ),
+                                ),
+                              ),
+
+                              child: Text(
+                                "0.5 Ltr",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: FontFamily.gilroyMedium,
+                                  color: BlackColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Divider(
+                              color: Color(0xff006b8a).withOpacity(0.5),
+                              height: 6,
+                              thickness: 1.5,
+                            ),
+                            Container(
+                              height: 30,
+                              width: 75,
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.symmetric(horizontal: 12),
+                              child: Text(
+                                "${halp_ltr_qty}",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: FontFamily.gilroyMedium,
+                                  color: BlackColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          color: Color(0xff006b8a).withOpacity(0.5),
+                          // margin: EdgeInsets.symmetric(horizontal: 12),
+                          height: 80,
+                          width: 1.5,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 40,
+                              width: 88,
+                              alignment: Alignment.center,
+                              //padding: EdgeInsets.symmetric(horizontal: 12),
+                              decoration: BoxDecoration(
+                                color: blueColor.withOpacity(0.1),
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Color(0xff006b8a).withOpacity(0.5),
+                                  ),
+                                ),
+                              ),
+                              child: Text(
+                                "1 Ltr",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: FontFamily.gilroyMedium,
+                                  color: BlackColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Divider(
+                              color: Color(0xff006b8a).withOpacity(0.5),
+                              height: 6,
+                            ),
+                            Container(
+                              height: 30,
+                              width: 75,
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.symmetric(horizontal: 12),
+                              child: Text(
+                                "${one_ltr_qty}",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: FontFamily.gilroyMedium,
+                                  color: BlackColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          color: Color(0xff006b8a).withOpacity(0.5),
+                          // margin: EdgeInsets.symmetric(horizontal: 12),
+                          height: 80,
+                          width: 1.5,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 40,
+                              width: 88,
+                              alignment: Alignment.center,
+                              //padding: EdgeInsets.symmetric(horizontal: 12),
+                              decoration: BoxDecoration(
+                                color: blueColor.withOpacity(0.1),
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Color(0xff006b8a).withOpacity(0.5),
+                                  ),
+                                ),
+                              ),
+                              child: Text(
+                                "2 Ltr",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: FontFamily.gilroyMedium,
+                                  color: BlackColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Divider(
+                              color: Color(0xff006b8a).withOpacity(0.5),
+                              height: 6,
+                            ),
+                            Container(
+                              height: 30,
+                              width: 75,
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.symmetric(horizontal: 12),
+                              child: Text(
+                                "${two_ltr_qty}",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: FontFamily.gilroyMedium,
+                                  color: BlackColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
                 ],
               ),
-
-              SizedBox(height: 14),
-              Divider(color: Color(0xff006b8a), height: 1, thickness: 0.1),
-              SizedBox(height: 14),
-
+*/
               /// Date and Time Row
+              Divider(color: Color(0xff006b8a), height: 15, thickness: 0.1),
+
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Icon(Icons.calendar_today, color: greyColor, size: 16),
                   SizedBox(width: 6),
                   Text(
-                    route['orderDate'],
+                    route.delivery_date ?? "",
                     style: TextStyle(
                       fontSize: 13,
                       fontFamily: FontFamily.gilroyMedium,
                       color: greyColor,
                     ),
                   ),
-                  SizedBox(width: 16),
+                  // SizedBox(width: 30),
+                  Spacer(),
                   Icon(Icons.access_time, color: orangeColor, size: 16),
                   SizedBox(width: 6),
                   Expanded(
                     child: Text(
-                      route['deliveryTime'],
+                      route.deliveryTime ?? "",
                       style: TextStyle(
                         fontSize: 13,
                         fontFamily: FontFamily.gilroyMedium,
@@ -594,40 +1261,7 @@ class _TotalRoutesState extends State<TotalRoutes> {
                 ],
               ),
 
-              SizedBox(height: 12),
-
-              /// Customers and Societies Count
-              Row(
-                children: [
-                  Icon(Icons.people, color: blueColor, size: 18),
-                  SizedBox(width: 6),
-                  Text(
-                    "${route['customers'].length} Customers",
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontFamily: FontFamily.gilroyMedium,
-                      color: BlackColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(width: 20),
-                  Icon(Icons.apartment, color: greenColor, size: 18),
-                  SizedBox(width: 6),
-                  Text(
-                    "${route['societies']} Societies",
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontFamily: FontFamily.gilroyMedium,
-                      color: BlackColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-
-              SizedBox(height: 14),
-              Divider(color: Color(0xff006b8a), height: 1, thickness: 0.1),
-              SizedBox(height: 14),
+              Divider(color: Color(0xff006b8a), height: 10, thickness: 0.1),
 
               /// Total Amount Row
               Row(
@@ -642,11 +1276,11 @@ class _TotalRoutesState extends State<TotalRoutes> {
                     ),
                   ),
                   Text(
-                    route['total'],
+                    route.total!,
                     style: TextStyle(
                       fontSize: 20,
                       fontFamily: FontFamily.gilroyBold,
-                      color: greenColor,
+                      color: gradientColor,
                     ),
                   ),
                 ],
@@ -655,352 +1289,6 @@ class _TotalRoutesState extends State<TotalRoutes> {
           ),
         ),
       ),
-    );
-  }
-
-  void _showCustomersBottomSheet(Map<String, dynamic> route) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) {
-        List<dynamic> customers = route['customers'] ?? [];
-        return DraggableScrollableSheet(
-          initialChildSize: 0.75,
-          maxChildSize: 0.95,
-          builder: (_, scrollController) {
-            return Container(
-              decoration: BoxDecoration(
-                color: WhiteColor,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-              ),
-              child: Column(
-                children: [
-                  SizedBox(height: 10),
-                  Container(
-                    width: 40,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: greyColor.withOpacity(0.4),
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                  SizedBox(height: 16),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    route['route_name'],
-                                    style: TextStyle(
-                                      fontSize: 22,
-                                      fontFamily: FontFamily.gilroyBold,
-                                      color: BlackColor,
-                                    ),
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    "${customers.length} Customers",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontFamily: FontFamily.gilroyMedium,
-                                      color: greyColor,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 6,
-                              ),
-                              decoration: BoxDecoration(
-                                color: greenColor.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(
-                                  color: greenColor.withOpacity(0.3),
-                                ),
-                              ),
-                              child: Text(
-                                route['total'],
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontFamily: FontFamily.gilroyBold,
-                                  color: greenColor,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 16),
-                  Divider(height: 1, color: lightgrey),
-                  Expanded(
-                    child: ListView.builder(
-                      controller: scrollController,
-                      padding: EdgeInsets.all(16),
-                      itemCount: customers.length,
-                      itemBuilder: (_, i) =>
-                          _buildCustomerCard(customers[i], i),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-  Widget _buildCustomerCard(Map<String, dynamic> customer, int index) {
-    Color statusColor = _getStatusColor(customer['order_status']);
-    IconData statusIcon = _getStatusIcon(customer['order_status']);
-
-    return Container(
-      margin: EdgeInsets.only(bottom: 12),
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: WhiteColor,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: lightgrey),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          /// Name + Status
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Text(
-                  customer['name'],
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontFamily: FontFamily.gilroyBold,
-                    color: BlackColor,
-                  ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: statusColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: statusColor.withOpacity(0.3)),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(statusIcon, color: statusColor, size: 14),
-                    SizedBox(width: 4),
-                    Text(
-                      customer['order_status'] ?? 'Unknown',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: FontFamily.gilroyBold,
-                        color: statusColor,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 6),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                customer['society'],
-                style: TextStyle(
-                  fontSize: 13,
-                  fontFamily: FontFamily.gilroyMedium,
-                  color: blueColor,
-                ),
-              ),
-              Text(
-                customer['orderTotal'],
-                style: TextStyle(
-                  fontSize: 18,
-                  fontFamily: FontFamily.gilroyBold,
-                  color: greenColor,
-                ),
-              ),
-            ],
-          ),
-
-          Divider(),
-
-          Text(
-            'Order Details -',
-            style: TextStyle(
-              fontSize: 13,
-              fontFamily: FontFamily.gilroyBold,
-              color: Colors.black,
-            ),
-          ),
-          SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              OrderInfo(
-                title: "Order ID",
-                subtitle: customer['order_details'][0]['order_id'],
-              ),
-              OrderInfo(title: "Status", subtitle: customer['order_status']),
-            ],
-          ),
-          SizedBox(height: 6),
-          OrderInfo(
-            title: "Product Name",
-            subtitle: customer['order_details'][0]['productsName'],
-          ),
-          SizedBox(height: 6),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              OrderInfo(
-                title: "Remaining Delivery",
-                subtitle: customer['order_details'][0]['remainingDelivery'],
-              ),
-              OrderInfo(
-                title: "Total Delivery",
-                subtitle: customer['order_details'][0]['totalDelivery'],
-              ),
-            ],
-          ),
-          SizedBox(height: 6),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              OrderInfo(
-                title: "Start Date",
-                subtitle: customer['order_details'][0]['order_date'],
-              ),
-            ],
-          ),
-          SizedBox(height: 6),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(
-                "Total Amount",
-                style: TextStyle(
-                  fontFamily: FontFamily.gilroyBold,
-                  fontSize: 13,
-                  color: greyColor,
-                ),
-              ),
-              Text(
-                " : ",
-                style: TextStyle(
-                  fontFamily: FontFamily.gilroyBold,
-                  fontSize: 13,
-                  color: greyColor,
-                ),
-              ),
-              SizedBox(width: 6),
-              Text(
-                customer['order_details'][0]['total'],
-                textAlign: TextAlign.right,
-                maxLines: 2,
-                style: TextStyle(
-                  fontFamily: FontFamily.gilroyBold,
-                  fontSize: 14,
-                  color: Colors.grey,
-                ),
-              ),
-            ],
-          ),
-
-          Divider(),
-          SizedBox(height: 8),
-
-          /// Address
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(Icons.location_on, color: RedColor, size: 18),
-              SizedBox(width: 6),
-              Expanded(
-                child: Text(
-                  customer['address'],
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontFamily: FontFamily.gilroyMedium,
-                    color: greyColor,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 6),
-
-          /// Phone
-          Row(
-            children: [
-              Icon(Icons.phone, color: blueColor, size: 18),
-              SizedBox(width: 6),
-              Text(
-                customer['phone'],
-                style: TextStyle(
-                  fontSize: 14,
-                  fontFamily: FontFamily.gilroyMedium,
-                  color: greyColor,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget OrderInfo({String? title, subtitle}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Text(
-          title ?? "",
-          style: TextStyle(
-            fontFamily: FontFamily.gilroyBold,
-            fontSize: 13,
-            color: greyColor,
-          ),
-        ),
-        Text(
-          " : ",
-          style: TextStyle(
-            fontFamily: FontFamily.gilroyBold,
-            fontSize: 13,
-            color: greyColor,
-          ),
-        ),
-        SizedBox(width: 6),
-        Text(
-          subtitle ?? "",
-          textAlign: TextAlign.right,
-          maxLines: 2,
-          style: TextStyle(
-            fontFamily: FontFamily.gilroyBold,
-            fontSize: 14,
-            color: Colors.grey,
-          ),
-        ),
-      ],
     );
   }
 
@@ -1044,7 +1332,7 @@ class _TotalRoutesState extends State<TotalRoutes> {
   Color _getStatusColor(String? status) {
     switch (status) {
       case 'Completed':
-        return greentext;
+        return gradientColor;
       case 'In Progress':
         return blueColor;
       case 'Pending':
@@ -1052,7 +1340,7 @@ class _TotalRoutesState extends State<TotalRoutes> {
       case 'Cancelled':
         return RedColor;
       case 'Active':
-        return greenColor;
+        return gradientColor;
       default:
         return greyColor;
     }

@@ -128,7 +128,7 @@ class _PrescriptiondetailsScreenState extends State<PrescriptiondetailsScreen> {
                                     gradient: gradient.btnGradient,
                                   ),
                                   child: Text(
-                                    "Accept",
+                                    "Accept & Assign",
                                     style: TextStyle(
                                       fontFamily: FontFamily.gilroyBold,
                                       color: WhiteColor,
@@ -142,7 +142,7 @@ class _PrescriptiondetailsScreenState extends State<PrescriptiondetailsScreen> {
                                       ?.orderProductList
                                       .flowId ==
                                   "1"
-                            ? InkWell(
+                            /* ?
                                 onTap: () {
                                   bottomsheet();
                                 },
@@ -168,7 +168,7 @@ class _PrescriptiondetailsScreenState extends State<PrescriptiondetailsScreen> {
                                       .prescriptiondetailsinfo
                                       ?.orderProductList
                                       .flowId ==
-                                  "3"
+                                  "3"*/
                             ? Container(
                                 height: 50,
                                 width: Get.width * 0.45,
@@ -839,7 +839,7 @@ class _PrescriptiondetailsScreenState extends State<PrescriptiondetailsScreen> {
                                 OrderInfo(
                                   title: "Payment Method".tr,
                                   subtitle:
-                                      "  ${prescriptionhistoryController.prescriptiondetailsinfo?.orderProductList.pMethodName ?? ""}\n ${prescriptionhistoryController.prescriptiondetailsinfo?.orderProductList.orderTransactionId}",
+                                      "  ${prescriptionhistoryController.prescriptiondetailsinfo?.orderProductList.pMethodName ?? ""}\n[${prescriptionhistoryController.prescriptiondetailsinfo?.orderProductList.orderTransactionId}]",
                                 ),
                                 SizedBox(height: 10),
                                 OrderInfo(

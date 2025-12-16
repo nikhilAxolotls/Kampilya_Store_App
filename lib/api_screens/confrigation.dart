@@ -5,6 +5,10 @@ class AppUrl {
   static const String baseUrl = 'https://admin.kampilya.com/';
   static const String imageurl = baseUrl;
   static const String path = baseUrl + '/store_api/';
+
+  //---------rider path
+  static const String riderpath = '/rider_api/';
+
   static const oneSignel = "**************************";
 
   static const String login = path + 'u_login_user.php';
@@ -60,4 +64,6 @@ class AppUrl {
   static const String listOfDelivery = 'list_deliveries.php';
   static const String addDeliveries = 'add_deliveries.php';
   static const String updateDeliveries = 'update_deliveries.php';
+
+  static const String routeList = 'get_rider_routes.php';
 }

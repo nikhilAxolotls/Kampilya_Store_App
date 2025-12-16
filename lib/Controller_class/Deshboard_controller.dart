@@ -14,6 +14,7 @@ class DashboardController extends GetxController {
   List dashboardlist = [];
 
   String earningamount = "";
+  String onHandEarning = "";
 
   deshboard() {
     var data = {"store_id": getData.read("StoreLogin")["id"]};
@@ -25,6 +26,9 @@ class DashboardController extends GetxController {
           for (var element in val["report_data"]) {
             if (element["title"] == "Earning") {
               earningamount = element["report_data"].toStringAsFixed(2);
+            }
+            if (element["title"] == "Total On Hand Amount") {
+              onHandEarning = element["report_data"].toStringAsFixed(2);
             }
           }
           dashboardlist = val["report_data"];

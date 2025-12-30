@@ -7,6 +7,7 @@ import 'package:storeappnew/Controller_class/Addrider_controller.dart';
 import 'package:storeappnew/Controller_class/Assign_rider_controller.dart';
 import 'package:storeappnew/Controller_class/Order_details_controller.dart';
 import 'package:storeappnew/Controller_class/Rider_controller.dart';
+import 'package:storeappnew/api_screens/Api_werper.dart';
 import 'package:storeappnew/api_screens/confrigation.dart';
 import 'package:storeappnew/utils/Colors.dart';
 import 'package:storeappnew/utils/Custom_widget.dart';
@@ -51,81 +52,102 @@ class _OrderdetailsScreenState extends State<OrderdetailsScreen> {
         builder: (context) {
           return orderdetailController.orderdetailsinfo?.orderdata.flowId != "7"
               ? orderdetailController.orderdetailsinfo?.orderdata.orderType ==
-                        "Self Pickup"
-                    ? orderdetailController
-                                      .orderdetailsinfo
-                                      ?.orderdata
-                                      .orderStatus !=
-                                  "Completed" &&
-                              orderdetailController
-                                      .orderdetailsinfo
-                                      ?.orderdata
-                                      .orderStatus !=
-                                  "Cancelled"
-                          ? Container(
-                              color: WhiteColor,
-                              height: Get.height * 0.09,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 12,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                      "Self Pickup"
+                  ? orderdetailController
+                                  .orderdetailsinfo?.orderdata.orderStatus !=
+                              "Completed" &&
+                          orderdetailController
+                                  .orderdetailsinfo?.orderdata.orderStatus !=
+                              "Cancelled"
+                      ? Container(
+                          color: WhiteColor,
+                          height: Get.height * 0.09,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 12,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                    Row(
                                       children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              "$currency${orderdetailController.orderdetailsinfo?.orderdata.orderTotal ?? ""}",
-                                              style: TextStyle(
-                                                fontFamily:
-                                                    FontFamily.gilroyBold,
-                                                color: BlackColor,
-                                                fontSize: 18,
-                                              ),
-                                            ),
-                                            SizedBox(width: Get.width * 0.02),
-                                            Image.asset(
-                                              "assets/downarrow.png",
-                                              height: 14,
-                                              width: 14,
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: Get.height * 0.005),
                                         Text(
-                                          "Total Peyment ",
+                                          "$currency${orderdetailController.orderdetailsinfo?.orderdata.orderTotal ?? ""}",
                                           style: TextStyle(
-                                            fontFamily: FontFamily.gilroyMedium,
-                                            color: greyColor,
-                                            fontSize: 16,
+                                            fontFamily: FontFamily.gilroyBold,
+                                            color: BlackColor,
+                                            fontSize: 18,
                                           ),
+                                        ),
+                                        SizedBox(width: Get.width * 0.02),
+                                        Image.asset(
+                                          "assets/downarrow.png",
+                                          height: 14,
+                                          width: 14,
                                         ),
                                       ],
                                     ),
-                                    InkWell(
-                                      child:
-                                          orderdetailController
-                                                  .orderdetailsinfo
-                                                  ?.orderdata
-                                                  .flowId ==
-                                              "1"
-                                          ? InkWell(
+                                    SizedBox(height: Get.height * 0.005),
+                                    Text(
+                                      "Total Peyment ",
+                                      style: TextStyle(
+                                        fontFamily: FontFamily.gilroyMedium,
+                                        color: greyColor,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                InkWell(
+                                  child: orderdetailController.orderdetailsinfo
+                                              ?.orderdata.flowId ==
+                                          "1"
+                                      ? InkWell(
+                                          onTap: () {
+                                            orderdetailController
+                                                .orderdetailslist(
+                                              oid: widget.oid,
+                                            );
+                                            assignriderController
+                                                .ordercompletedlist(
+                                              oid: widget.oid,
+                                            );
+                                            Dialogbox();
+                                          },
+                                          child: Container(
+                                            height: 50,
+                                            width: Get.width * 0.45,
+                                            alignment: Alignment.center,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              gradient: gradient.btnGradient,
+                                            ),
+                                            child: Text(
+                                              "Completed",
+                                              style: TextStyle(
+                                                fontFamily:
+                                                    FontFamily.gilroyBold,
+                                                color: WhiteColor,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : GetBuilder<OrderdetailController>(
+                                          builder: (context) {
+                                            return InkWell(
                                               onTap: () {
-                                                orderdetailController
-                                                    .orderdetailslist(
-                                                      oid: widget.oid,
-                                                    );
-                                                assignriderController
-                                                    .ordercompletedlist(
-                                                      oid: widget.oid,
-                                                    );
-                                                Dialogbox();
+                                                setState(() {
+                                                  assignriderController
+                                                      .mackdisitionlist(
+                                                    oid: widget.oid,
+                                                  );
+                                                });
                                               },
                                               child: Container(
                                                 height: 50,
@@ -133,12 +155,14 @@ class _OrderdetailsScreenState extends State<OrderdetailsScreen> {
                                                 alignment: Alignment.center,
                                                 decoration: BoxDecoration(
                                                   borderRadius:
-                                                      BorderRadius.circular(12),
+                                                      BorderRadius.circular(
+                                                    12,
+                                                  ),
                                                   gradient:
                                                       gradient.btnGradient,
                                                 ),
                                                 child: Text(
-                                                  "Completed",
+                                                  "Accept",
                                                   style: TextStyle(
                                                     fontFamily:
                                                         FontFamily.gilroyBold,
@@ -147,63 +171,23 @@ class _OrderdetailsScreenState extends State<OrderdetailsScreen> {
                                                   ),
                                                 ),
                                               ),
-                                            )
-                                          : GetBuilder<OrderdetailController>(
-                                              builder: (context) {
-                                                return InkWell(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      assignriderController
-                                                          .mackdisitionlist(
-                                                            oid: widget.oid,
-                                                          );
-                                                    });
-                                                  },
-                                                  child: Container(
-                                                    height: 50,
-                                                    width: Get.width * 0.45,
-                                                    alignment: Alignment.center,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            12,
-                                                          ),
-                                                      gradient:
-                                                          gradient.btnGradient,
-                                                    ),
-                                                    child: Text(
-                                                      "Accept",
-                                                      style: TextStyle(
-                                                        fontFamily: FontFamily
-                                                            .gilroyBold,
-                                                        color: WhiteColor,
-                                                        fontSize: 16,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                    ),
-                                  ],
+                                            );
+                                          },
+                                        ),
                                 ),
-                              ),
-                            )
-                          : SizedBox()
-                    : orderdetailController
-                                  .orderdetailsinfo
-                                  ?.orderdata
-                                  .orderStatus !=
+                              ],
+                            ),
+                          ),
+                        )
+                      : SizedBox()
+                  : orderdetailController
+                                  .orderdetailsinfo?.orderdata.orderStatus !=
                               "Completed" &&
                           orderdetailController
-                                  .orderdetailsinfo
-                                  ?.orderdata
-                                  .orderStatus !=
+                                  .orderdetailsinfo?.orderdata.orderStatus !=
                               "Cancelled"
-                    ? orderdetailController
-                                  .orderdetailsinfo
-                                  ?.orderdata
-                                  .flowId !=
+                      ? orderdetailController
+                                  .orderdetailsinfo?.orderdata.flowId !=
                               "5"
                           ? Container(
                               color: WhiteColor,
@@ -252,8 +236,7 @@ class _OrderdetailsScreenState extends State<OrderdetailsScreen> {
                                       ],
                                     ),
                                     InkWell(
-                                      child:
-                                          orderdetailController
+                                      child: orderdetailController
                                                   .orderdetailsinfo
                                                   ?.orderdata
                                                   .flowId ==
@@ -265,12 +248,12 @@ class _OrderdetailsScreenState extends State<OrderdetailsScreen> {
                                                     setState(() {
                                                       orderdetailController
                                                           .orderdetailslist(
-                                                            oid: widget.oid,
-                                                          );
+                                                        oid: widget.oid,
+                                                      );
                                                       assignriderController
                                                           .mackdisitionlist(
-                                                            oid: widget.oid,
-                                                          );
+                                                        oid: widget.oid,
+                                                      );
                                                     });
                                                   },
                                                   child: Container(
@@ -280,8 +263,8 @@ class _OrderdetailsScreenState extends State<OrderdetailsScreen> {
                                                     decoration: BoxDecoration(
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                            12,
-                                                          ),
+                                                        12,
+                                                      ),
                                                       gradient:
                                                           gradient.btnGradient,
                                                     ),
@@ -299,135 +282,17 @@ class _OrderdetailsScreenState extends State<OrderdetailsScreen> {
                                               },
                                             )
                                           : orderdetailController
-                                                    .orderdetailsinfo
-                                                    ?.orderdata
-                                                    .flowId ==
-                                                "1"
-                                          ? InkWell(
-                                              onTap: () {
-                                                orderdetailController
-                                                    .orderdetailslist(
-                                                      oid: widget.oid,
-                                                    );
-                                                bottomsheet();
-                                              },
-                                              child: Container(
-                                                height: 50,
-                                                width: Get.width * 0.45,
-                                                alignment: Alignment.center,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                  gradient:
-                                                      gradient.btnGradient,
-                                                ),
-                                                child: Text(
-                                                  "Assign",
-                                                  style: TextStyle(
-                                                    fontFamily:
-                                                        FontFamily.gilroyBold,
-                                                    color: WhiteColor,
-                                                    fontSize: 16,
-                                                  ),
-                                                ),
-                                              ),
-                                            )
-                                          : Container(
-                                              height: 50,
-                                              width: Get.width * 0.45,
-                                              alignment: Alignment.center,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                gradient: gradient.btnGradient,
-                                              ),
-                                              child: Text(
-                                                "Assigned",
-                                                style: TextStyle(
-                                                  fontFamily:
-                                                      FontFamily.gilroyBold,
-                                                  color: WhiteColor,
-                                                  fontSize: 16,
-                                                ),
-                                              ),
-                                            ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )
-                          : orderdetailController
-                                    .orderdetailsinfo
-                                    ?.orderdata
-                                    .flowId ==
-                                "5"
-                          ? Container(
-                              color: WhiteColor,
-                              height: Get.height * 0.09,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 12,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              "$currency${orderdetailController.orderdetailsinfo?.orderdata.orderTotal ?? ""}",
-                                              style: TextStyle(
-                                                fontFamily:
-                                                    FontFamily.gilroyBold,
-                                                color: BlackColor,
-                                                fontSize: 18,
-                                              ),
-                                            ),
-                                            SizedBox(width: Get.width * 0.02),
-                                            Image.asset(
-                                              "assets/downarrow.png",
-                                              height: 14,
-                                              width: 14,
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: Get.height * 0.005),
-                                        Text(
-                                          "Total Peyment",
-                                          style: TextStyle(
-                                            fontFamily: FontFamily.gilroyMedium,
-                                            color: greyColor,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    GetBuilder<OrderdetailController>(
-                                      builder: (context) {
-                                        return InkWell(
-                                          child:
-                                              orderdetailController
                                                       .orderdetailsinfo
                                                       ?.orderdata
                                                       .flowId ==
-                                                  "0"
+                                                  "1"
                                               ? InkWell(
                                                   onTap: () {
-                                                    setState(() {
-                                                      orderdetailController
-                                                          .orderdetailslist(
-                                                            oid: widget.oid,
-                                                          );
-                                                      assignriderController
-                                                          .mackdisitionlist(
-                                                            oid: widget.oid,
-                                                          );
-                                                    });
+                                                    orderdetailController
+                                                        .orderdetailslist(
+                                                      oid: widget.oid,
+                                                    );
+                                                    bottomsheet();
                                                   },
                                                   child: Container(
                                                     height: 50,
@@ -436,13 +301,12 @@ class _OrderdetailsScreenState extends State<OrderdetailsScreen> {
                                                     decoration: BoxDecoration(
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                            12,
-                                                          ),
+                                                              12),
                                                       gradient:
                                                           gradient.btnGradient,
                                                     ),
                                                     child: Text(
-                                                      "Accept",
+                                                      "Assign",
                                                       style: TextStyle(
                                                         fontFamily: FontFamily
                                                             .gilroyBold,
@@ -454,7 +318,9 @@ class _OrderdetailsScreenState extends State<OrderdetailsScreen> {
                                                 )
                                               : InkWell(
                                                   onTap: () {
-                                                    bottomsheet();
+                                                    //show tosast message
+                                                    ApiWrapper.showToastMessage(
+                                                        "Order is already assigned");
                                                   },
                                                   child: Container(
                                                     height: 50,
@@ -463,13 +329,12 @@ class _OrderdetailsScreenState extends State<OrderdetailsScreen> {
                                                     decoration: BoxDecoration(
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                            12,
-                                                          ),
+                                                              12),
                                                       gradient:
                                                           gradient.btnGradient,
                                                     ),
                                                     child: Text(
-                                                      "Reassign",
+                                                      "Assigned",
                                                       style: TextStyle(
                                                         fontFamily: FontFamily
                                                             .gilroyBold,
@@ -479,15 +344,151 @@ class _OrderdetailsScreenState extends State<OrderdetailsScreen> {
                                                     ),
                                                   ),
                                                 ),
-                                        );
-                                      },
                                     ),
                                   ],
                                 ),
                               ),
                             )
-                          : SizedBox()
-                    : SizedBox()
+                          : orderdetailController
+                                      .orderdetailsinfo?.orderdata.flowId ==
+                                  "5"
+                              ? Container(
+                                  color: WhiteColor,
+                                  height: Get.height * 0.09,
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 12,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  "$currency${orderdetailController.orderdetailsinfo?.orderdata.orderTotal ?? ""}",
+                                                  style: TextStyle(
+                                                    fontFamily:
+                                                        FontFamily.gilroyBold,
+                                                    color: BlackColor,
+                                                    fontSize: 18,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                    width: Get.width * 0.02),
+                                                Image.asset(
+                                                  "assets/downarrow.png",
+                                                  height: 14,
+                                                  width: 14,
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(
+                                                height: Get.height * 0.005),
+                                            Text(
+                                              "Total Peyment",
+                                              style: TextStyle(
+                                                fontFamily:
+                                                    FontFamily.gilroyMedium,
+                                                color: greyColor,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        GetBuilder<OrderdetailController>(
+                                          builder: (context) {
+                                            return InkWell(
+                                              child: orderdetailController
+                                                          .orderdetailsinfo
+                                                          ?.orderdata
+                                                          .flowId ==
+                                                      "0"
+                                                  ? InkWell(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          orderdetailController
+                                                              .orderdetailslist(
+                                                            oid: widget.oid,
+                                                          );
+                                                          assignriderController
+                                                              .mackdisitionlist(
+                                                            oid: widget.oid,
+                                                          );
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                        height: 50,
+                                                        width: Get.width * 0.45,
+                                                        alignment:
+                                                            Alignment.center,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                            12,
+                                                          ),
+                                                          gradient: gradient
+                                                              .btnGradient,
+                                                        ),
+                                                        child: Text(
+                                                          "Accept",
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .gilroyBold,
+                                                            color: WhiteColor,
+                                                            fontSize: 16,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : InkWell(
+                                                      onTap: () {
+                                                        bottomsheet();
+                                                      },
+                                                      child: Container(
+                                                        height: 50,
+                                                        width: Get.width * 0.45,
+                                                        alignment:
+                                                            Alignment.center,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                            12,
+                                                          ),
+                                                          gradient: gradient
+                                                              .btnGradient,
+                                                        ),
+                                                        child: Text(
+                                                          "Reassign",
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .gilroyBold,
+                                                            color: WhiteColor,
+                                                            fontSize: 16,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              : SizedBox()
+                      : SizedBox()
               : SizedBox();
         },
       ),
@@ -524,11 +525,8 @@ class _OrderdetailsScreenState extends State<OrderdetailsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(height: Get.height * 0.02),
-                          orderdetailController
-                                  .orderdetailsinfo!
-                                  .orderdata
-                                  .orderProducts
-                                  .isNotEmpty
+                          orderdetailController.orderdetailsinfo!.orderdata
+                                  .orderProducts.isNotEmpty
                               ? Container(
                                   padding: EdgeInsets.symmetric(
                                     horizontal: 12,
@@ -568,8 +566,8 @@ class _OrderdetailsScreenState extends State<OrderdetailsScreen> {
                                               onTap: () {
                                                 orderdetailController
                                                     .changeIndexProductWise(
-                                                      index: index,
-                                                    );
+                                                  index: index,
+                                                );
                                               },
                                               child: Container(
                                                 alignment: Alignment.center,
@@ -586,10 +584,12 @@ class _OrderdetailsScreenState extends State<OrderdetailsScreen> {
                                                           Alignment.center,
                                                       child: ClipRRect(
                                                         borderRadius:
-                                                            BorderRadius.circular(
-                                                              5,
-                                                            ),
-                                                        child: FadeInImage.assetNetwork(
+                                                            BorderRadius
+                                                                .circular(
+                                                          5,
+                                                        ),
+                                                        child: FadeInImage
+                                                            .assetNetwork(
                                                           placeholder:
                                                               "assets/ezgif.com-crop.gif",
                                                           placeholderCacheHeight:
@@ -626,8 +626,7 @@ class _OrderdetailsScreenState extends State<OrderdetailsScreen> {
                                                   ],
                                                 ),
                                                 decoration: BoxDecoration(
-                                                  border:
-                                                      orderdetailController
+                                                  border: orderdetailController
                                                               .currentIndex ==
                                                           index
                                                       ? Border.all(
@@ -635,8 +634,7 @@ class _OrderdetailsScreenState extends State<OrderdetailsScreen> {
                                                         )
                                                       : Border.all(
                                                           color: Colors
-                                                              .grey
-                                                              .shade300,
+                                                              .grey.shade300,
                                                         ),
                                                   // color: myOrderController
                                                   //             .currentIndex ==
@@ -864,10 +862,8 @@ class _OrderdetailsScreenState extends State<OrderdetailsScreen> {
                                       "${orderdetailController.orderdetailsinfo?.orderdata.storeCharge} ${currency}",
                                 ),
 
-                                orderdetailController
-                                            .orderdetailsinfo
-                                            ?.orderdata
-                                            .couponAmount !=
+                                orderdetailController.orderdetailsinfo
+                                            ?.orderdata.couponAmount !=
                                         "0"
                                     ? OrderInfo(
                                         title: "Coupon Amount".tr,
@@ -882,10 +878,8 @@ class _OrderdetailsScreenState extends State<OrderdetailsScreen> {
                                       "${orderdetailController.orderdetailsinfo?.orderdata.orderTotal} ${currency}",
                                 ),
 
-                                orderdetailController
-                                            .orderdetailsinfo
-                                            ?.orderdata
-                                            .wallAmt !=
+                                orderdetailController.orderdetailsinfo
+                                            ?.orderdata.wallAmt !=
                                         "0"
                                     ? OrderInfo(
                                         title: "Wallet Amount".tr,
@@ -901,8 +895,7 @@ class _OrderdetailsScreenState extends State<OrderdetailsScreen> {
                                 ),
                                 OrderInfo(
                                   title: "Payment Method".tr,
-                                  subtitle:
-                                      orderdetailController
+                                  subtitle: orderdetailController
                                           .orderdetailsinfo
                                           ?.orderdata
                                           .pMethodName ??
@@ -918,8 +911,7 @@ class _OrderdetailsScreenState extends State<OrderdetailsScreen> {
                                 ),
                                 OrderInfo(
                                   title: "Delivery Address".tr,
-                                  subtitle:
-                                      orderdetailController
+                                  subtitle: orderdetailController
                                           .orderdetailsinfo
                                           ?.orderdata
                                           .customerAddress ??
@@ -928,10 +920,8 @@ class _OrderdetailsScreenState extends State<OrderdetailsScreen> {
                                 ),
 
                                 // : SizedBox(),
-                                orderdetailController
-                                            .orderdetailsinfo
-                                            ?.orderdata
-                                            .orderStatus ==
+                                orderdetailController.orderdetailsinfo
+                                            ?.orderdata.orderStatus ==
                                         "Cancelled"
                                     ? OrderInfo(
                                         title: "Cancel Comment".tr,
@@ -949,9 +939,7 @@ class _OrderdetailsScreenState extends State<OrderdetailsScreen> {
                             ),
                           ),
                           SizedBox(height: Get.height * 0.02),
-                          orderdetailController
-                                      .orderdetailsinfo
-                                      ?.orderdata
+                          orderdetailController.orderdetailsinfo?.orderdata
                                       .additionalNote !=
                                   ""
                               ? Container(
@@ -974,10 +962,8 @@ class _OrderdetailsScreenState extends State<OrderdetailsScreen> {
                                       ),
                                       SizedBox(height: 10),
                                       Text(
-                                        orderdetailController
-                                                .orderdetailsinfo
-                                                ?.orderdata
-                                                .additionalNote ??
+                                        orderdetailController.orderdetailsinfo
+                                                ?.orderdata.additionalNote ??
                                             "",
                                         style: TextStyle(
                                           fontFamily: FontFamily.gilroyBold,
@@ -1051,7 +1037,6 @@ class _OrderdetailsScreenState extends State<OrderdetailsScreen> {
             color: greyColor,
           ),
         ),
-
         Text(
           " : ",
           style: TextStyle(
@@ -1138,35 +1123,27 @@ class _OrderdetailsScreenState extends State<OrderdetailsScreen> {
                       underline: SizedBox.shrink(),
                       items: riderlistController.ridertitle
                           .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value,
-                                style: TextStyle(
-                                  fontFamily: FontFamily.gilroyMedium,
-                                  color: BlackColor,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            );
-                          })
-                          .toList(),
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(
+                            value,
+                            style: TextStyle(
+                              fontFamily: FontFamily.gilroyMedium,
+                              color: BlackColor,
+                              fontSize: 14,
+                            ),
+                          ),
+                        );
+                      }).toList(),
                       onChanged: (value) {
-                        for (
-                          var i = 0;
-                          i < riderlistController.riderinfo!.riderdata.length;
-                          i++
-                        ) {
+                        for (var i = 0;
+                            i < riderlistController.riderinfo!.riderdata.length;
+                            i++) {
                           if (value ==
                               riderlistController
-                                  .riderinfo
-                                  ?.riderdata[i]
-                                  .title) {
-                            addRiderController.pType =
-                                riderlistController
-                                    .riderinfo
-                                    ?.riderdata[i]
-                                    .id ??
+                                  .riderinfo?.riderdata[i].title) {
+                            addRiderController.pType = riderlistController
+                                    .riderinfo?.riderdata[i].id ??
                                 "";
                           }
                         }
@@ -1223,11 +1200,8 @@ class _OrderdetailsScreenState extends State<OrderdetailsScreen> {
               Image.asset("assets/successfull.png", height: 150, width: 150),
               Padding(
                 padding: const EdgeInsets.only(left: 15),
-                child:
-                    orderdetailController
-                            .orderdetailsinfo
-                            ?.orderdata
-                            .orderType ==
+                child: orderdetailController
+                            .orderdetailsinfo?.orderdata.orderType ==
                         "Self"
                     ? Text(
                         "Delivery Successfully!".tr,

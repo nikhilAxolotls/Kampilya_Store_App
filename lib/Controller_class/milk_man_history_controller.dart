@@ -2,22 +2,29 @@
 
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:storeappnew/Modal_class/Rider_model.dart';
+import 'package:storeappnew/Modal_class/milk_man_history.dart';
+import 'package:storeappnew/Modal_class/milk_man_model.dart';
 import 'package:storeappnew/Modal_class/route_model.dart';
 import 'package:storeappnew/api_screens/Api_werper.dart';
 import 'package:storeappnew/api_screens/confrigation.dart';
 import 'package:storeappnew/api_screens/data_store.dart';
 
-class RouteController extends GetxController {
+class MilkManHistoryController extends GetxController {
+  final TextEditingController qtyController = TextEditingController(
+    text: "".obs.value.toString(),
+  );
   bool isLoading = false;
   int currentindex = 0;
+  RxString selectedMilkType = "Cow".obs;
+  // RxDouble qtyController = 0.0.obs;
 
-  List<String> ridertitle = [];
-  RouteInfo? routeInfo;
+  MilkManHistory? history;
 
-  routeList({String? riderId}) async {
+  getMilkManHistory({String? milkmanId}) async {
     isLoading = false;
     // var data = {
     //   "rid": getData.read("StoreLogin")["id"],
@@ -26,28 +33,23 @@ class RouteController extends GetxController {
     try {
       var url;
 
-      if (riderId != null) {
-        url = Uri.parse(
-          AppUrl.baseUrl +
-              AppUrl.riderpath +
-              AppUrl.routeList +
-              "?rider_id=${riderId}",
-        );
-      } else {
-        url = Uri.parse(AppUrl.baseUrl + AppUrl.riderpath + AppUrl.routeList);
-      }
+      // if (riderId != null) {
+      //   url = Uri.parse(
+      //     AppUrl.baseUrl +
+      //         AppUrl.riderpath +
+      //         AppUrl.routeList +
+      //         "?rider_id=${riderId}",
+      //   );
+      // } else {
+      //   url = Uri.parse(AppUrl.baseUrl + AppUrl.riderpath + AppUrl.routeList);
+      // }
+      url = Uri.parse(
+        AppUrl.path + AppUrl.milkmanHistory + "?milkman_id=${milkmanId}",
+      );
       var request = await http.get(url);
-      // var response = jsonDecode(request.body);
       var result = jsonDecode(request.body);
       if (request.statusCode == 200) {
-        print("Parsed result: " + result.toString());
-
-        if (result["AssignedRoutes"] != null ||
-            result["AssignedRoutes"] != []) {
-          routeInfo = RouteInfo.fromJson(result);
-
-          print("Route Info: " + routeInfo.toString());
-        }
+        history = MilkManHistory.fromJson(result);
       } else {
         print("API error: ${request.statusCode}");
       }

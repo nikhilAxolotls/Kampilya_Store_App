@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:storeappnew/Bottom_bar/Bottom_bar.dart';
 import 'package:storeappnew/Bottom_bar/terms_condition.dart';
 import 'package:storeappnew/Controller_class/Delete_account_controller.dart';
+import 'package:storeappnew/Controller_class/milk_man_controller.dart';
 import 'package:storeappnew/Controller_class/route_controller.dart';
 import 'package:storeappnew/Controller_class/trems_condition_controller.dart';
 import 'package:storeappnew/Dashboard_screens/Notification_screen.dart';
@@ -36,6 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   DeleteAccountController deleteAccountController = Get.put(
     DeleteAccountController(),
   );
+  MilkManController milkManController = Get.put(MilkManController());
   @override
   void initState() {
     super.initState();
@@ -157,7 +159,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 setting(
                   SettingName: "Milk Collection/Suppliers",
                   image: "assets/Milk4.png",
-                  onTap: () {
+                  onTap: () async {
+                    await milkManController.milkmanList();
                     Get.to(() => MilkManScreen());
                   },
                 ),
@@ -173,8 +176,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 setting(
                   SettingName: "Routes",
                   image: "assets/route.png",
-                  onTap: () {
-                    Get.to(() => TotalRoutes());
+                  onTap: () async {
+                    await routeController.routeList();
+
+                    Get.to(() => TotalRoutes(isFromRiderScreen: false));
                   },
                 ),
                 //--------------------
@@ -252,7 +257,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   setting({String? image, SettingName, Function()? onTap}) {
-    return InkWell(
+    return GestureDetector(
       onTap: onTap,
       child: Column(
         children: [

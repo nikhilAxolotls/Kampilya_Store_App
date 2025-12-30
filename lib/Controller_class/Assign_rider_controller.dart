@@ -10,8 +10,9 @@ import 'package:storeappnew/api_screens/data_store.dart';
 class AssignriderController extends GetxController {
   bool isLoading = false;
   int currentindex = 0;
-  OrderdetailController orderdetailController =
-      Get.put(OrderdetailController());
+  OrderdetailController orderdetailController = Get.put(
+    OrderdetailController(),
+  );
 
   List<String> ridertitle = [];
   Riderlist? riderinfo;
@@ -51,9 +52,7 @@ class AssignriderController extends GetxController {
     });
   }
 
-  mackdisitionlist({
-    String? oid,
-  }) {
+  mackdisitionlist({String? oid}) {
     isLoading = false;
     var data = {"oid": oid, "status": "1", "comment_reject": "n/a"};
     ApiWrapper.dataPost(AppUrl.makedecision, data).then((val) {
@@ -73,7 +72,7 @@ class AssignriderController extends GetxController {
   mackdisitioncancle({String? oid, reason}) {
     isLoading = false;
     var data = {"oid": oid, "status": "2", "comment_reject": reason};
-    ApiWrapper.dataPost(AppUrl.makedecision, data).then((val) {
+    return ApiWrapper.dataPost(AppUrl.makedecision, data).then((val) {
       if ((val != null) && (val.isNotEmpty)) {
         if ((val['ResponseCode'] == "200") && (val['Result'] == "true")) {
           // riderinfo = Riderlist.fromJson(val);

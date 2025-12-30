@@ -60,15 +60,11 @@ class _PrescriptiondetailsScreenState extends State<PrescriptiondetailsScreen> {
       backgroundColor: bgcolor,
       bottomNavigationBar: GetBuilder<PrescriptionhistoryController>(
         builder: (context) {
-          return prescriptionhistoryController
-                          .prescriptiondetailsinfo
-                          ?.orderProductList
-                          .orderStatus !=
+          return prescriptionhistoryController.prescriptiondetailsinfo
+                          ?.orderProductList.orderStatus !=
                       "Completed" &&
-                  prescriptionhistoryController
-                          .prescriptiondetailsinfo
-                          ?.orderProductList
-                          .orderStatus !=
+                  prescriptionhistoryController.prescriptiondetailsinfo
+                          ?.orderProductList.orderStatus !=
                       "Cancelled"
               ? Container(
                   height: Get.height * 0.09,
@@ -109,10 +105,8 @@ class _PrescriptiondetailsScreenState extends State<PrescriptiondetailsScreen> {
                             ),
                           ],
                         ),
-                        prescriptionhistoryController
-                                    .prescriptiondetailsinfo
-                                    ?.orderProductList
-                                    .flowId ==
+                        prescriptionhistoryController.prescriptiondetailsinfo
+                                    ?.orderProductList.flowId ==
                                 "0"
                             ? InkWell(
                                 onTap: () {
@@ -128,7 +122,7 @@ class _PrescriptiondetailsScreenState extends State<PrescriptiondetailsScreen> {
                                     gradient: gradient.btnGradient,
                                   ),
                                   child: Text(
-                                    "Accept & Assign",
+                                    "Accept & Assign".tr,
                                     style: TextStyle(
                                       fontFamily: FontFamily.gilroyBold,
                                       color: WhiteColor,
@@ -138,11 +132,11 @@ class _PrescriptiondetailsScreenState extends State<PrescriptiondetailsScreen> {
                                 ),
                               )
                             : prescriptionhistoryController
-                                      .prescriptiondetailsinfo
-                                      ?.orderProductList
-                                      .flowId ==
-                                  "1"
-                            /* ?
+                                        .prescriptiondetailsinfo
+                                        ?.orderProductList
+                                        .flowId ==
+                                    "1"
+                                /* ?
                                 onTap: () {
                                   bottomsheet();
                                 },
@@ -169,36 +163,7 @@ class _PrescriptiondetailsScreenState extends State<PrescriptiondetailsScreen> {
                                       ?.orderProductList
                                       .flowId ==
                                   "3"*/
-                            ? Container(
-                                height: 50,
-                                width: Get.width * 0.45,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  gradient: gradient.btnGradient,
-                                ),
-                                child: Text(
-                                  "Assigned",
-                                  style: TextStyle(
-                                    fontFamily: FontFamily.gilroyBold,
-                                    color: WhiteColor,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              )
-                            : prescriptionhistoryController
-                                      .prescriptiondetailsinfo
-                                      ?.orderProductList
-                                      .flowId ==
-                                  "5"
-                            ? InkWell(
-                                child: InkWell(
-                                  onTap: () {
-                                    prescriptionhistoryController
-                                        .prescriptidetailslist(oid: widget.oid);
-                                    bottomsheet();
-                                  },
-                                  child: Container(
+                                ? Container(
                                     height: 50,
                                     width: Get.width * 0.45,
                                     alignment: Alignment.center,
@@ -207,44 +172,79 @@ class _PrescriptiondetailsScreenState extends State<PrescriptiondetailsScreen> {
                                       gradient: gradient.btnGradient,
                                     ),
                                     child: Text(
-                                      "Reassign",
+                                      "Assigned",
                                       style: TextStyle(
                                         fontFamily: FontFamily.gilroyBold,
                                         color: WhiteColor,
                                         fontSize: 16,
                                       ),
                                     ),
-                                  ),
-                                ),
-                              )
-                            : prescriptionhistoryController
-                                      .prescriptiondetailsinfo
-                                      ?.orderProductList
-                                      .flowId ==
-                                  "4"
-                            ? InkWell(
-                                child: InkWell(
-                                  onTap: () {},
-                                  child: Container(
-                                    height: 50,
-                                    width: Get.width * 0.45,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      gradient: gradient.btnGradient,
-                                    ),
-                                    child: Text(
-                                      "Delivery Started",
-                                      style: TextStyle(
-                                        fontFamily: FontFamily.gilroyBold,
-                                        color: WhiteColor,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : SizedBox(),
+                                  )
+                                : prescriptionhistoryController
+                                            .prescriptiondetailsinfo
+                                            ?.orderProductList
+                                            .flowId ==
+                                        "5"
+                                    ? InkWell(
+                                        child: InkWell(
+                                          onTap: () {
+                                            prescriptionhistoryController
+                                                .prescriptidetailslist(
+                                                    oid: widget.oid);
+                                            bottomsheet();
+                                          },
+                                          child: Container(
+                                            height: 50,
+                                            width: Get.width * 0.45,
+                                            alignment: Alignment.center,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              gradient: gradient.btnGradient,
+                                            ),
+                                            child: Text(
+                                              "Reassign",
+                                              style: TextStyle(
+                                                fontFamily:
+                                                    FontFamily.gilroyBold,
+                                                color: WhiteColor,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : prescriptionhistoryController
+                                                .prescriptiondetailsinfo
+                                                ?.orderProductList
+                                                .flowId ==
+                                            "4"
+                                        ? InkWell(
+                                            child: InkWell(
+                                              onTap: () {},
+                                              child: Container(
+                                                height: 50,
+                                                width: Get.width * 0.45,
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  gradient:
+                                                      gradient.btnGradient,
+                                                ),
+                                                child: Text(
+                                                  "Delivery Started",
+                                                  style: TextStyle(
+                                                    fontFamily:
+                                                        FontFamily.gilroyBold,
+                                                    color: WhiteColor,
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        : SizedBox(),
                       ],
                     ),
                   ),
@@ -325,8 +325,8 @@ class _PrescriptiondetailsScreenState extends State<PrescriptiondetailsScreen> {
                                         onTap: () {
                                           prescriptionhistoryController
                                               .changeIndexProductWise(
-                                                index: index,
-                                              );
+                                            index: index,
+                                          );
                                         },
                                         child: Container(
                                           alignment: Alignment.center,
@@ -341,7 +341,8 @@ class _PrescriptiondetailsScreenState extends State<PrescriptiondetailsScreen> {
                                                 child: ClipRRect(
                                                   borderRadius:
                                                       BorderRadius.circular(5),
-                                                  child: FadeInImage.assetNetwork(
+                                                  child:
+                                                      FadeInImage.assetNetwork(
                                                     placeholder:
                                                         "assets/ezgif.com-crop.gif",
                                                     placeholderCacheHeight: 80,
@@ -382,12 +383,14 @@ class _PrescriptiondetailsScreenState extends State<PrescriptiondetailsScreen> {
                                           decoration: BoxDecoration(
                                             border:
                                                 prescriptionhistoryController
-                                                        .currentIndex ==
-                                                    index
-                                                ? Border.all(color: greenColor)
-                                                : Border.all(
-                                                    color: Colors.grey.shade300,
-                                                  ),
+                                                            .currentIndex ==
+                                                        index
+                                                    ? Border.all(
+                                                        color: greenColor)
+                                                    : Border.all(
+                                                        color: Colors
+                                                            .grey.shade300,
+                                                      ),
                                             // color: preScriptionControllre
                                             //             .currentIndex ==
                                             //         index
@@ -429,8 +432,9 @@ class _PrescriptiondetailsScreenState extends State<PrescriptiondetailsScreen> {
                                     itemCount: prescriptionhistoryController
                                         .prescriptiondetailsinfo
                                         ?.orderProductList
-                                        .orderProductData[prescriptionhistoryController
-                                            .currentIndex]
+                                        .orderProductData[
+                                            prescriptionhistoryController
+                                                .currentIndex]
                                         .totaldates
                                         .length,
                                     scrollDirection: Axis.horizontal,
@@ -450,8 +454,9 @@ class _PrescriptiondetailsScreenState extends State<PrescriptiondetailsScreen> {
                                               prescriptionhistoryController
                                                       .prescriptiondetailsinfo
                                                       ?.orderProductList
-                                                      .orderProductData[prescriptionhistoryController
-                                                          .currentIndex]
+                                                      .orderProductData[
+                                                          prescriptionhistoryController
+                                                              .currentIndex]
                                                       .totaldates[index]
                                                       .formatDate ??
                                                   "",
@@ -468,12 +473,12 @@ class _PrescriptiondetailsScreenState extends State<PrescriptiondetailsScreen> {
                                             decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(7),
-                                              border:
-                                                  prescriptionhistoryController
+                                              border: prescriptionhistoryController
                                                           .prescriptiondetailsinfo
                                                           ?.orderProductList
-                                                          .orderProductData[prescriptionhistoryController
-                                                              .currentIndex]
+                                                          .orderProductData[
+                                                              prescriptionhistoryController
+                                                                  .currentIndex]
                                                           .totaldates[index]
                                                           .isComplete ==
                                                       false
@@ -489,8 +494,9 @@ class _PrescriptiondetailsScreenState extends State<PrescriptiondetailsScreen> {
                                           prescriptionhistoryController
                                                       .prescriptiondetailsinfo
                                                       ?.orderProductList
-                                                      .orderProductData[prescriptionhistoryController
-                                                          .currentIndex]
+                                                      .orderProductData[
+                                                          prescriptionhistoryController
+                                                              .currentIndex]
                                                       .totaldates[index]
                                                       .isComplete ==
                                                   true
@@ -844,14 +850,12 @@ class _PrescriptiondetailsScreenState extends State<PrescriptiondetailsScreen> {
                                 SizedBox(height: 10),
                                 OrderInfo(
                                   title: "Address".tr,
-                                  subtitle:
-                                      prescriptionhistoryController
+                                  subtitle: prescriptionhistoryController
                                           .prescriptiondetailsinfo
                                           ?.orderProductList
                                           .customerAddress ??
                                       "",
                                 ),
-
                                 SizedBox(height: 10),
                                 prescriptionhistoryController
                                             .prescriptiondetailsinfo
@@ -871,10 +875,8 @@ class _PrescriptiondetailsScreenState extends State<PrescriptiondetailsScreen> {
                             ),
                           ),
                           SizedBox(height: Get.height * 0.02),
-                          prescriptionhistoryController
-                                      .prescriptiondetailsinfo
-                                      ?.orderProductList
-                                      .additionalNote !=
+                          prescriptionhistoryController.prescriptiondetailsinfo
+                                      ?.orderProductList.additionalNote !=
                                   ""
                               ? Container(
                                   padding: EdgeInsets.symmetric(
@@ -996,35 +998,27 @@ class _PrescriptiondetailsScreenState extends State<PrescriptiondetailsScreen> {
                       underline: SizedBox.shrink(),
                       items: riderlistController.ridertitle
                           .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value,
-                                style: TextStyle(
-                                  fontFamily: FontFamily.gilroyMedium,
-                                  color: BlackColor,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            );
-                          })
-                          .toList(),
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(
+                            value,
+                            style: TextStyle(
+                              fontFamily: FontFamily.gilroyMedium,
+                              color: BlackColor,
+                              fontSize: 14,
+                            ),
+                          ),
+                        );
+                      }).toList(),
                       onChanged: (value) {
-                        for (
-                          var i = 0;
-                          i < riderlistController.riderinfo!.riderdata.length;
-                          i++
-                        ) {
+                        for (var i = 0;
+                            i < riderlistController.riderinfo!.riderdata.length;
+                            i++) {
                           if (value ==
                               riderlistController
-                                  .riderinfo
-                                  ?.riderdata[i]
-                                  .title) {
-                            addRiderController.pType =
-                                riderlistController
-                                    .riderinfo
-                                    ?.riderdata[i]
-                                    .id ??
+                                  .riderinfo?.riderdata[i].title) {
+                            addRiderController.pType = riderlistController
+                                    .riderinfo?.riderdata[i].id ??
                                 "";
                           }
                         }
@@ -1077,7 +1071,6 @@ class _PrescriptiondetailsScreenState extends State<PrescriptiondetailsScreen> {
             color: greyColor,
           ),
         ),
-
         Text(
           " : ",
           style: TextStyle(

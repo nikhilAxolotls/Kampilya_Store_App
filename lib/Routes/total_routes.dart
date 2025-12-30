@@ -12,7 +12,8 @@ import 'package:storeappnew/utils/Custom_widget.dart';
 import 'package:storeappnew/utils/Fontfamily.dart';
 
 class TotalRoutes extends StatefulWidget {
-  const TotalRoutes({super.key});
+  final bool isFromRiderScreen;
+  const TotalRoutes({super.key, required this.isFromRiderScreen});
 
   @override
   State<TotalRoutes> createState() => _TotalRoutesState();
@@ -24,273 +25,19 @@ class _TotalRoutesState extends State<TotalRoutes> {
   //RouteController routeController = Get.put(RouteController());
   RouteController routeController = Get.find();
 
-  /*
-  /// Mock API Data - Replace with actual API call
-  final List<Map<String, dynamic>> allRoutes = [
-    {
-      'route_name': 'Route 1',
-      'route_id': 'RT001',
-      'orderDate': '2025-12-02',
-      'deliveryTime': '10:00 AM - 12:00 PM',
-      'status': 'Active',
-      'total': '₹12,450',
-      'societies': 3,
-      'customers': [
-        {
-          'name': 'Rajesh Kumar',
-          'address': '123, MG Road, Bangalore',
-          'phone': '+91 98765 43210',
-          'orderTotal': '₹1,250',
-          'society': 'Green Valley Society',
-          "order_status": 'Pending',
-          "order_type": "Subscription",
-          "order_details": [
-            {
-              "productsName": "Fresh Milk",
-              "order_id": "ORD123456",
-              "order_date": "2025-12-02",
-              "remainingDelivery": "2",
-              "totalDelivery": "5",
-              "halp_ltr_qty": "1",
-              "one_ltr_qty": "2",
-              "delivery_time": "10:00 AM - 12:00 PM",
-              "total": "₹1,250",
-            },
-          ],
-        },
-        {
-          'name': 'Priya Sharma',
-          'address': '45, MG Road, Bangalore',
-          'phone': '+91 98765 43211',
-          'orderTotal': '₹2,100',
-          'society': 'Green Valley Society',
-          "order_status": 'Pending',
-          "order_type": "Subscription",
-          "order_details": [
-            {
-              "order_id": "ORD123457",
-              "productsName": "Yogurt",
-              "order_date": "2025-12-02",
-              "remainingDelivery": "3",
-              "totalDelivery": "5",
-              "halp_ltr_qty": "1",
-              "one_ltr_qty": "1",
-              "delivery_time": "10:00 AM - 12:00 PM",
-              "total": "₹2,100",
-            },
-          ],
-        },
-        {
-          'name': 'Amit Patel',
-          'address': '78, MG Road, Bangalore',
-          'phone': '+91 98765 43212',
-          'orderTotal': '₹1,890',
-          'society': 'Lake View Apartments',
-          "order_status": 'In Progress',
-          "order_type": "Normal",
-          "order_details": [
-            {
-              "order_id": "ORD123458",
-              "productsName": "Butter",
-              "order_date": "2025-12-02",
-              "remainingDelivery": "4",
-              "totalDelivery": "5",
-              "halp_ltr_qty": "0",
-              "one_ltr_qty": "1",
-              "delivery_time": "10:00 AM - 12:00 PM",
-              "total": "₹1,890",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      'route_name': 'Route 2',
-      'route_id': 'RT002',
-      'orderDate': '2025-12-02',
-      'deliveryTime': '2:00 PM - 4:00 PM',
-      'status': 'Active',
-      'total': '₹8,900',
-      'societies': 4,
-      'customers': [
-        {
-          'name': 'Anita Desai',
-          'address': '45, Indiranagar, Bangalore',
-          'phone': '+91 98765 43215',
-          'orderTotal': '₹2,100',
-          'society': 'Palm Grove',
-          "order_status": 'In Progress',
-          "order_type": "Normal",
-          "order_details": [
-            {
-              "order_id": "ORD123459",
-              "order_date": "2025-12-02",
-              "productsName": "Paneer",
-              "remainingDelivery": "1",
-              "totalDelivery": "5",
-              "halp_ltr_qty": "0",
-              "one_ltr_qty": "1",
-              "delivery_time": "2:00 PM - 4:00 PM",
-              "total": "₹2,100",
-            },
-          ],
-        },
-        {
-          'name': 'Ramesh Nair',
-          'address': '67, Indiranagar, Bangalore',
-          'phone': '+91 98765 43216',
-          'orderTotal': '₹1,800',
-          'society': 'Palm Grove',
-          "order_status": 'Pending',
-          "order_type": "Subscription",
-          "order_details": [
-            {
-              "order_id": "ORD123460",
-              "order_date": "2025-12-02",
-              "productsName": "Cheese Spread ",
-              "remainingDelivery": "2",
-              "totalDelivery": "5",
-              "halp_ltr_qty": "1",
-              "one_ltr_qty": "0",
-              "delivery_time": "2:00 PM - 4:00 PM",
-              "total": "₹1,800",
-            },
-          ],
-        },
-        {
-          'name': 'Kavita Joshi',
-          'address': '89, Indiranagar, Bangalore',
-          'phone': '+91 98765 43217',
-          'orderTotal': '₹2,500',
-          'society': 'Royal Gardens',
-          "order_status": 'Completed',
-          "order_type": "Normal",
-          "order_details": [
-            {
-              "order_id": "ORD123461",
-              "order_date": "2025-12-02",
-              "productsName": "Ghee",
-              "remainingDelivery": "0",
-              "totalDelivery": "5",
-              "halp_ltr_qty": "2",
-              "one_ltr_qty": "0",
-              "delivery_time": "2:00 PM - 4:00 PM",
-              "total": "₹2,500",
-            },
-          ],
-        },
-        {
-          'name': 'Suresh Kumar',
-          'address': '23, Indiranagar, Bangalore',
-          'phone': '+91 98765 43218',
-          'orderTotal': '₹2,500',
-          'society': 'Silver Oak',
-          "order_status": 'In Progress',
-          "order_type": "Normal",
-          "order_details": [
-            {
-              "order_id": "ORD123462",
-              "order_date": "2025-12-02",
-              "productsName": "Lassi",
-              "remainingDelivery": "3",
-              "totalDelivery": "5",
-              "halp_ltr_qty": "0",
-              "one_ltr_qty": "2",
-              "delivery_time": "2:00 PM - 4:00 PM",
-              "total": "₹2,500",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      'route_name': 'Route 3',
-      'route_id': 'RT003',
-      'orderDate': '2025-12-01',
-      'deliveryTime': '11:00 AM - 1:00 PM',
-      'status': 'Completed',
-      'total': '₹5,640',
-      'societies': 2,
-      'customers': [
-        {
-          'name': 'Deepak Malhotra',
-          'address': '78, Koramangala, Bangalore',
-          'phone': '+91 98765 43219',
-          'orderTotal': '₹890',
-          'society': 'Elite Residency',
-          "order_status": 'Completed',
-          "order_type": "Subscription",
-          "order_details": [
-            {
-              "order_id": "ORD123463",
-              "productsName": "Buttermilk",
-              "order_date": "2025-12-01",
-              "remainingDelivery": "0",
-              "totalDelivery": "5",
-              "halp_ltr_qty": "2",
-              "one_ltr_qty": "2",
-              "delivery_time": "11:00 AM - 1:00 PM",
-              "total": "₹890",
-            },
-          ],
-        },
-        {
-          'name': 'Meera Iyer',
-          'address': '90, Koramangala, Bangalore',
-          'phone': '+91 98765 43220',
-          'orderTotal': '₹1,450',
-          'society': 'Elite Residency',
-          "order_status": 'Completed',
-          "order_type": "Subscription",
-          "order_details": [
-            {
-              "order_id": "ORD123464",
-              "productsName": "Curd",
-              "order_date": "2025-12-01",
-              "remainingDelivery": "0",
-              "totalDelivery": "5",
-              "halp_ltr_qty": "1",
-              "one_ltr_qty": "2",
-              "delivery_time": "11:00 AM - 1:00 PM",
-              "total": "₹1,450",
-            },
-          ],
-        },
-        {
-          'name': 'Arjun Rao',
-          'address': '34, Koramangala, Bangalore',
-          'phone': '+91 98765 43221',
-          'orderTotal': '₹3,300',
-          'society': 'Golden Heights',
-          "order_status": 'Completed',
-          "order_type": "Normal",
-          "order_details": [
-            {
-              "order_id": "ORD123465",
-              "productsName": "Cream",
-              "order_date": "2025-12-01",
-              "remainingDelivery": "0",
-              "totalDelivery": "5",
-              "halp_ltr_qty": "1",
-              "one_ltr_qty": "2",
-              "delivery_time": "11:00 AM - 1:00 PM",
-              "total": "₹3,300",
-            },
-          ],
-        },
-      ],
-    },
-  ];
-*/
   List<AssignedRoutes> allRoutes = [];
   @override
   void initState() {
     super.initState();
-
-    Timer(Duration(seconds: 2), () {
-      routeController.routeList();
-    });
-
+    // if (widget.isFromRiderScreen) {
+    //   Timer(Duration(seconds: 2), () {
+    //     routeController.routeList(riderId: Get.arguments['info'].id);
+    //   });
+    // } else {
+    //   Timer(Duration(seconds: 2), () {
+    //     routeController.routeList();
+    //   });
+    // }
     allRoutes = routeController.routeInfo?.assignedRoutes ?? [];
   }
 
@@ -307,7 +54,7 @@ class _TotalRoutesState extends State<TotalRoutes> {
         ),
         centerTitle: true,
         title: Text(
-          'All Routes',
+          widget.isFromRiderScreen ? 'Assigned Routes' : 'All Routes',
           style: TextStyle(
             color: BlackColor,
             fontFamily: FontFamily.gilroyBold,
@@ -386,9 +133,8 @@ class _TotalRoutesState extends State<TotalRoutes> {
   Widget _buildHeaderStatistics() {
     int totalRoutes = allRoutes.length;
     int activeRoutes = allRoutes.where((r) => r.status == 'Active').length;
-    int completedRoutes = allRoutes
-        .where((r) => r.status == 'Completed')
-        .length;
+    int completedRoutes =
+        allRoutes.where((r) => r.status == 'Completed').length;
     int totalCustomers = 0;
     for (var route in allRoutes) {
       totalCustomers += route.customers!.length;
@@ -537,6 +283,7 @@ class _TotalRoutesState extends State<TotalRoutes> {
   Widget _buildRouteCard(AssignedRoutes route) {
     Color statusColor = _getStatusColor(route.status ?? "Pending");
     IconData statusIcon = _getStatusIcon(route.status ?? "Pending");
+    double totalAmount = 0;
 
     int cow_halp_ltr_qty = 0;
     int cow_one_ltr_qty = 0;
@@ -555,6 +302,9 @@ class _TotalRoutesState extends State<TotalRoutes> {
             int.tryParse(item.buffaloHalpLtrQty ?? "0") ?? 0;
         buffalo_one_ltr_qty += int.tryParse(item.buffaloOneLtrQty ?? "0") ?? 0;
         buffalo_two_ltr_qty += int.tryParse(item.buffaloTwoLtrQty ?? "0") ?? 0;
+
+        totalAmount +=
+            double.tryParse(item.total?.replaceAll("₹", "") ?? "0") ?? 0;
       }
     }
     cow_total_qty = cow_halp_ltr_qty + cow_one_ltr_qty + cow_two_ltr_qty;
@@ -571,92 +321,98 @@ class _TotalRoutesState extends State<TotalRoutes> {
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: () => Get.to(RouteDetailsScreen(), arguments: route),
-
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               /// Header Row
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
+                  Container(
+                    clipBehavior: Clip.antiAlias,
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Color(0xff006b8a).withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    // child: Image.asset(
+                    //   "assets/routeIcon.png",
+
+                    //   //  color: Color(0xff006b8a),
+                    //   height: 50,
+                    //   width: 50,
+                    //   fit: BoxFit.cover,
+                    // ),
+                    child: Icon(
+                      Icons.location_on,
+                      color: Colors.red,
+                      //Icons.alt_route,
+                      //color: Color(0xff006b8a),
+                      size: 28,
+                    ),
+                  ),
+                  SizedBox(width: 12),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Color(0xff006b8a).withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Icon(
-                          Icons.receipt_long,
-                          color: Color(0xff006b8a),
-                          size: 20,
+                      Text(
+                        route.routeName!,
+                        overflow: TextOverflow.clip,
+                        maxLines: 2,
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontFamily: FontFamily.gilroyBold,
+                          color: BlackColor,
                         ),
                       ),
-                      SizedBox(width: 12),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      SizedBox(height: 2),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            route.routeName!,
-                            overflow: TextOverflow.clip,
-                            maxLines: 2,
+                            "${route.customers![0].society!}, ${route.customers![0].zone!} ",
                             style: TextStyle(
-                              fontSize: 17,
-                              fontFamily: FontFamily.gilroyBold,
-                              color: BlackColor,
+                              fontSize: 14,
+                              fontFamily: FontFamily.gilroyMedium,
+                              color: blueColor,
                             ),
                           ),
-                          SizedBox(height: 2),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                route.routeId!,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontFamily: FontFamily.gilroyMedium,
-                                  color: greyColor,
-                                ),
+
+                          /*
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 6,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: statusColor.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: statusColor.withOpacity(0.3),
                               ),
-                              /*
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 6,
-                                  vertical: 2,
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  statusIcon,
+                                  color: statusColor,
+                                  size: 14,
                                 ),
-                                decoration: BoxDecoration(
-                                  color: statusColor.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(
-                                    color: statusColor.withOpacity(0.3),
+                                SizedBox(width: 4),
+                                Text(
+                                  route.status ?? 'Unknown',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontFamily: FontFamily.gilroyBold,
+                                    color: statusColor,
                                   ),
                                 ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(
-                                      statusIcon,
-                                      color: statusColor,
-                                      size: 14,
-                                    ),
-                                    SizedBox(width: 4),
-                                    Text(
-                                      route.status ?? 'Unknown',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontFamily: FontFamily.gilroyBold,
-                                        color: statusColor,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            */
-                            ],
+                              ],
+                            ),
                           ),
+                        */
                         ],
                       ),
                     ],
@@ -697,6 +453,23 @@ class _TotalRoutesState extends State<TotalRoutes> {
                   ),
                 ],
               ),
+              //Rider
+              SizedBox(height: 10),
+              Row(
+                children: [
+                  Icon(Icons.delivery_dining, color: blueColor, size: 18),
+                  SizedBox(width: 6),
+                  Text(
+                    "${route.riderName}",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontFamily: FontFamily.gilroyMedium,
+                      color: BlackColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
               // Quantity
               SizedBox(height: 10),
               Row(
@@ -720,13 +493,11 @@ class _TotalRoutesState extends State<TotalRoutes> {
               //table
               Table(
                 columnWidths: const {
-                  0: FlexColumnWidth(2.5),
+                  0: FlexColumnWidth(2),
                   1: FlexColumnWidth(1),
                   2: FlexColumnWidth(1),
                   3: FlexColumnWidth(1),
-                  4: FlexColumnWidth(1.5),
                 },
-
                 border: TableBorder.all(
                   color: Color(0xff006b8a).withOpacity(0.5),
                   borderRadius: BorderRadius.circular(10),
@@ -745,36 +516,13 @@ class _TotalRoutesState extends State<TotalRoutes> {
                           horizontal: 8,
                           vertical: 5,
                         ),
-                        child: TableCell(
-                          verticalAlignment: TableCellVerticalAlignment.middle,
-                          child: Text(
-                            "Milk Type/Liter",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: FontFamily.gilroyMedium,
-                              color: BlackColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 5,
-                        ),
-                        child: TableCell(
-                          verticalAlignment: TableCellVerticalAlignment.middle,
-
-                          child: Text(
-                            "0.5 Ltr",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: FontFamily.gilroyMedium,
-                              color: BlackColor,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        child: Text(
+                          "Milk Type/Liter",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: FontFamily.gilroyMedium,
+                            color: BlackColor,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
@@ -783,36 +531,13 @@ class _TotalRoutesState extends State<TotalRoutes> {
                           horizontal: 8,
                           vertical: 5,
                         ),
-                        child: TableCell(
-                          verticalAlignment: TableCellVerticalAlignment.middle,
-
-                          child: Text(
-                            "1 Ltr",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: FontFamily.gilroyMedium,
-                              color: BlackColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 5,
-                          vertical: 5,
-                        ),
-                        child: TableCell(
-                          verticalAlignment: TableCellVerticalAlignment.middle,
-
-                          child: Text(
-                            "2 Ltr",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: FontFamily.gilroyMedium,
-                              color: BlackColor,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        child: Text(
+                          "0.5 Ltr",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: FontFamily.gilroyMedium,
+                            color: BlackColor,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
@@ -821,17 +546,28 @@ class _TotalRoutesState extends State<TotalRoutes> {
                           horizontal: 8,
                           vertical: 5,
                         ),
-                        child: TableCell(
-                          verticalAlignment: TableCellVerticalAlignment.middle,
-
-                          child: Text(
-                            "Total",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: FontFamily.gilroyMedium,
-                              color: BlackColor,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        child: Text(
+                          "1 Ltr",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: FontFamily.gilroyMedium,
+                            color: BlackColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 5,
+                        ),
+                        child: Text(
+                          "Total",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: FontFamily.gilroyMedium,
+                            color: BlackColor,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
@@ -845,35 +581,13 @@ class _TotalRoutesState extends State<TotalRoutes> {
                           horizontal: 8,
                           vertical: 5,
                         ),
-                        child: TableCell(
-                          child: Text(
-                            "Cow Milk",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: FontFamily.gilroyMedium,
-                              color: BlackColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 5,
-                        ),
-                        child: TableCell(
-                          verticalAlignment: TableCellVerticalAlignment.middle,
-
-                          child: Text(
-                            " ${cow_halp_ltr_qty}",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: FontFamily.gilroyMedium,
-                              color: BlackColor,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        child: Text(
+                          "Cow Milk",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: FontFamily.gilroyMedium,
+                            color: BlackColor,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
@@ -882,17 +596,13 @@ class _TotalRoutesState extends State<TotalRoutes> {
                           horizontal: 8,
                           vertical: 5,
                         ),
-                        child: TableCell(
-                          verticalAlignment: TableCellVerticalAlignment.middle,
-
-                          child: Text(
-                            " ${cow_one_ltr_qty}",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: FontFamily.gilroyMedium,
-                              color: BlackColor,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        child: Text(
+                          " ${cow_halp_ltr_qty}",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: FontFamily.gilroyMedium,
+                            color: BlackColor,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
@@ -901,17 +611,13 @@ class _TotalRoutesState extends State<TotalRoutes> {
                           horizontal: 8,
                           vertical: 5,
                         ),
-                        child: TableCell(
-                          verticalAlignment: TableCellVerticalAlignment.middle,
-
-                          child: Text(
-                            " ${cow_two_ltr_qty}",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: FontFamily.gilroyMedium,
-                              color: BlackColor,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        child: Text(
+                          " ${cow_one_ltr_qty}",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: FontFamily.gilroyMedium,
+                            color: BlackColor,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
@@ -920,17 +626,13 @@ class _TotalRoutesState extends State<TotalRoutes> {
                           horizontal: 8,
                           vertical: 5,
                         ),
-                        child: TableCell(
-                          verticalAlignment: TableCellVerticalAlignment.middle,
-
-                          child: Text(
-                            " ${cow_total_qty}",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: FontFamily.gilroyMedium,
-                              color: BlackColor,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        child: Text(
+                          " ${cow_total_qty}",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: FontFamily.gilroyMedium,
+                            color: BlackColor,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
@@ -944,35 +646,13 @@ class _TotalRoutesState extends State<TotalRoutes> {
                           horizontal: 8,
                           vertical: 5,
                         ),
-                        child: TableCell(
-                          child: Text(
-                            "Buffalo Milk",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: FontFamily.gilroyMedium,
-                              color: BlackColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 5,
-                        ),
-                        child: TableCell(
-                          verticalAlignment: TableCellVerticalAlignment.middle,
-
-                          child: Text(
-                            " ${buffalo_halp_ltr_qty}",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: FontFamily.gilroyMedium,
-                              color: BlackColor,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        child: Text(
+                          "Buffalo Milk",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: FontFamily.gilroyMedium,
+                            color: BlackColor,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
@@ -981,17 +661,13 @@ class _TotalRoutesState extends State<TotalRoutes> {
                           horizontal: 8,
                           vertical: 5,
                         ),
-                        child: TableCell(
-                          verticalAlignment: TableCellVerticalAlignment.middle,
-
-                          child: Text(
-                            " ${buffalo_one_ltr_qty}",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: FontFamily.gilroyMedium,
-                              color: BlackColor,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        child: Text(
+                          " ${buffalo_halp_ltr_qty}",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: FontFamily.gilroyMedium,
+                            color: BlackColor,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
@@ -1000,17 +676,13 @@ class _TotalRoutesState extends State<TotalRoutes> {
                           horizontal: 8,
                           vertical: 5,
                         ),
-                        child: TableCell(
-                          verticalAlignment: TableCellVerticalAlignment.middle,
-
-                          child: Text(
-                            " ${buffalo_two_ltr_qty}",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: FontFamily.gilroyMedium,
-                              color: BlackColor,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        child: Text(
+                          " ${buffalo_one_ltr_qty}",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: FontFamily.gilroyMedium,
+                            color: BlackColor,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
@@ -1019,17 +691,13 @@ class _TotalRoutesState extends State<TotalRoutes> {
                           horizontal: 8,
                           vertical: 5,
                         ),
-                        child: TableCell(
-                          verticalAlignment: TableCellVerticalAlignment.middle,
-
-                          child: Text(
-                            " ${buffalo_total_qty}",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: FontFamily.gilroyMedium,
-                              color: BlackColor,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        child: Text(
+                          " ${buffalo_total_qty}",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: FontFamily.gilroyMedium,
+                            color: BlackColor,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
@@ -1244,18 +912,15 @@ class _TotalRoutesState extends State<TotalRoutes> {
                       color: greyColor,
                     ),
                   ),
-                  // SizedBox(width: 30),
                   Spacer(),
                   Icon(Icons.access_time, color: orangeColor, size: 16),
                   SizedBox(width: 6),
-                  Expanded(
-                    child: Text(
-                      route.deliveryTime ?? "",
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontFamily: FontFamily.gilroyMedium,
-                        color: greyColor,
-                      ),
+                  Text(
+                    route.deliveryTime ?? "",
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontFamily: FontFamily.gilroyMedium,
+                      color: greyColor,
                     ),
                   ),
                 ],
@@ -1263,7 +928,7 @@ class _TotalRoutesState extends State<TotalRoutes> {
 
               Divider(color: Color(0xff006b8a), height: 10, thickness: 0.1),
 
-              /// Total Amount Row
+              //Total Amount Row
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -1276,7 +941,7 @@ class _TotalRoutesState extends State<TotalRoutes> {
                     ),
                   ),
                   Text(
-                    route.total!,
+                    "₹${totalAmount.toStringAsFixed(2)}",
                     style: TextStyle(
                       fontSize: 20,
                       fontFamily: FontFamily.gilroyBold,

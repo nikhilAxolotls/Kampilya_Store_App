@@ -232,19 +232,20 @@ class _LoginscreenState extends State<Loginscreen> {
       Map map = {"email": email, "password": password};
       Uri uri = Uri.parse(AppUrl.login);
       var response = await http.post(uri, body: jsonEncode(map));
+      var result = jsonDecode(response.body);
       if (response.statusCode == 200) {
-        var result = jsonDecode(response.body);
-        loginpage = result["Result"];
-        save("Firstuser", true);
-        save("Remember", isChecked); // ✅ Add this
-        setState(() {
-          save("StoreLogin", result["StoreLogin"]);
-          // currency = result["currency"];
-          save("currency", result["currency"]);
-        });
-        print("*********************${loginpage}");
+        if (result["Result"] == "true") {
+          //
+          loginpage = result["Result"];
+          save("Firstuser", true);
+          save("Remember", isChecked); // ✅ Add this
+          setState(() {
+            save("StoreLogin", result["StoreLogin"]);
+            // currency = result["currency"];
+            save("currency", result["currency"]);
+          });
+          print("*********************${loginpage}");
 
-        if (loginpage == "true") {
           Get.offAll(() => BottoBarScreen());
           // OneSignal.shared.sendTag("store_id", getData.read("StoreLogin")["id"]);
           OneSignal.User.addTagWithKey(
@@ -256,7 +257,6 @@ class _LoginscreenState extends State<Loginscreen> {
           ApiWrapper.showToastMessage(result["ResponseMsg"]);
         }
       }
-      // update();
     } catch (e) {
       print(e.toString());
     }

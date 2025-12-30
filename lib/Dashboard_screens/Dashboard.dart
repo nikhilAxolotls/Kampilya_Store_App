@@ -177,6 +177,168 @@ class _DashboardState extends State<Dashboard> {
                   Expanded(
                     child: GetBuilder<DashboardController>(
                       builder: (context) {
+                        // Remove the 10th and 11th items (earning payout and )
+                        // ---------------------------new data---------------------------
+                        final List<Map<String, dynamic>> filteredReportData =
+                            dashboard.dashboardlist
+                                .where(
+                                  (item) =>
+                                      item['title'] != 'Total On Hand Amount' &&
+                                      item['title'] != 'Earning' &&
+                                      item['title'] != 'Payout',
+                                )
+                                .map((item) => Map<String, dynamic>.from(item))
+                                .toList();
+
+                        dashboard.dashboardlist = filteredReportData;
+
+                        return dashboard.isLoading
+                            ? GridView.builder(
+                                itemCount: dashboard.dashboardlist.length,
+                                shrinkWrap: true,
+                                padding: EdgeInsets.zero,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      mainAxisSpacing: 8,
+                                      crossAxisSpacing: 8,
+                                      mainAxisExtent: 130,
+                                    ),
+                                itemBuilder: (context, index) {
+                                  return InkWell(
+                                    onTap: () {
+                                      switch (index) {
+                                        case 0:
+                                          setState(() {});
+                                          Get.to(() => Mymedicine());
+                                          break;
+                                        case 1:
+                                          setState(() {});
+                                          Get.to(() => MyCategory());
+                                          break;
+                                        case 2:
+                                          setState(() {});
+                                          Get.to(() => FaqScreen());
+                                          break;
+                                        case 3:
+                                          setState(() {});
+                                          Get.to(() => TimeSloatscreen());
+                                          break;
+                                        case 4:
+                                          setState(() {});
+                                          Get.to(() => Couponscreen());
+                                          break;
+                                        case 5:
+                                          setState(() {});
+                                          Get.to(() => RiderScreen());
+                                          break;
+                                        case 6:
+                                          setState(() {});
+                                          Get.to(() => ExtraImagescreen());
+                                          break;
+                                        case 7:
+                                          setState(() {});
+                                          Get.to(() => GalleryScreen());
+                                          break;
+                                        case 8:
+                                          setState(() {});
+                                          Get.to(() => NormalorderScreen());
+                                          break;
+                                        case 9:
+                                          setState(() {});
+                                          Get.to(() => PrescriptionOrder());
+                                          break;
+                                        case 10:
+                                          setState(() {});
+                                          Get.to(() => ListOfDeliveryScreen());
+                                          break;
+                                        case 11:
+                                          setState(() {});
+                                          Get.to(() => AttributeListScreen());
+
+                                        default:
+                                      }
+                                      // Get.to((routesList[index]));
+                                    },
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          SizedBox(width: 15),
+                                          SizedBox(
+                                            width: Get.width * 0.36,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                SizedBox(height: 15),
+
+                                                // index / 9 == 1 ||
+                                                //         index / 10 == 1 ||
+                                                //         index / 14 == 1
+                                                //     ? Text(
+                                                //         "${getData.read("currency")}${dashboard.dashboardlist[index]["report_data"].toStringAsFixed(2)}",
+                                                //         maxLines: 1,
+                                                //         style: TextStyle(
+                                                //           color: WhiteColor,
+                                                //           fontFamily: FontFamily
+                                                //               .gilroyBold,
+                                                //           fontSize: 20,
+                                                //           overflow: TextOverflow
+                                                //               .ellipsis,
+                                                //         ),
+                                                //       )
+                                                //     :
+                                                Text(
+                                                  "${dashboard.dashboardlist[index]["report_data"].toString()}",
+                                                  maxLines: 1,
+                                                  style: TextStyle(
+                                                    color: WhiteColor,
+                                                    fontFamily:
+                                                        FontFamily.gilroyBold,
+                                                    fontSize: 20,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  "${dashboard.dashboardlist[index]["title"]}",
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 2,
+                                                  style: TextStyle(
+                                                    fontSize: 20,
+                                                    color: WhiteColor,
+                                                    fontFamily: FontFamily
+                                                        .gilroyExtraBold,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: WhiteColor,
+                                        borderRadius: BorderRadius.circular(15),
+                                        image: DecorationImage(
+                                          image: AssetImage(
+                                            "assets/dImage.png",
+                                          ),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              )
+                            : Center(
+                                child: CircularProgressIndicator(
+                                  color: greenColor,
+                                ),
+                              );
+
+                        // ---------------------- old data ----------------------//
+                        /*
                         return dashboard.isLoading
                             ? GridView.builder(
                                 itemCount: dashboard.dashboardlist.length,
@@ -344,6 +506,7 @@ class _DashboardState extends State<Dashboard> {
                                   color: greenColor,
                                 ),
                               );
+                              */
                       },
                     ),
                   ),

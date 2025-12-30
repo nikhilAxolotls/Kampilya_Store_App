@@ -1,11 +1,25 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
+import 'package:storeappnew/Controller_class/add_milk_controller.dart';
+import 'package:storeappnew/Controller_class/milk_man_controller.dart';
+import 'package:storeappnew/Controller_class/milk_man_history_controller.dart';
+import 'package:storeappnew/Modal_class/add_milk_model.dart';
+import 'package:storeappnew/Modal_class/milk_man_history.dart';
+import 'package:storeappnew/Modal_class/milk_man_model.dart';
+import 'package:storeappnew/api_screens/confrigation.dart';
+import 'package:storeappnew/api_screens/data_store.dart';
 import 'package:storeappnew/utils/Colors.dart';
 import 'package:storeappnew/utils/Fontfamily.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MilkManDetailsScreen extends StatefulWidget {
-  final Map<String, dynamic> milkMan;
+  final Data milkMan;
 
   const MilkManDetailsScreen({super.key, required this.milkMan});
 
@@ -16,160 +30,54 @@ class MilkManDetailsScreen extends StatefulWidget {
 class _MilkManDetailsScreenState extends State<MilkManDetailsScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  MilkManHistoryController milkManHistoryController = Get.find();
 
-  // Dummy daily history data
-  final List<Map<String, dynamic>> dailyHistory = [
+  AddMilkController addMilkController = Get.put(AddMilkController());
+  MilkManController milkManController = Get.find();
+
+  // Daily history data - removed final to allow updates
+  /*
+  List<Map<String, dynamic>> dailyHistory = [
     {
       'date': '2025-12-04',
       'day': 'Today',
-      'morningQuantity': '45 L',
-      'eveningQuantity': '38 L',
-      'totalQuantity': '83 L',
-      'fat': '4.2%',
-      'snf': '8.5%',
+      'milkType': 'Cow',
+      'quantity': '45 L',
+      'fat': '4.2',
+      'snf': '8.5',
       'quality': 'Excellent',
-      'morningAmount': '₹2,250',
-      'eveningAmount': '₹1,900',
-      'totalAmount': '₹4,150',
+      'morningAmount': '2,250',
+      'eveningAmount': '1,900',
+      'totalAmount': '4,150',
       'status': 'Collected',
       'collectionTime': '06:30 AM / 06:00 PM',
       'paymentStatus': 'Pending',
-      'paymentMethod': '-',
-      'paymentDate': '-',
     },
     {
       'date': '2025-12-03',
       'day': 'Yesterday',
-      'morningQuantity': '42 L',
-      'eveningQuantity': '40 L',
-      'totalQuantity': '82 L',
-      'fat': '4.1%',
-      'snf': '8.4%',
+      'milkType': 'Buffalo',
+      'quantity': '40 L',
+      'fat': '4.1',
+      'snf': '8.4',
       'quality': 'Excellent',
-      'morningAmount': '₹2,100',
-      'eveningAmount': '₹2,000',
-      'totalAmount': '₹4,100',
+      'morningAmount': '2,100',
+      'eveningAmount': '2,000',
+      'totalAmount': '4,100',
       'status': 'Collected',
       'collectionTime': '06:25 AM / 06:10 PM',
       'paymentStatus': 'Paid',
-      'paymentMethod': 'UPI',
-      'paymentDate': '2025-12-03',
     },
-    {
-      'date': '2025-12-02',
-      'day': 'Monday',
-      'morningQuantity': '48 L',
-      'eveningQuantity': '36 L',
-      'totalQuantity': '84 L',
-      'fat': '4.3%',
-      'snf': '8.6%',
-      'quality': 'Excellent',
-      'morningAmount': '₹2,400',
-      'eveningAmount': '₹1,800',
-      'totalAmount': '₹4,200',
-      'status': 'Collected',
-      'collectionTime': '06:20 AM / 06:15 PM',
-      'paymentStatus': 'Paid',
-      'paymentMethod': 'Cash',
-      'paymentDate': '2025-12-02',
-    },
-    {
-      'date': '2025-12-01',
-      'day': 'Sunday',
-      'morningQuantity': '40 L',
-      'eveningQuantity': '42 L',
-      'totalQuantity': '82 L',
-      'fat': '4.0%',
-      'snf': '8.3%',
-      'quality': 'Good',
-      'morningAmount': '₹2,000',
-      'eveningAmount': '₹2,100',
-      'totalAmount': '₹4,100',
-      'status': 'Collected',
-      'collectionTime': '06:35 AM / 06:05 PM',
-      'paymentStatus': 'Partial',
-      'paymentMethod': 'Cash',
-      'paymentDate': '2025-12-01',
-      'paidAmount': '₹2,000',
-    },
-    {
-      'date': '2025-11-30',
-      'day': 'Saturday',
-      'morningQuantity': '46 L',
-      'eveningQuantity': '38 L',
-      'totalQuantity': '84 L',
-      'fat': '4.2%',
-      'snf': '8.5%',
-      'quality': 'Excellent',
-      'morningAmount': '₹2,300',
-      'eveningAmount': '₹1,900',
-      'totalAmount': '₹4,200',
-      'status': 'Collected',
-      'collectionTime': '06:15 AM / 06:20 PM',
-      'paymentStatus': 'Paid',
-      'paymentMethod': 'Bank Transfer',
-      'paymentDate': '2025-11-30',
-    },
-    {
-      'date': '2025-11-29',
-      'day': 'Friday',
-      'morningQuantity': '44 L',
-      'eveningQuantity': '40 L',
-      'totalQuantity': '84 L',
-      'fat': '4.1%',
-      'snf': '8.4%',
-      'quality': 'Good',
-      'morningAmount': '₹2,200',
-      'eveningAmount': '₹2,000',
-      'totalAmount': '₹4,200',
-      'status': 'Collected',
-      'collectionTime': '06:30 AM / 06:10 PM',
-      'paymentStatus': 'Paid',
-      'paymentMethod': 'UPI',
-      'paymentDate': '2025-11-29',
-    },
-    {
-      'date': '2025-11-28',
-      'day': 'Thursday',
-      'morningQuantity': '0 L',
-      'eveningQuantity': '0 L',
-      'totalQuantity': '0 L',
-      'fat': '-',
-      'snf': '-',
-      'quality': 'Not Collected',
-      'morningAmount': '₹0',
-      'eveningAmount': '₹0',
-      'totalAmount': '₹0',
-      'status': 'Missed',
-      'collectionTime': '-',
-      'paymentStatus': 'N/A',
-      'paymentMethod': '-',
-      'paymentDate': '-',
-    },
-    {
-      'date': '2025-11-27',
-      'day': 'Wednesday',
-      'morningQuantity': '50 L',
-      'eveningQuantity': '42 L',
-      'totalQuantity': '92 L',
-      'fat': '4.4%',
-      'snf': '8.7%',
-      'quality': 'Excellent',
-      'morningAmount': '₹2,500',
-      'eveningAmount': '₹2,100',
-      'totalAmount': '₹4,600',
-      'status': 'Collected',
-      'collectionTime': '06:10 AM / 06:25 PM',
-      'paymentStatus': 'Paid',
-      'paymentMethod': 'Cash',
-      'paymentDate': '2025-11-27',
-    },
+   
   ];
-
+*/
+  List<HistoryData> dailyHistory = [];
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+
+    dailyHistory = milkManHistoryController.history?.data ?? [];
   }
 
   @override
@@ -178,61 +86,68 @@ class _MilkManDetailsScreenState extends State<MilkManDetailsScreen>
     super.dispose();
   }
 
+  String getDayName(String supplyDate) {
+    // supplyDate format: yyyy-MM-dd
+    DateTime date = DateTime.parse(supplyDate);
+    return DateFormat('yyyy-MM-dd').format(DateTime.now()) == supplyDate
+        ? 'Today'
+        : DateFormat('EEEE').format(date);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: bgcolor,
-      body: CustomScrollView(
-        // physics: ReverseScrollPhysics(),
-        slivers: [
-          // App Bar with Profile
-          _buildSliverAppBar(),
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return [
+            // App Bar with Profile
+            _buildSliverAppBar(),
 
-          // Dashboard Cards
-          SliverToBoxAdapter(
-            child: Column(
-              children: [
-                SizedBox(height: 16),
-                _buildDashboardCards(),
-                SizedBox(height: 20),
-              ],
-            ),
-          ),
-
-          // Tabs Header
-          SliverPersistentHeader(
-            pinned: true,
-            delegate: _SliverAppBarDelegate(
-              TabBar(
-                controller: _tabController,
-                labelColor: greenColor,
-                unselectedLabelColor: greyColor,
-                indicatorColor: greenColor,
-                indicatorWeight: 3,
-                labelStyle: TextStyle(
-                  fontFamily: FontFamily.gilroyBold,
-                  fontSize: 15,
-                ),
-                unselectedLabelStyle: TextStyle(
-                  fontFamily: FontFamily.gilroyMedium,
-                  fontSize: 15,
-                ),
-                tabs: [
-                  Tab(text: 'Daily History'),
-                  Tab(text: 'Information'),
+            // Dashboard Cards
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  SizedBox(height: 10),
+                  _buildDashboardCards(),
+                  SizedBox(height: 10),
                 ],
               ),
             ),
-          ),
 
-          // Tab Content
-          SliverFillRemaining(
-            child: TabBarView(
-              controller: _tabController,
-              children: [_buildDailyHistoryTab(), _buildInformationTab()],
+            // Tabs Header
+            SliverPersistentHeader(
+              pinned: true,
+              delegate: _SliverAppBarDelegate(
+                TabBar(
+                  controller: _tabController,
+                  labelColor: greenColor,
+                  unselectedLabelColor: greyColor,
+                  indicatorColor: greenColor,
+                  indicatorWeight: 3,
+                  labelStyle: TextStyle(
+                    fontFamily: FontFamily.gilroyBold,
+                    fontSize: 15,
+                  ),
+                  unselectedLabelStyle: TextStyle(
+                    fontFamily: FontFamily.gilroyMedium,
+                    fontSize: 15,
+                  ),
+                  tabs: [
+                    Tab(text: 'Daily History'),
+                    Tab(text: 'Information'),
+                  ],
+                ),
+              ),
             ),
-          ),
-        ],
+          ];
+        },
+
+        // Tab Content
+        body: TabBarView(
+          controller: _tabController,
+          children: [_buildDailyHistoryTab(), _buildInformationTab()],
+        ),
       ),
     );
   }
@@ -240,7 +155,8 @@ class _MilkManDetailsScreenState extends State<MilkManDetailsScreen>
   // Sliver App Bar with Profile
   Widget _buildSliverAppBar() {
     return SliverAppBar(
-      expandedHeight: 250,
+      expandedHeight: 130,
+      collapsedHeight: 130,
       pinned: true,
       backgroundColor: WhiteColor,
       elevation: 0,
@@ -251,121 +167,186 @@ class _MilkManDetailsScreenState extends State<MilkManDetailsScreen>
         },
       ),
       actions: [
-        IconButton(
-          icon: Icon(Icons.call, color: WhiteColor),
-          onPressed: () {
-            // Call functionality
+        InkWell(
+          child: Icon(Icons.call, color: WhiteColor),
+          onTap: () async {
+            //launch Dialer
+            final Uri phoneUri = Uri(
+              scheme: 'tel',
+
+              path: widget.milkMan.phone.toString(), // phone number
+            );
+
+            if (await canLaunchUrl(phoneUri)) {
+              await launchUrl(phoneUri);
+            } else {
+              Fluttertoast.showToast(msg: 'Something went wrong');
+            }
           },
         ),
-        IconButton(
-          icon: Icon(Icons.more_vert, color: WhiteColor),
-          onPressed: () {
-            // More options
-          },
-        ),
-      ],
-      flexibleSpace: FlexibleSpaceBar(
-        background: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [greenColor, Color(0xff006b8a)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+        SizedBox(width: 10),
+        InkWell(
+          child: Container(
+            height: 30,
+            width: 100,
+            alignment: Alignment.center,
+            clipBehavior: Clip.antiAlias,
+            margin: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            decoration: BoxDecoration(
+              color: WhiteColor,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: WhiteColor, width: 2),
+            ),
+            child: Text(
+              "Add Milk",
+              style: TextStyle(
+                color: Color(0xff006b8a),
+                fontSize: 14,
+                fontWeight: FontWeight.w800,
+              ),
             ),
           ),
-          child: SafeArea(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(height: 10),
-                // Profile Image
-                Container(
-                  height: 100,
-                  width: 100,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: WhiteColor, width: 4),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 15,
-                        offset: Offset(0, 5),
+          onTap: () {
+            _showAddMilkBottomSheet();
+          },
+        ),
+        // IconButton(
+        //   icon: Icon(Icons.more_vert, color: WhiteColor),
+        //   onPressed: () {
+        //     // More options
+        //   },
+        // ),
+      ],
+      flexibleSpace: Container(
+        //alignment: Alignment.bottomCenter,
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [greenColor, Color(0xff006b8a)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              //SizedBox(height: 30),
+              // Profile Image
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 70,
+                    width: 70,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: WhiteColor, width: 4),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 15,
+                          offset: Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: ClipOval(
+                      child: Image.network(
+                        "${AppUrl.baseUrl + widget.milkMan.photo!}",
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            color: Colors.grey[300],
+                            child: Icon(
+                              Icons.person,
+                              size: 50,
+                              color: greyColor,
+                            ),
+                          );
+                        },
                       ),
-                    ],
-                  ),
-                  child: ClipOval(
-                    child: Image.network(
-                      widget.milkMan['img'],
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          color: Colors.grey[300],
-                          child: Icon(Icons.person, size: 50, color: greyColor),
-                        );
-                      },
                     ),
                   ),
-                ),
-                SizedBox(height: 10),
-                // Name
-                Text(
-                  widget.milkMan['name'],
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontFamily: FontFamily.gilroyBold,
-                    color: WhiteColor,
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Name
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                widget.milkMan.name ?? 'N/A',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontFamily: FontFamily.gilroyBold,
+                                  color: WhiteColor,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 6),
+
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Last Delivery: ${dailyHistory[0].supplyDate ?? 'Never'}\n${getDayName(dailyHistory[0].supplyDate ?? "")}",
+                            // 'Last Delivery: ${widget.milkMan['lastDelivery'] ?? 'Never'}',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontFamily: FontFamily.gilroyMedium,
+                              color: WhiteColor.withOpacity(0.9),
+                            ),
+                          ),
+                        ),
+                        // Rating
+
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.start,
+                        //   children: [
+                        //     Icon(Icons.star, color: yelloColor, size: 20),
+                        //     SizedBox(width: 4),
+                        //     Text(
+                        //       '${widget.milkMan['rating'] ?? '0.0'} Rating',
+                        //       style: TextStyle(
+                        //         fontSize: 15,
+                        //         fontFamily: FontFamily.gilroyBold,
+                        //         color: WhiteColor,
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(height: 6),
-                // Rating
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.star, color: yelloColor, size: 20),
-                    SizedBox(width: 4),
-                    Text(
-                      '${widget.milkMan['rating']} Rating',
+                  SizedBox(width: 8),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: widget.milkMan.status == 'Active'
+                          ? greentext
+                          : greyColor,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      widget.milkMan.status ?? 'Unknown',
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 12,
                         fontFamily: FontFamily.gilroyBold,
                         color: WhiteColor,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(width: 16),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: widget.milkMan['status'] == 'Active'
-                            ? greentext
-                            : greyColor,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        widget.milkMan['status'],
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: FontFamily.gilroyBold,
-                          color: WhiteColor,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 8),
-                // Last Delivery
-                Text(
-                  'Last Delivery: ${widget.milkMan['lastDelivery']}',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontFamily: FontFamily.gilroyMedium,
-                    color: WhiteColor.withOpacity(0.9),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+              SizedBox(height: 8),
+            ],
           ),
         ),
       ),
@@ -374,60 +355,191 @@ class _MilkManDetailsScreenState extends State<MilkManDetailsScreen>
 
   // Dashboard Cards
   Widget _buildDashboardCards() {
+    //calculate total supply
+    String calculateTotalSupply() {
+      final list = milkManHistoryController.history?.data ?? [];
+
+      final total = list.fold<double>(
+        0.0,
+        (sum, e) => sum + double.tryParse(e.quantityLitre ?? "0")!,
+      );
+
+      return total.toStringAsFixed(1);
+    }
+
+    //calculate total amount
+    String calculateTotalAmount() {
+      final list = milkManHistoryController.history?.data ?? [];
+
+      final total = list.fold<double>(
+        0.0,
+        (sum, e) => sum + double.tryParse(e.totalPrice ?? "0")!,
+      );
+
+      return total.toStringAsFixed(1);
+    }
+
+    //Daily Average = (Total quantity of milk supplied) / (Number of unique supply dates)
+    // String calculateDailyAverage() {
+    //   final list = milkManHistoryController.history?.data ?? [];
+
+    //   if (list.isEmpty) return "0.00";
+
+    //   final total = list.fold<double>(
+    //     0.0,
+    //     (sum, e) => sum + double.tryParse(e.quantityLitre ?? "0")!,
+    //   );
+
+    //   final average = total / list.length;
+    //   return average.toStringAsFixed(2);
+    // }
+
+    String calculateDailyAverageMilk() {
+      final data = milkManHistoryController.history?.data ?? [];
+
+      if (data.isEmpty) return "0.00";
+
+      // Map to store total milk per day
+      Map<String, double> dailyTotals = {};
+
+      for (var e in data) {
+        final date = e.supplyDate; // expected yyyy-MM-dd
+        final qty = double.tryParse(e.quantityLitre ?? "0") ?? 0;
+
+        if (date == null || date.isEmpty) continue;
+
+        dailyTotals[date] = (dailyTotals[date] ?? 0) + qty;
+      }
+
+      if (dailyTotals.isEmpty) return "0.00";
+
+      // Total milk across all days
+      double totalMilk = dailyTotals.values.fold(0, (a, b) => a + b);
+
+      // Number of unique days
+      int totalDays = dailyTotals.length;
+
+      double dailyAvg = totalMilk / totalDays;
+
+      return dailyAvg.toStringAsFixed(1);
+    }
+
+    //calculate buffalo milk supply
+    String calculateBuffaloMilkSupply() {
+      final today = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+      final list = milkManHistoryController.history?.data ?? [];
+
+      final total = list
+          .where(
+            (e) =>
+                e.milkType?.toLowerCase() == "buffalo" && e.supplyDate == today,
+          )
+          .fold<double>(
+            0.0,
+            (sum, e) => sum + double.tryParse(e.quantityLitre ?? "0")!,
+          );
+
+      return total.toStringAsFixed(1);
+    }
+
+    //calculate cow milk supply
+    String calculateCowMilkSupply() {
+      final today = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+      final list = milkManHistoryController.history?.data ?? [];
+
+      final total = list
+          .where(
+            (e) => e.milkType?.toLowerCase() == "cow" && e.supplyDate == today,
+          )
+          .fold<double>(
+            0.0,
+            (sum, e) => sum + double.tryParse(e.quantityLitre ?? "0")!,
+          );
+
+      return total.toStringAsFixed(1);
+    }
+
     return Column(
       children: [
         // First Row
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: 15),
           child: Row(
             children: [
-              Expanded(
+              Flexible(
                 child: _buildDashboardCard(
                   icon: Icons.water_drop,
                   label: 'Total Supply',
-                  value: widget.milkMan['totalMilkSupplied'],
+                  value:
+                      calculateTotalSupply(), // widget.milkMan.totalMilkSupplied ?? "",
                   color: blueColor,
                 ),
               ),
-              SizedBox(width: 12),
-              Expanded(
+              SizedBox(width: 8),
+              Flexible(
                 child: _buildDashboardCard(
                   icon: Icons.trending_up,
                   label: 'Daily Average',
-                  value: widget.milkMan['monthlyAverage'],
+                  value:
+                      calculateDailyAverageMilk(), //widget.milkMan.dailyAverage ?? "",
                   color: greenColor,
                 ),
               ),
             ],
           ),
         ),
-        SizedBox(height: 12),
         // Second Row
+        SizedBox(height: 8),
+        // Padding(
+        //   padding: EdgeInsets.symmetric(horizontal: 16),
+        //   child: _buildDashboardCard(
+        //     icon: Icons.account_balance_wallet,
+        //     label: 'Total Amount',
+        //     value:
+        //         calculateTotalAmount(), //'₹${widget.milkMan.totalAmount ?? '0'}',
+        //     color: buttonColor,
+        //   ),
+        // ), //
+        // SizedBox(height: 8),
+
+        // Padding(
+        //   padding: const EdgeInsets.symmetric(horizontal: 16),
+        //   child: _buildDashboardCard(
+        //     icon: Icons.pending_actions,
+        //     label: 'Pending Amount',
+        //     value: '₹${widget.milkMan.pendingAmount ?? '0'}',
+        //     color: orangeColor,
+        //   ),
+        // ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
               Expanded(
                 child: _buildDashboardCard(
                   icon: Icons.account_balance_wallet,
                   label: 'Total Amount',
-                  value: widget.milkMan['totalAmount'],
+                  value:
+                      "₹${calculateTotalAmount()}", //'₹${widget.milkMan.totalAmount ?? '0'}',
                   color: buttonColor,
                 ),
               ),
-              SizedBox(width: 12),
+              SizedBox(width: 8),
               Expanded(
                 child: _buildDashboardCard(
                   icon: Icons.pending_actions,
-                  label: 'Pending',
-                  value: widget.milkMan['pendingAmount'],
+                  label: 'Pending Amount',
+                  value: '₹${widget.milkMan.pendingAmount ?? '0'}',
                   color: orangeColor,
                 ),
               ),
             ],
           ),
         ),
-        SizedBox(height: 12),
+
+        SizedBox(height: 8),
         // Third Row
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16),
@@ -435,18 +547,48 @@ class _MilkManDetailsScreenState extends State<MilkManDetailsScreen>
             children: [
               Expanded(
                 child: _buildDashboardCard(
+                  iconString: '🐄',
                   icon: Icons.pets,
-                  label: 'Cows',
-                  value: '${widget.milkMan['cowCount']}',
+                  label: 'Cows Milk Rate (₹/L)',
+                  value: '₹${widget.milkMan.todayRate!.cow!}',
                   color: Color(0xff8B4513),
                 ),
               ),
-              SizedBox(width: 12),
+              SizedBox(width: 8),
               Expanded(
                 child: _buildDashboardCard(
+                  iconString: '🐃',
                   icon: Icons.pets,
-                  label: 'Buffaloes',
-                  value: '${widget.milkMan['buffaloCount']}',
+                  label: 'Buffaloes Milk Rate (₹/L)',
+                  value: '₹${widget.milkMan.todayRate!.buffalo!}',
+                  color: Color(0xff696969),
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 8),
+        // Third Row
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            children: [
+              Expanded(
+                child: _buildDashboardCard(
+                  iconString: '🐄',
+                  icon: Icons.pets,
+                  label: 'Today Cow Milk Supply (L)',
+                  value: '${calculateCowMilkSupply()}',
+                  color: Color(0xff8B4513),
+                ),
+              ),
+              SizedBox(width: 8),
+              Expanded(
+                child: _buildDashboardCard(
+                  iconString: '🐃',
+                  icon: Icons.pets,
+                  label: 'Today Buffalo Milk Supply (L)',
+                  value: '${calculateBuffaloMilkSupply()}',
                   color: Color(0xff696969),
                 ),
               ),
@@ -459,16 +601,18 @@ class _MilkManDetailsScreenState extends State<MilkManDetailsScreen>
 
   // Dashboard Card
   Widget _buildDashboardCard({
+    String? iconString,
     required IconData icon,
     required String label,
     required String value,
     required Color color,
   }) {
     return Container(
-      padding: EdgeInsets.all(16),
+      alignment: Alignment.center,
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
         color: WhiteColor,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -478,33 +622,54 @@ class _MilkManDetailsScreenState extends State<MilkManDetailsScreen>
         ],
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.max,
         children: [
-          Container(
-            padding: EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, color: color, size: 28),
-          ),
-          SizedBox(height: 12),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 20,
-              fontFamily: FontFamily.gilroyBold,
-              color: BlackColor,
-            ),
-          ),
-          SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              fontFamily: FontFamily.gilroyMedium,
-              color: greyColor,
-            ),
-            textAlign: TextAlign.center,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                padding: EdgeInsets.all(7),
+                decoration: BoxDecoration(
+                  color: color.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: iconString != null
+                    ? Text(
+                        iconString,
+                        style: TextStyle(color: color, fontSize: 22),
+                      )
+                    : Icon(icon, color: color, size: 28),
+              ),
+              SizedBox(width: 4),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      value,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontFamily: FontFamily.gilroyBold,
+                        color: BlackColor,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    SizedBox(height: 1),
+                    Text(
+                      label,
+                      overflow: TextOverflow.clip,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontFamily: FontFamily.gilroyMedium,
+                        color: greyColor,
+                      ),
+                      textAlign: TextAlign.start,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -514,29 +679,38 @@ class _MilkManDetailsScreenState extends State<MilkManDetailsScreen>
   // Daily History Tab
   Widget _buildDailyHistoryTab() {
     return RefreshIndicator(
-      onRefresh: () async {
-        await Future.delayed(Duration(seconds: 1));
-      },
       color: greenColor,
+      onRefresh: () async {
+        await Future.delayed(const Duration(seconds: 1));
+        await milkManHistoryController.getMilkManHistory(
+          milkmanId: widget.milkMan.id,
+        );
+      },
       child: ListView.builder(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
+        physics: const AlwaysScrollableScrollPhysics(),
         itemCount: dailyHistory.length,
         itemBuilder: (context, index) {
-          return _buildHistoryCard(dailyHistory[index]);
+          final item = dailyHistory[index];
+          return _buildHistoryCard(item);
         },
       ),
     );
   }
 
   // History Card
-  Widget _buildHistoryCard(Map<String, dynamic> history) {
-    final isMissed = history['status'] == 'Missed';
+  Widget _buildHistoryCard(HistoryData history) {
+    final isMissed = history.status == 'Missed';
     final statusColor = isMissed
         ? RedColor
-        : (history['quality'] == 'Excellent' ? greentext : yelloColor);
+        : (history.quality == 'Excellent' || history.quality == 'Good'
+            ? greentext
+            : history.quality == 'Poor'
+                ? Colors.red
+                : yelloColor);
 
     return Container(
-      margin: EdgeInsets.only(bottom: 16),
+      margin: EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
         color: WhiteColor,
         borderRadius: BorderRadius.circular(20),
@@ -553,7 +727,7 @@ class _MilkManDetailsScreenState extends State<MilkManDetailsScreen>
         ],
       ),
       child: Padding(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -580,7 +754,7 @@ class _MilkManDetailsScreenState extends State<MilkManDetailsScreen>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          history['day'],
+                          getDayName(history.supplyDate ?? ""),
                           style: TextStyle(
                             fontSize: 16,
                             fontFamily: FontFamily.gilroyBold,
@@ -589,7 +763,7 @@ class _MilkManDetailsScreenState extends State<MilkManDetailsScreen>
                         ),
                         SizedBox(height: 2),
                         Text(
-                          history['date'],
+                          history.supplyDate ?? "",
                           style: TextStyle(
                             fontSize: 13,
                             fontFamily: FontFamily.gilroyMedium,
@@ -608,7 +782,7 @@ class _MilkManDetailsScreenState extends State<MilkManDetailsScreen>
                     border: Border.all(color: statusColor.withOpacity(0.3)),
                   ),
                   child: Text(
-                    history['status'],
+                    history.status ?? "",
                     style: TextStyle(
                       fontSize: 12,
                       fontFamily: FontFamily.gilroyBold,
@@ -620,43 +794,83 @@ class _MilkManDetailsScreenState extends State<MilkManDetailsScreen>
             ),
 
             if (!isMissed) ...[
-              SizedBox(height: 16),
+              SizedBox(height: 8),
 
               // Divider
-              Divider(color: lightgrey, height: 1),
+              //   Divider(color: lightgrey, height: 1),
+              //SizedBox(height: 8),
 
-              SizedBox(height: 16),
+              //
+              Divider(color: greenColor.withOpacity(0.5), height: 1),
+              SizedBox(height: 2),
 
-              // Morning and Evening Collection
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Expanded(
-                    child: _buildCollectionInfo(
-                      'Morning',
-                      history['morningQuantity'],
-                      history['morningAmount'],
-                      Icons.wb_sunny,
-                      yelloColor,
-                    ),
+                  Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            history.milkType == 'cow' ? '🐄' : '🐃',
+                            style: TextStyle(fontSize: 25),
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            "${double.tryParse(history.quantityLitre ?? '0')!.toStringAsFixed(1)} L",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: FontFamily.gilroyBold,
+                              color: BlackColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        '${history.milkType?.replaceAll("cow", "Cow").replaceAll("buffalo", "Buffalo")} Milk',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: FontFamily.gilroyMedium,
+                          color: greyColor,
+                        ),
+                      ),
+                    ],
                   ),
                   Container(height: 60, width: 1, color: lightgrey),
-                  Expanded(
-                    child: _buildCollectionInfo(
-                      'Evening',
-                      history['eveningQuantity'],
-                      history['eveningAmount'],
-                      Icons.nightlight_round,
-                      buttonColor,
-                    ),
+                  Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text('💸', style: TextStyle(fontSize: 25)),
+                          SizedBox(width: 10),
+                          Text(
+                            '₹${double.tryParse(history.totalPrice ?? '0')!.toStringAsFixed(1)}',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: FontFamily.gilroyBold,
+                              color: BlackColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        'Total Amount',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: FontFamily.gilroyMedium,
+                          color: greyColor,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
 
-              SizedBox(height: 16),
+              SizedBox(height: 8),
 
               // Quality Metrics
               Container(
-                padding: EdgeInsets.all(12),
+                padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: bgcolor,
                   borderRadius: BorderRadius.circular(12),
@@ -666,13 +880,27 @@ class _MilkManDetailsScreenState extends State<MilkManDetailsScreen>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        _buildQualityMetric('Fat', history['fat'], blueColor),
+                        _buildQualityMetric(
+                          'Fat',
+                          '${history.fat}%',
+                          blueColor,
+                        ),
                         Container(height: 30, width: 1, color: lightgrey),
-                        _buildQualityMetric('SNF', history['snf'], greenColor),
+                        _buildQualityMetric(
+                          'SNF',
+                          '${history.snf}%',
+                          greenColor,
+                        ),
+                        Container(height: 30, width: 1, color: lightgrey),
+                        _buildQualityMetric(
+                          'Rate',
+                          '₹${history.todaysRate}',
+                          greenColor,
+                        ),
                         Container(height: 30, width: 1, color: lightgrey),
                         _buildQualityMetric(
                           'Quality',
-                          history['quality'],
+                          history.quality ?? "",
                           statusColor,
                         ),
                       ],
@@ -681,269 +909,15 @@ class _MilkManDetailsScreenState extends State<MilkManDetailsScreen>
                 ),
               ),
 
-              SizedBox(height: 12),
-
-              // Total Row
-              Container(
-                padding: EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      greenColor.withOpacity(0.1),
-                      greenColor.withOpacity(0.05),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: greenColor.withOpacity(0.2)),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.water_drop, color: greenColor, size: 20),
-                        SizedBox(width: 8),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Total Quantity',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontFamily: FontFamily.gilroyMedium,
-                                color: greyColor,
-                              ),
-                            ),
-                            Text(
-                              history['totalQuantity'],
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontFamily: FontFamily.gilroyBold,
-                                color: greenColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          'Total Amount',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: FontFamily.gilroyMedium,
-                            color: greyColor,
-                          ),
-                        ),
-                        Text(
-                          history['totalAmount'],
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontFamily: FontFamily.gilroyBold,
-                            color: greenColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-
-              SizedBox(height: 12),
-
-              // Payment Information Card
-              Container(
-                padding: EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: _getPaymentStatusColor(
-                    history['paymentStatus'],
-                  ).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: _getPaymentStatusColor(
-                      history['paymentStatus'],
-                    ).withOpacity(0.3),
-                    width: 1.5,
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: _getPaymentStatusColor(
-                                  history['paymentStatus'],
-                                ).withOpacity(0.2),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Icon(
-                                _getPaymentIcon(history['paymentStatus']),
-                                color: _getPaymentStatusColor(
-                                  history['paymentStatus'],
-                                ),
-                                size: 20,
-                              ),
-                            ),
-                            SizedBox(width: 12),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Payment Status',
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    fontFamily: FontFamily.gilroyMedium,
-                                    color: greyColor,
-                                  ),
-                                ),
-                                SizedBox(height: 2),
-                                Text(
-                                  history['paymentStatus'],
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: FontFamily.gilroyBold,
-                                    color: _getPaymentStatusColor(
-                                      history['paymentStatus'],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        if (history['paymentStatus'] != 'Pending' &&
-                            history['paymentStatus'] != 'N/A')
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 6,
-                            ),
-                            decoration: BoxDecoration(
-                              color: blueColor.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  _getPaymentMethodIcon(
-                                    history['paymentMethod'],
-                                  ),
-                                  color: blueColor,
-                                  size: 14,
-                                ),
-                                SizedBox(width: 6),
-                                Text(
-                                  history['paymentMethod'],
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: FontFamily.gilroyBold,
-                                    color: blueColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                      ],
-                    ),
-                    if (history['paymentStatus'] == 'Partial') ...[
-                      SizedBox(height: 12),
-                      Divider(color: lightgrey, height: 1),
-                      SizedBox(height: 12),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Paid Amount',
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  fontFamily: FontFamily.gilroyMedium,
-                                  color: greyColor,
-                                ),
-                              ),
-                              SizedBox(height: 2),
-                              Text(
-                                history['paidAmount'],
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontFamily: FontFamily.gilroyBold,
-                                  color: greentext,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                'Remaining',
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  fontFamily: FontFamily.gilroyMedium,
-                                  color: greyColor,
-                                ),
-                              ),
-                              SizedBox(height: 2),
-                              Text(
-                                '₹${int.parse(history['totalAmount'].replaceAll(RegExp(r'[^0-9]'), '')) - int.parse(history['paidAmount'].replaceAll(RegExp(r'[^0-9]'), ''))}',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontFamily: FontFamily.gilroyBold,
-                                  color: orangeColor,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                    if (history['paymentDate'] != '-') ...[
-                      SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.calendar_today,
-                            color: greyColor,
-                            size: 12,
-                          ),
-                          SizedBox(width: 4),
-                          Text(
-                            'Paid on ${history['paymentDate']}',
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontFamily: FontFamily.gilroyMedium,
-                              color: greyColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-
               SizedBox(height: 8),
-
               // Collection Time
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.access_time, color: greyColor, size: 14),
+                  Icon(Icons.access_time, color: redgradient, size: 14),
                   SizedBox(width: 4),
                   Text(
-                    history['collectionTime'],
+                    history.supplyTime ?? "",
                     style: TextStyle(
                       fontSize: 12,
                       fontFamily: FontFamily.gilroyMedium,
@@ -953,7 +927,7 @@ class _MilkManDetailsScreenState extends State<MilkManDetailsScreen>
                 ],
               ),
             ] else ...[
-              SizedBox(height: 12),
+              SizedBox(height: 8),
               Center(
                 child: Text(
                   'No collection recorded for this day',
@@ -980,34 +954,45 @@ class _MilkManDetailsScreenState extends State<MilkManDetailsScreen>
     IconData icon,
     Color color,
   ) {
-    return Column(
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(icon, color: color, size: 24),
-        SizedBox(height: 8),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            fontFamily: FontFamily.gilroyMedium,
-            color: greyColor,
-          ),
+        Column(
+          children: [
+            Icon(icon, color: color, size: 24),
+            SizedBox(height: 8),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                fontFamily: FontFamily.gilroyMedium,
+                color: greyColor,
+              ),
+            ),
+          ],
         ),
-        SizedBox(height: 4),
-        Text(
-          quantity,
-          style: TextStyle(
-            fontSize: 16,
-            fontFamily: FontFamily.gilroyBold,
-            color: BlackColor,
-          ),
-        ),
-        Text(
-          amount,
-          style: TextStyle(
-            fontSize: 13,
-            fontFamily: FontFamily.gilroyBold,
-            color: color,
-          ),
+        SizedBox(width: 12),
+        Column(
+          children: [
+            Text(
+              quantity,
+              style: TextStyle(
+                fontSize: 16,
+                fontFamily: FontFamily.gilroyBold,
+                color: BlackColor,
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              amount,
+              style: TextStyle(
+                fontSize: 12,
+                fontFamily: FontFamily.gilroyBold,
+                color: color,
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -1048,74 +1033,74 @@ class _MilkManDetailsScreenState extends State<MilkManDetailsScreen>
           _buildSectionTitle('Contact Information'),
           SizedBox(height: 12),
           _buildInfoCard([
-            _buildInfoRow(Icons.person, 'Name', widget.milkMan['name']),
-            _buildInfoRow(Icons.phone, 'Phone', widget.milkMan['phone']),
+            _buildInfoRow(Icons.person, 'Name', widget.milkMan.name ?? ""),
+            _buildInfoRow(Icons.phone, 'Phone', widget.milkMan.phone ?? ""),
             _buildInfoRow(
               Icons.location_on,
               'Address',
-              widget.milkMan['address'],
+              widget.milkMan.address ?? "",
             ),
-          ]),
-          SizedBox(height: 20),
-          _buildSectionTitle('Business Details'),
-          SizedBox(height: 12),
-          _buildInfoCard([
             _buildInfoRow(
               Icons.calendar_today,
               'Joined Date',
-              widget.milkMan['joinedDate'],
+              widget.milkMan.createdAt?.substring(0, 10) ?? "",
             ),
             _buildInfoRow(
               Icons.event,
               'Last Delivery',
-              widget.milkMan['lastDelivery'],
-            ),
-            _buildInfoRow(
-              Icons.pets,
-              'Total Cattle',
-              '${widget.milkMan['cowCount'] + widget.milkMan['buffaloCount']} (${widget.milkMan['cowCount']} Cows, ${widget.milkMan['buffaloCount']} Buffaloes)',
+              " ${dailyHistory[0].supplyDate ?? ""} (${getDayName(dailyHistory[0].supplyDate ?? "")})",
             ),
           ]),
-          SizedBox(height: 20),
-          _buildSectionTitle('Performance Metrics'),
-          SizedBox(height: 12),
-          _buildInfoCard([
-            _buildInfoRow(
-              Icons.water_drop,
-              'Total Supply',
-              widget.milkMan['totalMilkSupplied'],
-            ),
-            _buildInfoRow(
-              Icons.trending_up,
-              'Daily Average',
-              widget.milkMan['monthlyAverage'],
-            ),
-            _buildInfoRow(
-              Icons.star,
-              'Rating',
-              '${widget.milkMan['rating']} / 5.0',
-            ),
-          ]),
-          SizedBox(height: 20),
-          _buildSectionTitle('Financial Summary'),
-          SizedBox(height: 12),
-          _buildInfoCard([
-            _buildInfoRow(
-              Icons.account_balance_wallet,
-              'Total Amount',
-              widget.milkMan['totalAmount'],
-            ),
-            _buildInfoRow(
-              Icons.pending_actions,
-              'Pending Amount',
-              widget.milkMan['pendingAmount'],
-            ),
-            _buildInfoRow(
-              Icons.payment,
-              'Paid Amount',
-              '₹${int.parse(widget.milkMan['totalAmount'].replaceAll(RegExp(r'[^0-9]'), '')) - int.parse(widget.milkMan['pendingAmount'].replaceAll(RegExp(r'[^0-9]'), ''))}',
-            ),
-          ]),
+          // SizedBox(height: 20),
+          // _buildSectionTitle('Business Details'),
+          // SizedBox(height: 12),
+          // _buildInfoCard([
+          // _buildInfoRow(
+          //   Icons.pets,
+          //   'Cow Milk Rate',
+          //   '₹${widget.milkMan.cowMilkRate}/L',
+          // ),
+          // _buildInfoRow(
+          //   Icons.pets,
+          //   'Buffalo Milk Rate',
+          //   '₹${widget.milkMan.buffaloMilkRate}/L',
+          // ),
+          //]),
+          // SizedBox(height: 20),
+          // _buildSectionTitle('Performance Metrics'),
+          // SizedBox(height: 12),
+          // _buildInfoCard([
+          //   _buildInfoRow(
+          //     Icons.water_drop,
+          //     'Total Supply',
+          //     widget.milkMan.totalMilkSupplied ?? "",
+          //   ),
+          //   _buildInfoRow(
+          //     Icons.trending_up,
+          //     'Daily Average',
+          //     widget.milkMan.dailyAverage ?? "",
+          //   ),
+          // ]),
+          // SizedBox(height: 20),
+          // _buildSectionTitle('Financial Summary'),
+          // SizedBox(height: 12),
+          // _buildInfoCard([
+          //   _buildInfoRow(
+          //     Icons.account_balance_wallet,
+          //     'Total Amount',
+          //     '₹${widget.milkMan.totalAmount ?? ""}',
+          //   ),
+          //   _buildInfoRow(
+          //     Icons.pending_actions,
+          //     'Pending Amount',
+          //     '₹${widget.milkMan.pendingAmount ?? ""}',
+          //   ),
+          //   _buildInfoRow(
+          //     Icons.payment,
+          //     'Paid Amount',
+          //     '₹${(int.tryParse(widget.milkMan.totalAmount?.replaceAll(RegExp(r'[^0-9]'), '') ?? '0') ?? 0) - (int.tryParse(widget.milkMan.pendingAmount?.replaceAll(RegExp(r'[^0-9]'), '') ?? '0') ?? 0)}',
+          //   ),
+          // ]),
         ],
       ),
     );
@@ -1244,6 +1229,473 @@ class _MilkManDetailsScreenState extends State<MilkManDetailsScreen>
       default:
         return Icons.payment;
     }
+  }
+
+  void _showAddMilkBottomSheet() {
+    final TextEditingController fatController = TextEditingController();
+    final TextEditingController snfController = TextEditingController();
+    DateTime selectedDate = DateTime.now();
+    String selectedQuality = 'Excellent';
+
+    double calculateTotal() {
+      final rateStr = milkManHistoryController.selectedMilkType.value == "Cow"
+          ? widget.milkMan.todayRate!.cow
+          : widget.milkMan.todayRate!.buffalo;
+      final qtyStr = milkManHistoryController.qtyController.text;
+
+      if (rateStr == null || rateStr.isEmpty) return 0.0;
+      if (qtyStr.isEmpty) return 0.0;
+
+      // Extract only numbers/decimals from rate in case it contains ₹ of other chars
+      final cleanRateStr = rateStr.replaceAll(RegExp(r'[^0-9.]'), '');
+      final rate = double.tryParse(cleanRateStr) ?? 0.0;
+      final qty = double.tryParse(qtyStr) ?? 0.0;
+
+      return rate * qty;
+    }
+
+    double currentTotal = calculateTotal();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setBottomSheetState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+                left: 16,
+                right: 16,
+                top: 8,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Container(
+                        height: 10,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          color: greenColor.withOpacity(0.5),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: WhiteColor, width: 2),
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Add Milk",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: FontFamily.gilroyBold,
+                            color: BlackColor,
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.close),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ],
+                    ),
+                    Divider(),
+                    SizedBox(height: 5),
+
+                    // Date Selection
+                    InkWell(
+                      onTap: () async {
+                        final DateTime? picked = await showDatePicker(
+                          context: context,
+                          initialDate: selectedDate,
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime.now(),
+                        );
+                        if (picked != null && picked != selectedDate) {
+                          setBottomSheetState(() {
+                            selectedDate = picked;
+                          });
+                        }
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 12,
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: lightgrey),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(Icons.calendar_today, color: greenColor),
+                            SizedBox(width: 10),
+                            Text(
+                              DateFormat('dd-MM-yyyy').format(selectedDate),
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: FontFamily.gilroyMedium,
+                                color: BlackColor,
+                              ),
+                            ),
+                            Spacer(),
+                            Text(
+                              "Change",
+                              style: TextStyle(
+                                color: blueColor,
+                                fontFamily: FontFamily.gilroyBold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+
+                    // Milk Type Selection
+                    Text(
+                      "Select Milk Type",
+                      style: TextStyle(
+                        fontFamily: FontFamily.gilroyMedium,
+                        color: greyColor,
+                        fontSize: 14,
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Radio<String>(
+                          value: 'Cow',
+                          groupValue:
+                              milkManHistoryController.selectedMilkType.value,
+                          activeColor: greenColor,
+                          onChanged: (value) {
+                            setBottomSheetState(() {
+                              milkManHistoryController.selectedMilkType.value =
+                                  value!;
+                              currentTotal = calculateTotal();
+                            });
+                          },
+                        ),
+                        Text(
+                          'Cow',
+                          style: TextStyle(fontFamily: FontFamily.gilroyMedium),
+                        ),
+                        SizedBox(width: 20),
+                        Radio<String>(
+                          value: 'Buffalo',
+                          groupValue:
+                              milkManHistoryController.selectedMilkType.value,
+                          activeColor: greenColor,
+                          onChanged: (value) {
+                            setBottomSheetState(() {
+                              milkManHistoryController.selectedMilkType.value =
+                                  value!;
+                              currentTotal = calculateTotal();
+                            });
+                          },
+                        ),
+                        Text(
+                          'Buffalo',
+                          style: TextStyle(fontFamily: FontFamily.gilroyMedium),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+
+                    // Quantities
+                    if (milkManHistoryController.selectedMilkType.value ==
+                        'Cow')
+                      _buildTextField(
+                        controller: milkManHistoryController.qtyController,
+                        label: "Cow Milk (L)",
+                        icon: Icons.water_drop,
+                        isNumber: true,
+                        onChanged: (value) {
+                          setBottomSheetState(() {
+                            currentTotal = calculateTotal();
+                          });
+                        },
+                      )
+                    else
+                      _buildTextField(
+                        controller: milkManHistoryController.qtyController,
+                        label: "Buffalo Milk (L)",
+                        icon: Icons.water_drop_outlined,
+                        isNumber: true,
+                        onChanged: (value) {
+                          setBottomSheetState(() {
+                            currentTotal = calculateTotal();
+                          });
+                        },
+                      ),
+                    SizedBox(height: 16),
+
+                    // Fat and SNF
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildTextField(
+                            controller: fatController,
+                            label: "Fat (%)",
+                            icon: Icons.percent,
+                            isNumber: true,
+                          ),
+                        ),
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: _buildTextField(
+                            controller: snfController,
+                            label: "SNF (%)",
+                            icon: Icons.analytics,
+                            isNumber: true,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16),
+
+                    // Quality Dropdown
+                    Text(
+                      "Quality",
+                      style: TextStyle(
+                        fontFamily: FontFamily.gilroyMedium,
+                        color: greyColor,
+                        fontSize: 14,
+                      ),
+                    ),
+                    SizedBox(height: 6),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: lightgrey),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: selectedQuality,
+                          isExpanded: true,
+                          items: ['Excellent', 'Good', 'Average', 'Poor'].map((
+                            String value,
+                          ) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (newValue) {
+                            if (newValue != null) {
+                              setBottomSheetState(() {
+                                selectedQuality = newValue;
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 24),
+
+                    // Submit Button
+                    SizedBox(
+                      width: double.infinity,
+                      height: 60,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: "Total Amount:\n ",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: FontFamily.gilroyMedium,
+                                    color: BlackColor,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: "₹ ${currentTotal.toStringAsFixed(1)} ",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontFamily: FontFamily.gilroyMedium,
+                                    color: BlackColor,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(width: 20),
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                _submitMilkData(
+                                  selectedDate,
+                                  milkManHistoryController.qtyController.text,
+                                  milkManHistoryController
+                                      .selectedMilkType.value,
+                                  fatController.text,
+                                  snfController.text,
+                                  selectedQuality,
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xff006b8a),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Text(
+                                  "Collect Milk",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontFamily: FontFamily.gilroyBold,
+                                    color: WhiteColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+    bool isNumber = false,
+    ValueChanged<String>? onChanged,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontFamily: FontFamily.gilroyMedium,
+            color: greyColor,
+            fontSize: 14,
+          ),
+        ),
+        SizedBox(height: 6),
+        TextField(
+          controller: controller,
+          onChanged: onChanged,
+          //accept only numbers
+          inputFormatters: [
+            label == "Collect Milk (L)" || label == "Bulk Milk (L)"
+                ? FilteringTextInputFormatter.digitsOnly
+                : FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')),
+          ],
+          keyboardType: isNumber
+              ? TextInputType.numberWithOptions(decimal: true)
+              : TextInputType.text,
+          decoration: InputDecoration(
+            prefixIcon: Icon(icon, color: greenColor, size: 20),
+            hintText: "0.0",
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: lightgrey),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: lightgrey),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: greenColor, width: 2),
+            ),
+            contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _submitMilkData(
+    DateTime date,
+    String qty,
+    String milkType,
+    String fat,
+    String snf,
+    String quality,
+  ) async {
+    double ltrs = double.tryParse(qty) ?? 0.0;
+
+    if (ltrs <= 0) {
+      Fluttertoast.showToast(msg: "Please enter valid quantity");
+      return;
+    }
+    if (fat.isEmpty || fat == "0") {
+      Fluttertoast.showToast(msg: "Please enter valid fat percentage");
+      return;
+    }
+    if (snf.isEmpty || snf == "0") {
+      Fluttertoast.showToast(msg: "Please enter valid snf percentage");
+      return;
+    }
+
+    String formattedDate = DateFormat('yyyy-MM-dd').format(date);
+    String dayLabel =
+        DateFormat('yyyy-MM-dd').format(DateTime.now()) == formattedDate
+            ? 'Today'
+            : DateFormat('EEEE').format(date);
+
+    String currentTime = DateFormat('hh:mm a').format(DateTime.now());
+
+    var data = AddMilkModel(
+      storeId: getData.read("StoreLogin")["id"],
+      milkmanId: widget.milkMan.id,
+      supplyDate: formattedDate,
+      supplyTime: currentTime,
+      milkType: milkType.toLowerCase(),
+      quantityLitre: ltrs.toStringAsFixed(1),
+      fat: fat.isEmpty ? '-' : fat,
+      snf: snf.isEmpty ? '-' : snf,
+      quality: quality,
+    ).toJson();
+
+    //add milk data to daily history
+    await addMilkController.addMilk(data);
+
+    // Refresh milk man list data
+    await milkManController.milkmanList();
+
+    // Refresh history data to get the newly added entry
+    await milkManHistoryController.getMilkManHistory(
+      milkmanId: widget.milkMan.id,
+    );
+
+    // Update local state with fresh data
+    setState(() {
+      dailyHistory = milkManHistoryController.history?.data ?? [];
+    });
+
+    // Clear form fields
+    milkManHistoryController.qtyController.clear();
+    milkManHistoryController.selectedMilkType.value = "Cow";
+
+    // Close bottom sheet
+    Navigator.pop(context);
   }
 }
 

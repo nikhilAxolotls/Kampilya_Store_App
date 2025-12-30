@@ -12,12 +12,17 @@ import 'package:storeappnew/utils/Colors.dart';
 class ApiWrapper {
   static var headers = {
     'Content-Type': 'application/json',
-    'Cookie': 'PHPSESSID=oonu3ro0agbeiik4t0l6egt8ab'
+    'Cookie': 'PHPSESSID=oonu3ro0agbeiik4t0l6egt8ab',
   };
   static doImageUpload(
-      String endpoint, Map<String, String> params, List imgs) async {
-    var request =
-        http.MultipartRequest('POST', Uri.parse(AppUrl.path + endpoint));
+    String endpoint,
+    Map<String, String> params,
+    List imgs,
+  ) async {
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse(AppUrl.path + endpoint),
+    );
     request.fields.addAll(params);
     for (int i = 0; i < imgs.length; i++) {
       log(imgs[i].toString(), name: "Image name $i");
@@ -31,12 +36,13 @@ class ApiWrapper {
 
   static showToastMessage(message) {
     Fluttertoast.showToast(
-        msg: message,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: greenColor,
-        textColor: Colors.white,
-        fontSize: 14.0);
+      msg: message,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: greenColor,
+      textColor: Colors.white,
+      fontSize: 14.0,
+    );
   }
 
   static dataPost(appUrl, method) async {
@@ -45,8 +51,11 @@ class ApiWrapper {
       print(url);
       print(method);
 
-      var request =
-          await http.post(url, headers: headers, body: jsonEncode(method));
+      var request = await http.post(
+        url,
+        headers: headers,
+        body: jsonEncode(method),
+      );
       var response = jsonDecode(request.body);
       print("response----- $response");
       if (request.statusCode == 200) {

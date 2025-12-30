@@ -1,7 +1,16 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:storeappnew/Controller_class/milk_man_controller.dart';
+import 'package:storeappnew/Controller_class/milk_man_history_controller.dart';
 import 'package:storeappnew/Dashboard_screens/milk_collection/milk_man_details_screen.dart';
+import 'package:storeappnew/Modal_class/milk_man_history.dart';
+import 'package:storeappnew/Modal_class/milk_man_model.dart';
+import 'package:storeappnew/api_screens/confrigation.dart';
 import 'package:storeappnew/utils/Colors.dart';
 import 'package:storeappnew/utils/Fontfamily.dart';
 
@@ -13,129 +22,36 @@ class MilkManScreen extends StatefulWidget {
 }
 
 class _MilkManScreenState extends State<MilkManScreen> {
-  // Dummy data for milkmen
-  final List<Map<String, dynamic>> milkMen = [
-    {
-      'id': '1',
-      'name': 'Ramesh Kumar',
-      'phone': '+91 98765 43210',
-      'address': 'Village Gokul, Mathura',
-      'img': 'https://randomuser.me/api/portraits/men/32.jpg',
-      'totalMilkSupplied': '2,450 L',
-      'monthlyAverage': '82 L/day',
-      'totalAmount': '₹1,22,500',
-      'pendingAmount': '₹8,500',
-      'rating': 4.8,
-      'status': 'Active',
-      'joinedDate': '2023-01-15',
-      'lastDelivery': '2025-12-04',
-      'cowCount': 8,
-      'buffaloCount': 5,
-    },
-    {
-      'id': '2',
-      'name': 'Suresh Yadav',
-      'phone': '+91 98765 43211',
-      'address': 'Village Vrindavan, Mathura',
-      'img': 'https://randomuser.me/api/portraits/men/45.jpg',
-      'totalMilkSupplied': '3,200 L',
-      'monthlyAverage': '106 L/day',
-      'totalAmount': '₹1,60,000',
-      'pendingAmount': '₹12,000',
-      'rating': 4.9,
-      'status': 'Active',
-      'joinedDate': '2022-11-20',
-      'lastDelivery': '2025-12-04',
-      'cowCount': 12,
-      'buffaloCount': 8,
-    },
-    {
-      'id': '3',
-      'name': 'Mahesh Patel',
-      'phone': '+91 98765 43212',
-      'address': 'Village Barsana, Mathura',
-      'img': 'https://randomuser.me/api/portraits/men/62.jpg',
-      'totalMilkSupplied': '1,800 L',
-      'monthlyAverage': '60 L/day',
-      'totalAmount': '₹90,000',
-      'pendingAmount': '₹5,500',
-      'rating': 4.6,
-      'status': 'Active',
-      'joinedDate': '2023-03-10',
-      'lastDelivery': '2025-12-04',
-      'cowCount': 6,
-      'buffaloCount': 4,
-    },
-    {
-      'id': '4',
-      'name': 'Rajendra Singh',
-      'phone': '+91 98765 43213',
-      'address': 'Village Nandgaon, Mathura',
-      'img': 'https://randomuser.me/api/portraits/men/22.jpg',
-      'totalMilkSupplied': '2,900 L',
-      'monthlyAverage': '96 L/day',
-      'totalAmount': '₹1,45,000',
-      'pendingAmount': '₹0',
-      'rating': 5.0,
-      'status': 'Active',
-      'joinedDate': '2022-08-05',
-      'lastDelivery': '2025-12-04',
-      'cowCount': 10,
-      'buffaloCount': 6,
-    },
-    {
-      'id': '5',
-      'name': 'Dinesh Sharma',
-      'phone': '+91 98765 43214',
-      'address': 'Village Govardhan, Mathura',
-      'img': 'https://randomuser.me/api/portraits/men/54.jpg',
-      'totalMilkSupplied': '1,500 L',
-      'monthlyAverage': '50 L/day',
-      'totalAmount': '₹75,000',
-      'pendingAmount': '₹3,000',
-      'rating': 4.5,
-      'status': 'Inactive',
-      'joinedDate': '2023-05-22',
-      'lastDelivery': '2025-11-30',
-      'cowCount': 5,
-      'buffaloCount': 3,
-    },
-    {
-      'id': '6',
-      'name': 'Prakash Verma',
-      'phone': '+91 98765 43215',
-      'address': 'Village Radha Kund, Mathura',
-      'img': 'https://randomuser.me/api/portraits/men/71.jpg',
-      'totalMilkSupplied': '2,100 L',
-      'monthlyAverage': '70 L/day',
-      'totalAmount': '₹1,05,000',
-      'pendingAmount': '₹7,000',
-      'rating': 4.7,
-      'status': 'Active',
-      'joinedDate': '2023-02-14',
-      'lastDelivery': '2025-12-04',
-      'cowCount': 7,
-      'buffaloCount': 5,
-    },
-  ];
+  MilkManController milkManController = Get.find();
+  MilkManHistoryController milkManHistoryController = Get.put(
+    MilkManHistoryController(),
+  );
+
+  List<Data> milkMen = [];
+  @override
+  void initState() {
+    super.initState();
+
+    milkMen = milkManController.milkManModel?.data ?? [];
+  }
 
   String selectedFilter = 'All';
   String searchQuery = '';
 
-  List<Map<String, dynamic>> getFilteredMilkMen() {
-    List<Map<String, dynamic>> filtered = milkMen;
+  List<Data> getFilteredMilkMen() {
+    List<Data> filtered = milkMen;
 
     // Apply status filter
     if (selectedFilter != 'All') {
-      filtered = filtered.where((m) => m['status'] == selectedFilter).toList();
+      filtered = filtered.where((m) => m.status == selectedFilter).toList();
     }
 
     // Apply search filter
     if (searchQuery.isNotEmpty) {
       filtered = filtered.where((m) {
-        return m['name'].toLowerCase().contains(searchQuery.toLowerCase()) ||
-            m['phone'].contains(searchQuery) ||
-            m['address'].toLowerCase().contains(searchQuery.toLowerCase());
+        return m.name!.toLowerCase().contains(searchQuery.toLowerCase()) ||
+            m.phone!.contains(searchQuery) ||
+            m.address!.toLowerCase().contains(searchQuery.toLowerCase());
       }).toList();
     }
 
@@ -145,14 +61,7 @@ class _MilkManScreenState extends State<MilkManScreen> {
   @override
   Widget build(BuildContext context) {
     final filteredMilkMen = getFilteredMilkMen();
-    final activeMilkMen = milkMen.where((m) => m['status'] == 'Active').length;
-    final totalMilkToday = milkMen.where((m) => m['status'] == 'Active').fold(
-      0,
-      (sum, m) {
-        final avg = m['monthlyAverage'].toString().split(' ')[0];
-        return sum + int.parse(avg);
-      },
-    );
+    final activeMilkMen = milkMen.where((m) => m.status == 'Active').length;
 
     return Scaffold(
       backgroundColor: bgcolor,
@@ -181,77 +90,78 @@ class _MilkManScreenState extends State<MilkManScreen> {
           setState(() {});
         },
         color: greenColor,
-        child: SingleChildScrollView(
-          physics: AlwaysScrollableScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Statistics Header
-              _buildStatisticsHeader(activeMilkMen, totalMilkToday),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Statistics Header
+            _buildStatisticsHeader(activeMilkMen),
 
-              SizedBox(height: 6),
+            SizedBox(height: 2),
 
-              // Search Bar
-              _buildSearchBar(),
+            // Search Bar
+            _buildSearchBar(),
 
-              SizedBox(height: 10),
+            SizedBox(height: 10),
 
-              // Filter Chips
-              _buildFilterChips(),
+            // Filter Chips
+            _buildFilterChips(),
 
-              SizedBox(height: 20),
+            SizedBox(height: 8),
 
-              // Milkmen Section Header
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Milk Suppliers',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontFamily: FontFamily.gilroyBold,
-                        color: BlackColor,
-                      ),
+            // Milkmen Section Header
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Milk Suppliers',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: FontFamily.gilroyBold,
+                      color: BlackColor,
                     ),
-                    Text(
-                      '${filteredMilkMen.length} suppliers',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontFamily: FontFamily.gilroyMedium,
-                        color: greyColor,
-                      ),
+                  ),
+                  Text(
+                    '${filteredMilkMen.length} suppliers',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontFamily: FontFamily.gilroyMedium,
+                      color: greyColor,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
+            ),
 
-              SizedBox(height: 12),
+            SizedBox(height: 6),
 
-              // Milkmen List
-              filteredMilkMen.isEmpty
+            // Milkmen List
+            Expanded(
+              child: filteredMilkMen.isEmpty
                   ? _buildEmptyState()
                   : _buildMilkMenList(filteredMilkMen),
+            ),
 
-              SizedBox(height: 20),
-            ],
-          ),
+            SizedBox(height: 20),
+          ],
         ),
       ),
     );
   }
 
   // Statistics Header with gradient cards
-  Widget _buildStatisticsHeader(int activeMilkMen, int totalMilkToday) {
+  Widget _buildStatisticsHeader(int activeMilkMen) {
     return Container(
-      height: 180,
-      margin: EdgeInsets.all(16),
+      height: 100,
+      alignment: Alignment.center,
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Row(
         children: [
           Expanded(
             child: Container(
-              padding: EdgeInsets.all(20),
+              // alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 15),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [greenColor, Color(0xff006b8a)],
@@ -270,24 +180,28 @@ class _MilkManScreenState extends State<MilkManScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: WhiteColor.withOpacity(0.2),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(Icons.people, color: WhiteColor, size: 24),
+                  Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: WhiteColor.withOpacity(0.2),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(Icons.people, color: WhiteColor, size: 24),
+                      ),
+                      SizedBox(width: 6),
+                      Text(
+                        '$activeMilkMen',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontFamily: FontFamily.gilroyBold,
+                          color: WhiteColor,
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 12),
-                  Text(
-                    '$activeMilkMen',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontFamily: FontFamily.gilroyBold,
-                      color: WhiteColor,
-                    ),
-                  ),
-                  SizedBox(height: 4),
+                  SizedBox(height: 8),
                   Text(
                     'Active Suppliers',
                     style: TextStyle(
@@ -300,10 +214,10 @@ class _MilkManScreenState extends State<MilkManScreen> {
               ),
             ),
           ),
-          SizedBox(width: 12),
+          SizedBox(width: 8),
           Expanded(
             child: Container(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 15),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [buttonColor, Color(0xff8e5cff)],
@@ -322,26 +236,34 @@ class _MilkManScreenState extends State<MilkManScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: WhiteColor.withOpacity(0.2),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(Icons.water_drop, color: WhiteColor, size: 24),
+                  Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: WhiteColor.withOpacity(0.2),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.water_drop,
+                          color: WhiteColor,
+                          size: 24,
+                        ),
+                      ),
+                      SizedBox(width: 4),
+                      Text(
+                        '${milkManController.milkManModel?.todaysCollection!.toStringAsFixed(1)}',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontFamily: FontFamily.gilroyBold,
+                          color: WhiteColor,
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 12),
+                  SizedBox(height: 8),
                   Text(
-                    '$totalMilkToday L',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontFamily: FontFamily.gilroyBold,
-                      color: WhiteColor,
-                    ),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    'Today\'s Collection',
+                    'Today\'s Collection (L)',
                     style: TextStyle(
                       fontSize: 14,
                       fontFamily: FontFamily.gilroyMedium,
@@ -359,47 +281,47 @@ class _MilkManScreenState extends State<MilkManScreen> {
 
   // Search Bar
   Widget _buildSearchBar() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      child: Container(
-        decoration: BoxDecoration(
-          color: WhiteColor,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 10,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        child: TextField(
-          onChanged: (value) {
-            setState(() {
-              searchQuery = value;
-            });
-          },
-          decoration: InputDecoration(
-            hintText: 'Search by name, phone, or location...',
-            hintStyle: TextStyle(
-              color: greyColor,
-              fontFamily: FontFamily.gilroyMedium,
-              fontSize: 14,
-            ),
-            prefixIcon: Icon(Icons.search, color: greyColor),
-            suffixIcon: searchQuery.isNotEmpty
-                ? IconButton(
-                    icon: Icon(Icons.clear, color: greyColor),
-                    onPressed: () {
-                      setState(() {
-                        searchQuery = '';
-                      });
-                    },
-                  )
-                : null,
-            border: InputBorder.none,
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+    return Container(
+      // padding: EdgeInsets.symmetric(horizontal: 16),
+      margin: EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: WhiteColor,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: Offset(0, 2),
           ),
+        ],
+      ),
+      child: TextField(
+        clipBehavior: Clip.antiAlias,
+        onChanged: (value) {
+          setState(() {
+            searchQuery = value;
+          });
+        },
+        decoration: InputDecoration(
+          hintText: 'Search by name, phone, or location...',
+          hintStyle: TextStyle(
+            color: greyColor,
+            fontFamily: FontFamily.gilroyMedium,
+            fontSize: 12,
+          ),
+          prefixIcon: Icon(Icons.search, color: greyColor, size: 18),
+          suffixIcon: searchQuery.isNotEmpty
+              ? IconButton(
+                  icon: Icon(Icons.clear, color: greyColor, size: 18),
+                  onPressed: () {
+                    setState(() {
+                      searchQuery = '';
+                    });
+                  },
+                )
+              : null,
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),
       ),
     );
@@ -431,7 +353,7 @@ class _MilkManScreenState extends State<MilkManScreen> {
         });
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected ? greenColor : WhiteColor,
           borderRadius: BorderRadius.circular(20),
@@ -459,10 +381,10 @@ class _MilkManScreenState extends State<MilkManScreen> {
   }
 
   // Milkmen List
-  Widget _buildMilkMenList(List<Map<String, dynamic>> filteredMilkMen) {
+  Widget _buildMilkMenList(List<Data> filteredMilkMen) {
     return ListView.builder(
       shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
+      physics: AlwaysScrollableScrollPhysics(),
       padding: EdgeInsets.symmetric(horizontal: 16),
       itemCount: filteredMilkMen.length,
       itemBuilder: (context, index) {
@@ -472,15 +394,32 @@ class _MilkManScreenState extends State<MilkManScreen> {
   }
 
   // Individual Milkman Card
-  Widget _buildMilkManCard(Map<String, dynamic> milkMan) {
-    final isActive = milkMan['status'] == 'Active';
-    final hasPending = milkMan['pendingAmount'] != '₹0';
+  Widget _buildMilkManCard(Data milkMan) {
+    final isActive = milkMan.status == 'Active';
+    final hasPending = milkMan.pendingAmount != '₹0';
+    String calculateDailyAverage() {
+      //Sum of all each milk entry quantity and divide by total entries
+      return milkManHistoryController.history?.data
+              ?.where((element) => element.milkmanId == milkMan.id)
+              .map(
+                (e) =>
+                    double.parse(e.quantityLitre ?? "0") /
+                    double.parse(
+                      milkManHistoryController.history?.data!.length
+                              .toString() ??
+                          "0",
+                    ),
+              )
+              .reduce((a, b) => a + b)
+              .toStringAsFixed(2) ??
+          "";
+    }
 
     return Container(
-      margin: EdgeInsets.only(bottom: 16),
+      margin: EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
         color: WhiteColor,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.06),
@@ -492,17 +431,21 @@ class _MilkManScreenState extends State<MilkManScreen> {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MilkManDetailsScreen(milkMan: milkMan),
-              ),
+          onTap: () async {
+            await milkManHistoryController.getMilkManHistory(
+              milkmanId: milkMan.id,
             );
+            await Get.to(MilkManDetailsScreen(milkMan: milkMan));
+
+            // Refresh data when returning from details screen
+            await milkManController.milkmanList();
+            setState(() {
+              milkMen = milkManController.milkManModel?.data ?? [];
+            });
           },
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(12),
           child: Padding(
-            padding: EdgeInsets.all(16),
+            padding: EdgeInsets.all(12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -529,7 +472,8 @@ class _MilkManScreenState extends State<MilkManScreen> {
                       ),
                       child: ClipOval(
                         child: Image.network(
-                          milkMan['img'],
+                          "${AppUrl.baseUrl + milkMan.photo!}" ??
+                              "https://uxwing.com/person-profile-image-icon/",
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
                             return Container(
@@ -555,7 +499,7 @@ class _MilkManScreenState extends State<MilkManScreen> {
                             children: [
                               Expanded(
                                 child: Text(
-                                  milkMan['name'],
+                                  milkMan.name ?? "",
                                   style: TextStyle(
                                     fontSize: 17,
                                     fontFamily: FontFamily.gilroyBold,
@@ -577,7 +521,7 @@ class _MilkManScreenState extends State<MilkManScreen> {
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Text(
-                                  milkMan['status'],
+                                  milkMan.status ?? "",
                                   style: TextStyle(
                                     fontSize: 11,
                                     fontFamily: FontFamily.gilroyBold,
@@ -593,7 +537,7 @@ class _MilkManScreenState extends State<MilkManScreen> {
                               Icon(Icons.phone, color: greyColor, size: 14),
                               SizedBox(width: 4),
                               Text(
-                                milkMan['phone'],
+                                milkMan.phone ?? "",
                                 style: TextStyle(
                                   fontSize: 13,
                                   fontFamily: FontFamily.gilroyMedium,
@@ -602,17 +546,26 @@ class _MilkManScreenState extends State<MilkManScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(height: 4),
+                          SizedBox(height: 6),
+                          // Location
                           Row(
                             children: [
-                              Icon(Icons.star, color: yelloColor, size: 14),
-                              SizedBox(width: 4),
-                              Text(
-                                '${milkMan['rating']} Rating',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontFamily: FontFamily.gilroyBold,
-                                  color: yelloColor,
+                              Icon(
+                                Icons.location_on,
+                                color: RedColor,
+                                size: 16,
+                              ),
+                              SizedBox(width: 6),
+                              Expanded(
+                                child: Text(
+                                  milkMan.address ?? "",
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontFamily: FontFamily.gilroyMedium,
+                                    color: greyColor,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                             ],
@@ -623,34 +576,12 @@ class _MilkManScreenState extends State<MilkManScreen> {
                   ],
                 ),
 
-                SizedBox(height: 14),
-
-                // Location
-                Row(
-                  children: [
-                    Icon(Icons.location_on, color: RedColor, size: 16),
-                    SizedBox(width: 6),
-                    Expanded(
-                      child: Text(
-                        milkMan['address'],
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontFamily: FontFamily.gilroyMedium,
-                          color: greyColor,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-
-                SizedBox(height: 14),
+                SizedBox(height: 4),
 
                 // Divider
                 Divider(color: lightgrey, height: 1),
 
-                SizedBox(height: 14),
+                SizedBox(height: 8),
 
                 // Statistics Row
                 Row(
@@ -658,28 +589,29 @@ class _MilkManScreenState extends State<MilkManScreen> {
                     Expanded(
                       child: _buildStatItem(
                         icon: Icons.water_drop,
-                        label: 'Monthly Avg',
-                        value: milkMan['monthlyAverage'],
+                        label: 'Daily Avg',
+                        value: (milkMan.totalAvg ?? 0).toStringAsFixed(1) ?? "",
                         color: blueColor,
                       ),
                     ),
-                    Container(height: 40, width: 1, color: lightgrey),
+                    Container(height: 50, width: 1, color: lightgrey),
                     Expanded(
                       child: _buildStatItem(
                         icon: Icons.calendar_today,
                         label: 'Total Supply',
-                        value: milkMan['totalMilkSupplied'],
+                        value:
+                            (milkMan.totalSupply ?? 0).toStringAsFixed(1) ?? "",
                         color: greenColor,
                       ),
                     ),
                   ],
                 ),
 
-                SizedBox(height: 12),
+                SizedBox(height: 8),
 
                 // Footer Row with amount
                 Container(
-                  padding: EdgeInsets.all(12),
+                  padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: bgcolor,
                     borderRadius: BorderRadius.circular(12),
@@ -700,7 +632,7 @@ class _MilkManScreenState extends State<MilkManScreen> {
                           ),
                           SizedBox(height: 2),
                           Text(
-                            milkMan['totalAmount'],
+                            "₹${milkMan.totalAmount ?? ""}",
                             style: TextStyle(
                               fontSize: 18,
                               fontFamily: FontFamily.gilroyBold,
@@ -713,7 +645,7 @@ class _MilkManScreenState extends State<MilkManScreen> {
                         Container(
                           padding: EdgeInsets.symmetric(
                             horizontal: 12,
-                            vertical: 8,
+                            vertical: 4,
                           ),
                           decoration: BoxDecoration(
                             color: orangeColor.withOpacity(0.1),
@@ -742,7 +674,7 @@ class _MilkManScreenState extends State<MilkManScreen> {
                                     ),
                                   ),
                                   Text(
-                                    milkMan['pendingAmount'],
+                                    "₹${milkMan.pendingAmount ?? ""}",
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontFamily: FontFamily.gilroyBold,
@@ -773,18 +705,25 @@ class _MilkManScreenState extends State<MilkManScreen> {
     required Color color,
   }) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, color: color, size: 20),
-        SizedBox(height: 6),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 16,
-            fontFamily: FontFamily.gilroyBold,
-            color: BlackColor,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: color, size: 20),
+            SizedBox(width: 8),
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 16,
+                fontFamily: FontFamily.gilroyBold,
+                color: BlackColor,
+              ),
+            ),
+          ],
         ),
-        SizedBox(height: 2),
+        SizedBox(height: 5),
         Text(
           label,
           style: TextStyle(
@@ -800,37 +739,40 @@ class _MilkManScreenState extends State<MilkManScreen> {
 
   // Empty State
   Widget _buildEmptyState() {
-    return Container(
-      padding: EdgeInsets.all(40),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            padding: EdgeInsets.all(30),
-            decoration: BoxDecoration(color: bgcolor, shape: BoxShape.circle),
-            child: Icon(Icons.search_off, size: 80, color: greyColor),
-          ),
-          SizedBox(height: 24),
-          Text(
-            'No Suppliers Found',
-            style: TextStyle(
-              fontSize: 20,
-              fontFamily: FontFamily.gilroyBold,
-              color: BlackColor,
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Container(
+        padding: EdgeInsets.all(40),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: EdgeInsets.all(30),
+              decoration: BoxDecoration(color: bgcolor, shape: BoxShape.circle),
+              child: Icon(Icons.search_off, color: greyColor),
             ),
-          ),
-          SizedBox(height: 10),
-          Text(
-            'No milk suppliers match your search criteria.\nTry adjusting the filters.',
-            style: TextStyle(
-              fontSize: 14,
-              fontFamily: FontFamily.gilroyMedium,
-              color: greyColor,
-              height: 1.5,
+            SizedBox(height: 24),
+            Text(
+              'No Suppliers Found',
+              style: TextStyle(
+                fontSize: 20,
+                fontFamily: FontFamily.gilroyBold,
+                color: BlackColor,
+              ),
             ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+            SizedBox(height: 10),
+            Text(
+              'No milk suppliers match your search criteria.\nTry adjusting the filters.',
+              style: TextStyle(
+                fontSize: 14,
+                fontFamily: FontFamily.gilroyMedium,
+                color: greyColor,
+                height: 1.5,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }

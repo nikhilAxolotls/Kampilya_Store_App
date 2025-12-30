@@ -23,10 +23,12 @@ class _NormalorderScreenState extends State<NormalorderScreen>
   final note = TextEditingController();
   var selectedRadioTile;
   String? rejectmsg = '';
-  OrderhistoryController orderhistoryController =
-      Get.put(OrderhistoryController());
-  AssignriderController assignriderController =
-      Get.put(AssignriderController());
+  OrderhistoryController orderhistoryController = Get.put(
+    OrderhistoryController(),
+  );
+  AssignriderController assignriderController = Get.put(
+    AssignriderController(),
+  );
 
   @override
   void initState() {
@@ -73,9 +75,7 @@ class _NormalorderScreenState extends State<NormalorderScreen>
         ),
         body: Column(
           children: [
-            SizedBox(
-              height: 10,
-            ),
+            SizedBox(height: 10),
             SizedBox(
               height: 40,
               child: Padding(
@@ -88,27 +88,22 @@ class _NormalorderScreenState extends State<NormalorderScreen>
                     fontSize: 15,
                   ),
                   indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                      10.0,
-                    ),
+                    borderRadius: BorderRadius.circular(10.0),
                     color: WhiteColor,
                   ),
                   labelColor: greenColor,
                   onTap: (value) {
                     if (value == 0) {
                       orderhistoryController.orderhistorylist(
-                          Status: "Current");
+                        Status: "Current",
+                      );
                     } else {
                       orderhistoryController.orderhistorylist(Status: "past");
                     }
                   },
                   tabs: [
-                    Tab(
-                      text: "Current Order".tr,
-                    ),
-                    Tab(
-                      text: "Past Orders".tr,
-                    ),
+                    Tab(text: "Current Order".tr),
+                    Tab(text: "Past Orders".tr),
                   ],
                 ),
               ),
@@ -119,10 +114,7 @@ class _NormalorderScreenState extends State<NormalorderScreen>
               child: TabBarView(
                 controller: _tabController,
                 physics: NeverScrollableScrollPhysics(),
-                children: [
-                  currentOrder(),
-                  pastOrder(),
-                ],
+                children: [currentOrder(), pastOrder()],
               ),
             ),
           ],
@@ -135,102 +127,120 @@ class _NormalorderScreenState extends State<NormalorderScreen>
     return RefreshIndicator(
       color: greenColor,
       onRefresh: () {
-        return Future.delayed(
-          Duration(seconds: 2),
-          () {
-            setState(() {
-              orderhistoryController.orderhistorylist(Status: "Current");
-            });
-          },
-        );
+        return Future.delayed(Duration(seconds: 2), () {
+          setState(() {
+            orderhistoryController.orderhistorylist(Status: "Current");
+          });
+        });
       },
       child: SizedBox(
         height: Get.size.height,
         width: Get.size.width,
-        child: GetBuilder<OrderhistoryController>(builder: (context) {
-          return orderhistoryController.isLoading
-              ? orderhistoryController.orderhistoryinfo!.orderHistory.isNotEmpty
-                  ? ListView.builder(
-                      itemCount: orderhistoryController
-                          .orderhistoryinfo?.orderHistory.length,
-                      physics: BouncingScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        String currentdate =
-                            "${orderhistoryController.orderhistoryinfo?.orderHistory[index].date.toString().split(" ").first}";
-                        return InkWell(
-                          onTap: () {
-                            Get.to(() => OrderdetailsScreen(
-                                ordertype: orderhistoryController
-                                    .orderhistoryinfo!
-                                    .orderHistory[index]
-                                    .orderType,
-                                oid: orderhistoryController
-                                    .orderhistoryinfo!.orderHistory[index].id));
-                          },
-                          child: Container(
-                            width: Get.size.width,
-                            margin: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 6),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 10),
-                            decoration: BoxDecoration(
-                                color: WhiteColor,
-                                borderRadius: BorderRadius.circular(15)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                SizedBox(height: 10),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+        child: GetBuilder<OrderhistoryController>(
+          builder: (context) {
+            return orderhistoryController.isLoading
+                ? orderhistoryController
+                          .orderhistoryinfo!
+                          .orderHistory
+                          .isNotEmpty
+                      ? ListView.builder(
+                          itemCount: orderhistoryController
+                              .orderhistoryinfo
+                              ?.orderHistory
+                              .length,
+                          physics: BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            String currentdate =
+                                "${orderhistoryController.orderhistoryinfo?.orderHistory[index].date.toString().split(" ").first}";
+                            return InkWell(
+                              onTap: () {
+                                Get.to(
+                                  () => OrderdetailsScreen(
+                                    ordertype: orderhistoryController
+                                        .orderhistoryinfo!
+                                        .orderHistory[index]
+                                        .orderType,
+                                    oid: orderhistoryController
+                                        .orderhistoryinfo!
+                                        .orderHistory[index]
+                                        .id,
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                width: Get.size.width,
+                                margin: EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 6,
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 10,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: WhiteColor,
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text(
-                                      currentdate,
-                                      style: TextStyle(
-                                          fontFamily: FontFamily.gilroyMedium),
-                                    ),
-                                    Spacer(),
-                                    orderhistoryController.orderhistoryinfo
-                                                ?.orderHistory[index].status ==
-                                            "Pending"
-                                        ? Row(
-                                            children: [
-                                              Image.asset(
-                                                  "assets/info-circle.png",
-                                                  height: 20,
-                                                  width: 20),
-                                              SizedBox(width: 5),
-                                              Text(
-                                                orderhistoryController
-                                                        .orderhistoryinfo
-                                                        ?.orderHistory[index]
-                                                        .status ??
-                                                    "",
-                                                style: TextStyle(
-                                                  fontFamily:
-                                                      FontFamily.gilroyBold,
-                                                  color: Color(0xFFFFBB00),
-                                                ),
-                                              ),
-                                            ],
-                                          )
-                                        : orderhistoryController
+                                    SizedBox(height: 10),
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          currentdate,
+                                          style: TextStyle(
+                                            fontFamily: FontFamily.gilroyMedium,
+                                          ),
+                                        ),
+                                        Spacer(),
+                                        orderhistoryController
                                                     .orderhistoryinfo
                                                     ?.orderHistory[index]
                                                     .status ==
-                                                "Processing"
+                                                "Pending"
                                             ? Row(
                                                 children: [
                                                   Image.asset(
-                                                      "assets/Processing.png",
-                                                      height: 20,
-                                                      width: 20),
+                                                    "assets/info-circle.png",
+                                                    height: 20,
+                                                    width: 20,
+                                                  ),
                                                   SizedBox(width: 5),
                                                   Text(
                                                     orderhistoryController
                                                             .orderhistoryinfo
-                                                            ?.orderHistory[
-                                                                index]
+                                                            ?.orderHistory[index]
+                                                            .status ??
+                                                        "",
+                                                    style: TextStyle(
+                                                      fontFamily:
+                                                          FontFamily.gilroyBold,
+                                                      color: Color(0xFFFFBB00),
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            : orderhistoryController
+                                                      .orderhistoryinfo
+                                                      ?.orderHistory[index]
+                                                      .status ==
+                                                  "Processing"
+                                            ? Row(
+                                                children: [
+                                                  Image.asset(
+                                                    "assets/Processing.png",
+                                                    height: 20,
+                                                    width: 20,
+                                                  ),
+                                                  SizedBox(width: 5),
+                                                  Text(
+                                                    orderhistoryController
+                                                            .orderhistoryinfo
+                                                            ?.orderHistory[index]
                                                             .status ??
                                                         "",
                                                     style: TextStyle(
@@ -244,15 +254,15 @@ class _NormalorderScreenState extends State<NormalorderScreen>
                                             : Row(
                                                 children: [
                                                   Image.asset(
-                                                      "assets/OnRote.png",
-                                                      height: 20,
-                                                      width: 20),
+                                                    "assets/OnRote.png",
+                                                    height: 20,
+                                                    width: 20,
+                                                  ),
                                                   SizedBox(width: 5),
                                                   Text(
                                                     orderhistoryController
                                                             .orderhistoryinfo
-                                                            ?.orderHistory[
-                                                                index]
+                                                            ?.orderHistory[index]
                                                             .status ??
                                                         "",
                                                     style: TextStyle(
@@ -262,179 +272,541 @@ class _NormalorderScreenState extends State<NormalorderScreen>
                                                     ),
                                                   ),
                                                 ],
-                                              )
-                                  ],
-                                ),
-                                SizedBox(height: 10),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Order ID: ${orderhistoryController.orderhistoryinfo?.orderHistory[index].id ?? ""}",
-                                      style: TextStyle(
-                                          fontFamily: FontFamily.gilroyBold,
-                                          color: BlackColor,
-                                          fontSize: 16),
+                                              ),
+                                      ],
                                     ),
-                                    Text(
-                                      orderhistoryController.orderhistoryinfo!
-                                          .orderHistory[index].orderType,
-                                      style: TextStyle(
-                                          fontFamily: FontFamily.gilroyBold,
-                                          color: greenColor,
-                                          fontSize: 16),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 10),
-                                Row(
-                                  children: [
-                                    Container(
-                                      height: 60,
-                                      width: 60,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                        // image: DecorationImage(
-                                        //   // image: NetworkImage(AppUrl.imageurl +
-                                        //   //     orderhistoryController
-                                        //   //         .orderhistoryinfo!
-                                        //   //         .orderHistory[index]
-                                        //   //         .t),
-                                        // ),
-                                        color: bgcolor,
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Text(
-                                        orderhistoryController.orderhistoryinfo!
-                                            .orderHistory[index].customerName[0]
-                                            .toUpperCase(),
-                                        style: TextStyle(
+                                    SizedBox(height: 10),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Order ID: ${orderhistoryController.orderhistoryinfo?.orderHistory[index].id ?? ""}",
+                                          style: TextStyle(
                                             fontFamily: FontFamily.gilroyBold,
-                                            fontSize: 20,
-                                            color: greenColor),
-                                      ),
+                                            color: BlackColor,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        Text(
+                                          orderhistoryController
+                                              .orderhistoryinfo!
+                                              .orderHistory[index]
+                                              .orderType,
+                                          style: TextStyle(
+                                            fontFamily: FontFamily.gilroyBold,
+                                            color: greenColor,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
+                                    SizedBox(height: 10),
+                                    Row(
+                                      children: [
+                                        Container(
+                                          height: 60,
+                                          width: 60,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            // image: DecorationImage(
+                                            //   // image: NetworkImage(AppUrl.imageurl +
+                                            //   //     orderhistoryController
+                                            //   //         .orderhistoryinfo!
+                                            //   //         .orderHistory[index]
+                                            //   //         .t),
+                                            // ),
+                                            color: bgcolor,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Text(
+                                            orderhistoryController
+                                                .orderhistoryinfo!
+                                                .orderHistory[index]
+                                                .customerName[0]
+                                                .toUpperCase(),
+                                            style: TextStyle(
+                                              fontFamily: FontFamily.gilroyBold,
+                                              fontSize: 20,
+                                              color: greenColor,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              SizedBox(width: 5),
-                                              SizedBox(
-                                                width: Get.width * 0.25,
-                                                child: Text(
-                                                  orderhistoryController
-                                                          .orderhistoryinfo
-                                                          ?.orderHistory[index]
-                                                          .customerName ??
-                                                      "",
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
+                                              Row(
+                                                children: [
+                                                  SizedBox(width: 5),
+                                                  SizedBox(
+                                                    width: Get.width * 0.25,
+                                                    child: Text(
+                                                      orderhistoryController
+                                                              .orderhistoryinfo
+                                                              ?.orderHistory[index]
+                                                              .customerName ??
+                                                          "",
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                        fontFamily: FontFamily
+                                                            .gilroyBold,
+                                                        fontSize: 15,
+                                                        color: BlackColor,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  // Spacer(),
+                                                  // Text(
+                                                  //   orderhistoryController
+                                                  //           .orderhistoryinfo
+                                                  //           ?.orderHistory[index]
+                                                  //           .paymentTitle ??
+                                                  //       "",
+                                                  //   style: TextStyle(
+                                                  //       fontFamily:
+                                                  //           FontFamily.gilroyBold,
+                                                  //       fontSize: 15,
+                                                  //       color: BlackColor),
+                                                  // ),
+                                                ],
+                                              ),
+                                              SizedBox(height: 5),
+                                              Row(
+                                                children: [
+                                                  SizedBox(width: 5),
+                                                  SizedBox(
+                                                    width: Get.width * 0.4,
+                                                    child: Text(
+                                                      orderhistoryController
+                                                              .orderhistoryinfo
+                                                              ?.orderHistory[index]
+                                                              .customerAddress ??
+                                                          "",
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                        fontFamily: FontFamily
+                                                            .gilroyBold,
+                                                        fontSize: 15,
+                                                        color: BlackColor,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Spacer(),
+                                                  Text(
+                                                    "$currency${orderhistoryController.orderhistoryinfo?.orderHistory[index].total ?? ""}",
+                                                    style: TextStyle(
                                                       fontFamily:
                                                           FontFamily.gilroyBold,
                                                       fontSize: 15,
-                                                      color: BlackColor),
-                                                ),
-                                              ),
-                                              // Spacer(),
-                                              // Text(
-                                              //   orderhistoryController
-                                              //           .orderhistoryinfo
-                                              //           ?.orderHistory[index]
-                                              //           .paymentTitle ??
-                                              //       "",
-                                              //   style: TextStyle(
-                                              //       fontFamily:
-                                              //           FontFamily.gilroyBold,
-                                              //       fontSize: 15,
-                                              //       color: BlackColor),
-                                              // ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 5),
-                                          Row(
-                                            children: [
-                                              SizedBox(width: 5),
-                                              SizedBox(
-                                                width: Get.width * 0.4,
-                                                child: Text(
-                                                  orderhistoryController
-                                                          .orderhistoryinfo
-                                                          ?.orderHistory[index]
-                                                          .customerAddress ??
-                                                      "",
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      fontFamily:
-                                                          FontFamily.gilroyBold,
-                                                      fontSize: 15,
-                                                      color: BlackColor),
-                                                ),
-                                              ),
-                                              Spacer(),
-                                              Text(
-                                                "$currency${orderhistoryController.orderhistoryinfo?.orderHistory[index].total ?? ""}",
-                                                style: TextStyle(
-                                                    fontFamily:
-                                                        FontFamily.gilroyBold,
-                                                    fontSize: 15,
-                                                    color: BlackColor),
+                                                      color: BlackColor,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ],
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                                SizedBox(height: 10),
-                                orderhistoryController.orderhistoryinfo!
-                                            .orderHistory[index].flowId ==
-                                        "0"
-                                    ? Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          orderbutton(
-                                              buttoncolor: redgradient,
-                                              text: "Cancle",
-                                              onTap: () {
-                                                ticketCancell(
+                                    SizedBox(height: 10),
+                                    orderhistoryController
+                                                .orderhistoryinfo!
+                                                .orderHistory[index]
+                                                .flowId ==
+                                            "0"
+                                        ? Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              orderbutton(
+                                                buttoncolor: redgradient,
+                                                text: "Cancle",
+                                                onTap: () {
+                                                  ticketCancell(
                                                     orderhistoryController
                                                         .orderhistoryinfo!
                                                         .orderHistory[index]
-                                                        .id);
-                                                setState(() {
+                                                        .id,
+                                                  );
                                                   orderhistoryController
                                                       .orderhistorylist(
-                                                          Status: "Current");
-                                                });
-                                              }),
-                                          orderbutton(
-                                              gradient: gradient.btnGradient,
-                                              text: "Info",
-                                              onTap: () {
-                                                Get.to(() => OrderdetailsScreen(
-                                                    ordertype:
-                                                        orderhistoryController
-                                                            .orderhistoryinfo!
-                                                            .orderHistory[index]
-                                                            .orderType,
-                                                    oid: orderhistoryController
-                                                        .orderhistoryinfo!
-                                                        .orderHistory[index]
-                                                        .id));
-                                              }),
-                                        ],
-                                      )
-                                    : InkWell(
-                                        onTap: () {
-                                          Get.to(() => OrderdetailsScreen(
+                                                        Status: "Current",
+                                                      );
+
+                                                  setState(() {});
+                                                },
+                                              ),
+                                              orderbutton(
+                                                gradient: gradient.btnGradient,
+                                                text: "Info",
+                                                onTap: () {
+                                                  Get.to(
+                                                    () => OrderdetailsScreen(
+                                                      ordertype:
+                                                          orderhistoryController
+                                                              .orderhistoryinfo!
+                                                              .orderHistory[index]
+                                                              .orderType,
+                                                      oid: orderhistoryController
+                                                          .orderhistoryinfo!
+                                                          .orderHistory[index]
+                                                          .id,
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ],
+                                          )
+                                        : InkWell(
+                                            onTap: () {
+                                              Get.to(
+                                                () => OrderdetailsScreen(
+                                                  ordertype:
+                                                      orderhistoryController
+                                                          .orderhistoryinfo!
+                                                          .orderHistory[index]
+                                                          .orderType,
+                                                  oid: orderhistoryController
+                                                      .orderhistoryinfo!
+                                                      .orderHistory[index]
+                                                      .id,
+                                                ),
+                                              );
+                                            },
+                                            child: Container(
+                                              height: 45,
+                                              width: Get.width * 0.82,
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                gradient: gradient.btnGradient,
+                                              ),
+                                              child: Text(
+                                                "Info",
+                                                style: TextStyle(
+                                                  color: WhiteColor,
+                                                  fontFamily: "Gilroy Bold",
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        )
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 150,
+                              width: 200,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage("assets/emptyOrder.png"),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              "No orders placed!",
+                              style: TextStyle(
+                                fontFamily: FontFamily.gilroyBold,
+                                color: BlackColor,
+                                fontSize: 15,
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            Text(
+                              "Currently you don’t have any orders.",
+                              style: TextStyle(
+                                fontFamily: FontFamily.gilroyMedium,
+                                color: greyColor,
+                              ),
+                            ),
+                          ],
+                        )
+                : Center(child: CircularProgressIndicator());
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget pastOrder() {
+    return RefreshIndicator(
+      color: greenColor,
+      onRefresh: () {
+        return Future.delayed(Duration(seconds: 2), () {
+          setState(() {
+            orderhistoryController.orderhistorylist(Status: "Past");
+          });
+        });
+      },
+      child: SizedBox(
+        height: Get.size.height,
+        width: Get.size.width,
+        child: GetBuilder<OrderhistoryController>(
+          builder: (context) {
+            return orderhistoryController.isLoading
+                ? orderhistoryController
+                          .orderhistoryinfo!
+                          .orderHistory
+                          .isNotEmpty
+                      ? ListView.builder(
+                          itemCount: orderhistoryController
+                              .orderhistoryinfo
+                              ?.orderHistory
+                              .length,
+                          physics: BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            String currentdate =
+                                "${orderhistoryController.orderhistoryinfo?.orderHistory[index].date.toString().split(" ").first}";
+                            return InkWell(
+                              onTap: () {
+                                Get.to(
+                                  () => OrderdetailsScreen(
+                                    ordertype: orderhistoryController
+                                        .orderhistoryinfo!
+                                        .orderHistory[index]
+                                        .orderType,
+                                    oid: orderhistoryController
+                                        .orderhistoryinfo!
+                                        .orderHistory[index]
+                                        .id,
+                                    bottombar: orderhistoryController
+                                        .orderhistoryinfo!
+                                        .orderHistory[index]
+                                        .status,
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                width: Get.size.width,
+                                margin: EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 6,
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 10,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: WhiteColor,
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(height: 10),
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          currentdate,
+                                          style: TextStyle(
+                                            fontFamily: FontFamily.gilroyMedium,
+                                          ),
+                                        ),
+                                        Spacer(),
+                                        orderhistoryController
+                                                    .orderhistoryinfo
+                                                    ?.orderHistory[index]
+                                                    .status ==
+                                                "Cancelled"
+                                            ? Row(
+                                                children: [
+                                                  Image.asset(
+                                                    "assets/Cancelled.png",
+                                                    height: 20,
+                                                    width: 20,
+                                                  ),
+                                                  SizedBox(width: 5),
+                                                  Text(
+                                                    orderhistoryController
+                                                            .orderhistoryinfo
+                                                            ?.orderHistory[index]
+                                                            .status ??
+                                                        "",
+                                                    style: TextStyle(
+                                                      fontFamily:
+                                                          FontFamily.gilroyBold,
+                                                      color: redgradient,
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            : Row(
+                                                children: [
+                                                  Image.asset(
+                                                    "assets/Delivered.png",
+                                                    height: 20,
+                                                    width: 20,
+                                                  ),
+                                                  SizedBox(width: 5),
+                                                  Text(
+                                                    orderhistoryController
+                                                            .orderhistoryinfo
+                                                            ?.orderHistory[index]
+                                                            .status ??
+                                                        "",
+                                                    style: TextStyle(
+                                                      fontFamily:
+                                                          FontFamily.gilroyBold,
+                                                      color: greenColor,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Order ID: ${orderhistoryController.orderhistoryinfo?.orderHistory[index].id ?? ""}",
+                                          style: TextStyle(
+                                            fontFamily: FontFamily.gilroyBold,
+                                            color: BlackColor,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        Text(
+                                          orderhistoryController
+                                              .orderhistoryinfo!
+                                              .orderHistory[index]
+                                              .orderType,
+                                          style: TextStyle(
+                                            fontFamily: FontFamily.gilroyBold,
+                                            color: greenColor,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10),
+                                    Row(
+                                      children: [
+                                        Container(
+                                          height: 60,
+                                          width: 60,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            color: bgcolor,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Text(
+                                            orderhistoryController
+                                                .orderhistoryinfo!
+                                                .orderHistory[index]
+                                                .customerName[0],
+                                            style: TextStyle(
+                                              fontFamily: FontFamily.gilroyBold,
+                                              fontSize: 20,
+                                              color: BlackColor,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  SizedBox(width: 5),
+                                                  SizedBox(
+                                                    width: Get.width * 0.4,
+                                                    child: Text(
+                                                      orderhistoryController
+                                                              .orderhistoryinfo
+                                                              ?.orderHistory[index]
+                                                              .customerName ??
+                                                          "",
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                        fontFamily: FontFamily
+                                                            .gilroyBold,
+                                                        fontSize: 15,
+                                                        color: BlackColor,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Spacer(),
+                                                  // Text(
+                                                  //   orderhistoryController
+                                                  //           .orderhistoryinfo
+                                                  //           ?.orderHistory[index]
+                                                  //           .paymentTitle ??
+                                                  //       "",
+                                                  //   style: TextStyle(
+                                                  //       fontFamily:
+                                                  //           FontFamily.gilroyBold,
+                                                  //       fontSize: 15,
+                                                  //       color: BlackColor),
+                                                  // ),
+                                                ],
+                                              ),
+                                              SizedBox(height: 5),
+                                              Row(
+                                                children: [
+                                                  SizedBox(width: 5),
+                                                  SizedBox(
+                                                    width: Get.width * 0.4,
+                                                    child: Text(
+                                                      orderhistoryController
+                                                              .orderhistoryinfo
+                                                              ?.orderHistory[index]
+                                                              .customerAddress ??
+                                                          "",
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                        fontFamily: FontFamily
+                                                            .gilroyBold,
+                                                        fontSize: 15,
+                                                        color: BlackColor,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Spacer(),
+                                                  Text(
+                                                    "$currency${orderhistoryController.orderhistoryinfo?.orderHistory[index].total ?? ""}",
+                                                    style: TextStyle(
+                                                      fontFamily:
+                                                          FontFamily.gilroyBold,
+                                                      fontSize: 15,
+                                                      color: BlackColor,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: Get.height * 0.02),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        InkWell(
+                                          onTap: () {
+                                            Get.to(
+                                              () => OrderdetailsScreen(
                                                 ordertype:
                                                     orderhistoryController
                                                         .orderhistoryinfo!
@@ -444,416 +816,126 @@ class _NormalorderScreenState extends State<NormalorderScreen>
                                                     .orderhistoryinfo!
                                                     .orderHistory[index]
                                                     .id,
-                                              ));
-                                        },
-                                        child: Container(
-                                          height: 45,
-                                          width: Get.width * 0.82,
-                                          alignment: Alignment.center,
-                                          decoration: BoxDecoration(
+                                                bottombar:
+                                                    orderhistoryController
+                                                        .orderhistoryinfo!
+                                                        .orderHistory[index]
+                                                        .status,
+                                              ),
+                                            );
+                                          },
+                                          child: Container(
+                                            height: 45,
+                                            width: Get.width * 0.82,
+                                            alignment: Alignment.center,
+                                            decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(50),
-                                              gradient: gradient.btnGradient),
-                                          child: Text("Info",
+                                              gradient: gradient.btnGradient,
+                                            ),
+                                            child: Text(
+                                              "Info",
                                               style: TextStyle(
-                                                  color: WhiteColor,
-                                                  fontFamily: "Gilroy Bold",
-                                                  fontSize: 16)),
-                                        ),
-                                      ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    )
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 150,
-                          width: 200,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage("assets/emptyOrder.png")),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          "No orders placed!",
-                          style: TextStyle(
-                              fontFamily: FontFamily.gilroyBold,
-                              color: BlackColor,
-                              fontSize: 15),
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          "Currently you don’t have any orders.",
-                          style: TextStyle(
-                              fontFamily: FontFamily.gilroyMedium,
-                              color: greyColor),
-                        ),
-                      ],
-                    )
-              : Center(child: CircularProgressIndicator());
-        }),
-      ),
-    );
-  }
-
-  Widget pastOrder() {
-    return RefreshIndicator(
-      color: greenColor,
-      onRefresh: () {
-        return Future.delayed(
-          Duration(seconds: 2),
-          () {
-            setState(() {
-              orderhistoryController.orderhistorylist(Status: "Past");
-            });
-          },
-        );
-      },
-      child: SizedBox(
-        height: Get.size.height,
-        width: Get.size.width,
-        child: GetBuilder<OrderhistoryController>(builder: (context) {
-          return orderhistoryController.isLoading
-              ? orderhistoryController.orderhistoryinfo!.orderHistory.isNotEmpty
-                  ? ListView.builder(
-                      itemCount: orderhistoryController
-                          .orderhistoryinfo?.orderHistory.length,
-                      physics: BouncingScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        String currentdate =
-                            "${orderhistoryController.orderhistoryinfo?.orderHistory[index].date.toString().split(" ").first}";
-                        return InkWell(
-                          onTap: () {
-                            Get.to(() => OrderdetailsScreen(
-                                ordertype: orderhistoryController
-                                    .orderhistoryinfo!
-                                    .orderHistory[index]
-                                    .orderType,
-                                oid: orderhistoryController
-                                    .orderhistoryinfo!.orderHistory[index].id,
-                                bottombar: orderhistoryController
-                                    .orderhistoryinfo!
-                                    .orderHistory[index]
-                                    .status));
-                          },
-                          child: Container(
-                            width: Get.size.width,
-                            margin: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 6),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 10),
-                            decoration: BoxDecoration(
-                                color: WhiteColor,
-                                borderRadius: BorderRadius.circular(15)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(height: 10),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      currentdate,
-                                      style: TextStyle(
-                                          fontFamily: FontFamily.gilroyMedium),
-                                    ),
-                                    Spacer(),
-                                    orderhistoryController.orderhistoryinfo
-                                                ?.orderHistory[index].status ==
-                                            "Cancelled"
-                                        ? Row(
-                                            children: [
-                                              Image.asset(
-                                                  "assets/Cancelled.png",
-                                                  height: 20,
-                                                  width: 20),
-                                              SizedBox(width: 5),
-                                              Text(
-                                                orderhistoryController
-                                                        .orderhistoryinfo
-                                                        ?.orderHistory[index]
-                                                        .status ??
-                                                    "",
-                                                style: TextStyle(
-                                                  fontFamily:
-                                                      FontFamily.gilroyBold,
-                                                  color: redgradient,
-                                                ),
-                                              ),
-                                            ],
-                                          )
-                                        : Row(
-                                            children: [
-                                              Image.asset(
-                                                  "assets/Delivered.png",
-                                                  height: 20,
-                                                  width: 20),
-                                              SizedBox(width: 5),
-                                              Text(
-                                                orderhistoryController
-                                                        .orderhistoryinfo
-                                                        ?.orderHistory[index]
-                                                        .status ??
-                                                    "",
-                                                style: TextStyle(
-                                                  fontFamily:
-                                                      FontFamily.gilroyBold,
-                                                  color: greenColor,
-                                                ),
-                                              ),
-                                            ],
-                                          )
-                                  ],
-                                ),
-                                SizedBox(height: 10),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Order ID: ${orderhistoryController.orderhistoryinfo?.orderHistory[index].id ?? ""}",
-                                      style: TextStyle(
-                                          fontFamily: FontFamily.gilroyBold,
-                                          color: BlackColor,
-                                          fontSize: 16),
-                                    ),
-                                    Text(
-                                      orderhistoryController.orderhistoryinfo!
-                                          .orderHistory[index].orderType,
-                                      style: TextStyle(
-                                          fontFamily: FontFamily.gilroyBold,
-                                          color: greenColor,
-                                          fontSize: 16),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 10),
-                                Row(
-                                  children: [
-                                    Container(
-                                      height: 60,
-                                      width: 60,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                        color: bgcolor,
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Text(
-                                        orderhistoryController
-                                            .orderhistoryinfo!
-                                            .orderHistory[index]
-                                            .customerName[0],
-                                        style: TextStyle(
-                                            fontFamily: FontFamily.gilroyBold,
-                                            fontSize: 20,
-                                            color: BlackColor),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              SizedBox(width: 5),
-                                              SizedBox(
-                                                width: Get.width * 0.4,
-                                                child: Text(
-                                                  orderhistoryController
-                                                          .orderhistoryinfo
-                                                          ?.orderHistory[index]
-                                                          .customerName ??
-                                                      "",
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      fontFamily:
-                                                          FontFamily.gilroyBold,
-                                                      fontSize: 15,
-                                                      color: BlackColor),
-                                                ),
-                                              ),
-                                              Spacer(),
-                                              // Text(
-                                              //   orderhistoryController
-                                              //           .orderhistoryinfo
-                                              //           ?.orderHistory[index]
-                                              //           .paymentTitle ??
-                                              //       "",
-                                              //   style: TextStyle(
-                                              //       fontFamily:
-                                              //           FontFamily.gilroyBold,
-                                              //       fontSize: 15,
-                                              //       color: BlackColor),
-                                              // ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 5),
-                                          Row(
-                                            children: [
-                                              SizedBox(width: 5),
-                                              SizedBox(
-                                                width: Get.width * 0.4,
-                                                child: Text(
-                                                  orderhistoryController
-                                                          .orderhistoryinfo
-                                                          ?.orderHistory[index]
-                                                          .customerAddress ??
-                                                      "",
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      fontFamily:
-                                                          FontFamily.gilroyBold,
-                                                      fontSize: 15,
-                                                      color: BlackColor),
-                                                ),
-                                              ),
-                                              Spacer(),
-                                              Text(
-                                                "$currency${orderhistoryController.orderhistoryinfo?.orderHistory[index].total ?? ""}",
-                                                style: TextStyle(
-                                                    fontFamily:
-                                                        FontFamily.gilroyBold,
-                                                    fontSize: 15,
-                                                    color: BlackColor),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: Get.height * 0.02),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        Get.to(() => OrderdetailsScreen(
-                                            ordertype: orderhistoryController
-                                                .orderhistoryinfo!
-                                                .orderHistory[index]
-                                                .orderType,
-                                            oid: orderhistoryController
-                                                .orderhistoryinfo!
-                                                .orderHistory[index]
-                                                .id,
-                                            bottombar: orderhistoryController
-                                                .orderhistoryinfo!
-                                                .orderHistory[index]
-                                                .status));
-                                      },
-                                      child: Container(
-                                        height: 45,
-                                        width: Get.width * 0.82,
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(50),
-                                            gradient: gradient.btnGradient),
-                                        child: Text("Info",
-                                            style: TextStyle(
                                                 color: WhiteColor,
                                                 fontFamily: "Gilroy Bold",
-                                                fontSize: 16)),
-                                      ),
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
-                                )
-                              ],
+                                ),
+                              ),
+                            );
+                          },
+                        )
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 150,
+                              width: 200,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage("assets/emptyOrder.png"),
+                                ),
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                    )
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 150,
-                          width: 200,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage("assets/emptyOrder.png")),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          "No orders placed!",
-                          style: TextStyle(
-                              fontFamily: FontFamily.gilroyBold,
-                              color: BlackColor,
-                              fontSize: 15),
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          "Currently you don’t have any orders.",
-                          style: TextStyle(
-                              fontFamily: FontFamily.gilroyMedium,
-                              color: greyColor),
-                        ),
-                      ],
-                    )
-              : Center(child: CircularProgressIndicator());
-        }),
+                            SizedBox(height: 10),
+                            Text(
+                              "No orders placed!",
+                              style: TextStyle(
+                                fontFamily: FontFamily.gilroyBold,
+                                color: BlackColor,
+                                fontSize: 15,
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            Text(
+                              "Currently you don’t have any orders.",
+                              style: TextStyle(
+                                fontFamily: FontFamily.gilroyMedium,
+                                color: greyColor,
+                              ),
+                            ),
+                          ],
+                        )
+                : Center(child: CircularProgressIndicator());
+          },
+        ),
       ),
     );
   }
 
   ticketCancell(orderid) {
     showModalBottomSheet(
-        isDismissible: false,
-        isScrollControlled: true,
-        backgroundColor: WhiteColor,
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        context: context,
-        builder: (BuildContext context) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
+      isDismissible: false,
+      isScrollControlled: true,
+      backgroundColor: WhiteColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
             return SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     SizedBox(height: Get.height * 0.02),
                     Container(
-                        height: 6,
-                        width: 80,
-                        decoration: BoxDecoration(
-                            color: Colors.grey.shade300,
-                            borderRadius: BorderRadius.circular(25))),
+                      height: 6,
+                      width: 80,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                    ),
                     SizedBox(height: Get.height * 0.02),
                     Text(
                       "Select Reason".tr,
                       style: TextStyle(
-                          fontSize: 20,
-                          fontFamily: 'Gilroy Bold',
-                          color: BlackColor),
+                        fontSize: 20,
+                        fontFamily: 'Gilroy Bold',
+                        color: BlackColor,
+                      ),
                     ),
                     SizedBox(height: Get.height * 0.02),
                     Text(
                       "Please select the reason for cancellation:".tr,
                       style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'Gilroy Medium',
-                          color: BlackColor),
+                        fontSize: 16,
+                        fontFamily: 'Gilroy Medium',
+                        color: BlackColor,
+                      ),
                     ),
                     SizedBox(height: Get.height * 0.02),
                     ListView.builder(
@@ -871,9 +953,7 @@ class _NormalorderScreenState extends State<NormalorderScreen>
                             height: 40,
                             child: Row(
                               children: [
-                                SizedBox(
-                                  width: 25,
-                                ),
+                                SizedBox(width: 25),
                                 Radio(
                                   activeColor: gradient.defoultColor,
                                   value: i,
@@ -884,9 +964,7 @@ class _NormalorderScreenState extends State<NormalorderScreen>
                                     rejectmsg = cancelList[i]["title"];
                                   },
                                 ),
-                                SizedBox(
-                                  width: 15,
-                                ),
+                                SizedBox(width: 15),
                                 Text(
                                   cancelList[i]["title"],
                                   style: TextStyle(
@@ -928,24 +1006,32 @@ class _NormalorderScreenState extends State<NormalorderScreen>
                             child: TextField(
                               controller: note,
                               decoration: InputDecoration(
-                                  isDense: true,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(10)),
-                                    borderSide: BorderSide(
-                                        color: Color(0xFF246BFD), width: 1),
+                                isDense: true,
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(10),
                                   ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(10)),
-                                    borderSide: BorderSide(
-                                        color: Color(0xFF246BFD), width: 1),
+                                  borderSide: BorderSide(
+                                    color: Color(0xFF246BFD),
+                                    width: 1,
                                   ),
-                                  hintText: 'Enter reason'.tr,
-                                  hintStyle: TextStyle(
-                                      fontFamily: 'Gilroy Medium',
-                                      fontSize: Get.size.height / 55,
-                                      color: Colors.grey)),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                  borderSide: BorderSide(
+                                    color: Color(0xFF246BFD),
+                                    width: 1,
+                                  ),
+                                ),
+                                hintText: 'Enter reason'.tr,
+                                hintStyle: TextStyle(
+                                  fontFamily: 'Gilroy Medium',
+                                  fontSize: Get.size.height / 55,
+                                  color: Colors.grey,
+                                ),
+                              ),
                             ),
                           )
                         : const SizedBox(),
@@ -956,20 +1042,43 @@ class _NormalorderScreenState extends State<NormalorderScreen>
                         orderbutton(
                           text: "Cancel",
                           buttoncolor: redgradient,
-                          onTap: () {
+                          onTap: () async {
                             Get.back();
+
+                            // await API call (works with Future<void> or Future<bool>)
+
+                            // switch to Completed tab (index 1) and refresh its data
+
+                            await orderhistoryController.orderhistorylist(
+                              Status: "Current",
+                            );
+
+                            // also refresh current tab if you want both updated
+                            await orderhistoryController.orderhistorylist(
+                              Status: "past",
+                            );
+
+                            setState(() {});
                           },
                         ),
                         orderbutton(
                           text: "Confirm",
                           gradient: gradient.btnGradient,
-                          onTap: () {
+                          onTap: () async {
                             Get.back();
-                            assignriderController.mackdisitioncancle(
-                                oid: orderid,
-                                reason: rejectmsg == "Others".tr
-                                    ? note.text
-                                    : rejectmsg);
+                            await assignriderController.mackdisitioncancle(
+                              oid: orderid,
+                              reason: rejectmsg == "Others".tr
+                                  ? note.text
+                                  : rejectmsg,
+                            );
+
+                            orderhistoryController.orderhistorylist(
+                              Status: "Current",
+                            );
+                            _tabController?.animateTo(0);
+
+                            setState(() {});
                           },
                         ),
                       ],
@@ -979,8 +1088,10 @@ class _NormalorderScreenState extends State<NormalorderScreen>
                 ),
               ),
             );
-          });
-        });
+          },
+        );
+      },
+    );
   }
 
   List cancelList = [

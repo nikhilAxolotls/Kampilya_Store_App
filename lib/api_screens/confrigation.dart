@@ -66,4 +66,7 @@ class AppUrl {
   static const String updateDeliveries = 'update_deliveries.php';
 
   static const String routeList = 'get_rider_routes.php';
+  static const String milkmanList = 'get_milkman.php';
+  static const String milkmanHistory = 'get_milk_collection.php';
+  static const String addmilk = 'add_milk_collection.php';
 }

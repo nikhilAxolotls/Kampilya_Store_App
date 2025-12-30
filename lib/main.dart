@@ -11,9 +11,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await GetStorage.init();
-  runApp(
-    BoardingScreen(),
-  );
+  runApp(BoardingScreen());
 }
 
 // ignore: use_key_in_widget_constructors
@@ -21,6 +19,7 @@ class BoardingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      title: "Kampilya Store",
       theme: ThemeData(
         primaryColor: Colors.blue,
         hintColor: Colors.orange,

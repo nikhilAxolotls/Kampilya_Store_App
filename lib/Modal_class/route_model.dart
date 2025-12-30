@@ -34,6 +34,7 @@ class RouteInfo {
 class AssignedRoutes {
   String? routeName;
   String? routeId;
+  String? riderName;
 
   String? deliveryTime;
   String? status;
@@ -46,6 +47,7 @@ class AssignedRoutes {
   AssignedRoutes({
     this.routeName,
     this.routeId,
+    this.riderName,
     this.delivery_date,
 
     this.deliveryTime,
@@ -58,7 +60,7 @@ class AssignedRoutes {
   AssignedRoutes.fromJson(Map<String, dynamic> json) {
     routeName = json['route_name'];
     routeId = json['route_id'];
-
+    riderName = json['rider_name'];
     delivery_date =
         json['delivery_date'] ??
         DateFormat('dd-MM-yyyy').format(DateTime.now());
@@ -79,6 +81,7 @@ class AssignedRoutes {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['route_name'] = this.routeName;
     data['route_id'] = this.routeId;
+    data['rider_name'] = this.riderName;
 
     data['deliveryTime'] = this.deliveryTime;
     data['status'] = this.status;
@@ -97,6 +100,9 @@ class Customers {
   String? phone;
   String? orderTotal;
   String? society;
+  String? zone;
+  String? building;
+  String? flatNo;
   String? orderStatus;
   String? orderType;
   List<OrderDetails>? orderDetails;
@@ -107,6 +113,9 @@ class Customers {
     this.phone,
     this.orderTotal,
     this.society,
+    this.zone,
+    this.building,
+    this.flatNo,
     this.orderStatus,
     this.orderType,
     this.orderDetails,
@@ -117,7 +126,10 @@ class Customers {
     address = json['address'];
     phone = json['phone'];
     orderTotal = json['orderTotal'];
-    society = json['society'];
+    society = json['society'] ?? "";
+    zone = json['zone'] ?? "";
+    building = json['building'] ?? "";
+    flatNo = json['flat_no'] ?? "";
     orderStatus = json['order_status'];
     orderType = json['order_type'];
     if (json['order_details'] != null) {
